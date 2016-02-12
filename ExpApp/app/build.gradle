@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.software.exp.expapp"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 7
+        versionName "1.5"
+        multiDexEnabled false
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/flexjson-2.1.jar')
+    compile 'com.google.android.gms:play-services:8.1.0'
+}
