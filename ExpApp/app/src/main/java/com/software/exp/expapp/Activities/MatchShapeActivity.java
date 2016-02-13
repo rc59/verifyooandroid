@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.software.exp.expapp.Logic.ApiSaveAndMatch;
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.Logic.ExpShape;
 import com.software.exp.expapp.Logic.MotionEventCompact;
@@ -35,41 +34,32 @@ import java.util.ArrayList;
 
 import flexjson.JSONSerializer;
 
-
-public class SourceShape extends Activity {
+public class MatchShapeActivity extends Activity {
 
     boolean mShowIcon = true;
     boolean mShowIconFirstTime = true;
 
     private String mInstruction;
 
-    private static TextView mLblStatus;
+    private Button mBtnRestart;
+    private Button mBtnMatch;
 
     private static GesturesProcessor mGesturesProcessor;
     private static GestureOverlayView mOverlay;
 
-    private Button mBtnRestart;
-    private Button mBtnSave;
-
     private static ArrayList<Stroke> mShape = new ArrayList<Stroke>();
-    private static ArrayList<Stroke> mShapeVerify = new ArrayList<Stroke>();
-
-    private boolean mIsGestureAccepted = false;
-
     private Stroke mTempStroke;
-
-    private String mUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_source_shape);
+        setContentView(R.layout.activity_match_shape);
         init();
     }
 
     private int getIconDisplayTime() {
         if (mShowIconFirstTime) {
-            return Consts.TOUCH_ICON_INTERVAL_FIRST_LONG;
+            return Consts.TOUCH_ICON_INTERVAL;
         }
         else {
             return Consts.TOUCH_ICON_INTERVAL;
@@ -108,34 +98,23 @@ public class SourceShape extends Activity {
         mOverlay.setBackgroundColor(Color.rgb(190, 190, 190));
     }
 
-    private void init() {
-        mUserName = getIntent().getStringExtra(Consts.USERNAME);
 
+    private void init() {
         mOverlay = (GestureOverlayView) findViewById(R.id.gestures_overlay);
         setColorInput();
 
-        mLblStatus = (TextView) findViewById(R.id.lblStatus);
-        mLblStatus.setTextColor(Color.BLUE);
-
         mShape.clear();
-
-        mBtnSave = (Button) findViewById(R.id.btnSave);
+        mBtnMatch = (Button) findViewById(R.id.btnMatch);
         mBtnRestart = (Button) findViewById(R.id.btnRestart);
-        mTempStroke = new Stroke();
 
-        //mBtnSave.setBackgroundColor(Color.LTGRAY);
-        //mBtnRestart.setBackgroundColor(Color.LTGRAY);
 
-        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-
-        mGesturesProcessor = new GesturesProcessor();
-        mOverlay.addOnGestureListener(mGesturesProcessor);
-        mBtnSave.setOnClickListener(new View.OnClickListener() {
+        mBtnMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickSave();
+                onClickMatch();
             }
         });
+
         mBtnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,62 +122,60 @@ public class SourceShape extends Activity {
             }
         });
 
+
+        mTempStroke = new Stroke();
+
+        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+
+        mGesturesProcessor = new GesturesProcessor();
+        mOverlay.addOnGestureListener(mGesturesProcessor);
+
         mInstruction = getIntent().getStringExtra(Consts.INSTRUCTION);
 
+        TextView label = (TextView) findViewById(R.id.lblStatus);
+        label.setText(String.format("%s - %s", mInstruction, getString(R.string.repeatOriginal)));
+        label.setTextColor(Color.BLUE);
+
         setTitle(mInstruction);
-        mLblStatus.setText(mInstruction);
-        mBtnSave.setEnabled(false);
+        mBtnMatch.setEnabled(false);
     }
 
     private void onClickRestart() {
-        mShowIcon = true;
-        mShapeVerify = new ArrayList<Stroke>();
-        mLblStatus.setText(mInstruction);
-        mLblStatus.setTextColor(Color.BLUE);
-        mIsGestureAccepted = false;
         clearOverlay();
         mTempStroke = new Stroke();
         mShape.clear();
-        mShapeVerify.clear();
-        mBtnSave.setText(R.string.btnNext);
-        mBtnSave.setEnabled(false);
-        //mBtnRestart.setBackgroundColor(Color.LTGRAY);
-        //mBtnSave.setBackgroundColor(Color.LTGRAY);
-
+        mBtnMatch.setEnabled(false);
+        mShowIcon = true;
         setColorInput();
     }
 
-    private void onClickSave() {
-        if (mIsGestureAccepted) {
-            Intent intentPrev = getIntent();
-            String id = intentPrev.getStringExtra(Consts.USERNAME);
+    private void onClickMatch() {
+        setColorNoInput();
+        Intent intent = new Intent(getApplication(), MatchingActivity.class);
 
-            Intent intent = new Intent(getApplication(), SavingShape.class);
+        JSONSerializer serializer = new JSONSerializer();
 
-            String serviceName = Context.TELEPHONY_SERVICE;
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(serviceName);
-            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        String serviceName = Context.TELEPHONY_SERVICE;
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(serviceName);
+        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
-            ExpShape shape = new ExpShape(telephonyManager, wm, mInstruction);
-            shape.Name = id;
-            shape.Strokes = mShape;
+        String numGamesStr = getIntent().getStringExtra(Consts.NUM_GAMES);
+        String username = getIntent().getStringExtra(Consts.USERNAME);
 
-            JSONSerializer serializer = new JSONSerializer();
-            String jsonShape = serializer.deepSerialize(shape);
+        int numGames = (Integer.valueOf(numGamesStr));
+        numGames++;
 
-            Tools.jsonShape = jsonShape;
-            Tools.Username = id;
-            startActivity(intent);
-        } else {
-            mShowIcon = true;
-            mLblStatus.setText(getString(R.string.drawAgain));
-            mIsGestureAccepted = true;
-            clearOverlay();
-            mBtnSave.setText(R.string.btnSave);
-            mBtnSave.setEnabled(false);
-            setColorInput();
-            //mBtnSave.setBackgroundColor(Color.LTGRAY);
-        }
+        ExpShape shape = new ExpShape(telephonyManager, wm, mInstruction);
+        shape.Name = username;
+        shape.Strokes = mShape;
+
+        Tools.prepareShapeForSerialize(shape);
+
+        String jsonShape = serializer.deepSerialize(shape);
+
+        Tools.jsonShape = jsonShape;
+
+        startActivity(intent);
     }
 
     private void clearOverlay() {
@@ -210,7 +187,7 @@ public class SourceShape extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_source_shape, menu);
+        getMenuInflater().inflate(R.menu.menu_match_shape, menu);
         return true;
     }
 
@@ -269,8 +246,8 @@ public class SourceShape extends Activity {
         }
 
         public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
-            mSensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             setColorInputing();
+            mSensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         }
 
         public void onGesture(GestureOverlayView overlay, MotionEvent event) {
@@ -336,56 +313,14 @@ public class SourceShape extends Activity {
             if (gesture.getLength() > Consts.LENGTH_THRESHOLD) {
                 mTempStroke.Length = gesture.getLength();
 
-                if (mIsGestureAccepted) {
-                    mBtnSave.setEnabled(false);
-
-                    mShapeVerify.add(mTempStroke);
-                    mTempStroke = new Stroke();
-                    checkIfShapesMatch();
-                }
-                else {
-                    mShape.add(mTempStroke);
-                    mTempStroke = new Stroke();
-                    mBtnSave.setEnabled(true);
-                    //mBtnSave.setBackgroundColor(Color.GREEN);
-                }
+                mShape.add(mTempStroke);
+                mTempStroke = new Stroke();
+                mBtnMatch.setEnabled(true);
             }
         }
 
         public void onGestureCancelled(GestureOverlayView overlay, MotionEvent event) {
 
-        }
-    }
-
-    private void checkIfShapesMatch() {
-        if(mShape.size() == mShapeVerify.size()) {
-            mBtnRestart.setEnabled(false);
-            mLblStatus.setTextColor(Color.BLUE);
-            mLblStatus.setText(getString(R.string.matchingShapes));
-            setColorNoInput();
-
-            for (int idx = 0; idx < mShapeVerify.size(); idx++) {
-                mShape.add(mShapeVerify.get(idx));
-            }
-
-            JSONSerializer serializer = new JSONSerializer();
-
-            String serviceName = Context.TELEPHONY_SERVICE;
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(serviceName);
-            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-
-            Intent intentPrev = getIntent();
-            String id = intentPrev.getStringExtra(Consts.USERNAME);
-
-            ExpShape shape = new ExpShape(telephonyManager, wm, mInstruction);
-            shape.Name = id;
-            shape.Strokes = mShape;
-
-            Tools.prepareShapeForSerialize(shape);
-
-            String jsonShape = serializer.deepSerialize(shape);
-            ApiSaveAndMatch apiMatch = new ApiSaveAndMatch(getApplicationContext(), "selfMatch", mBtnSave, mLblStatus, mBtnRestart);
-            apiMatch.runEx(jsonShape);
         }
     }
 }

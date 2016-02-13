@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.R;
 
-public class Instructions extends Activity {
+public class InstructionsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

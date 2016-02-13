@@ -14,7 +14,7 @@ import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.Logic.Tools;
 import com.software.exp.expapp.R;
 
-public class UserDashboard extends Activity {
+public class UserDashboardActivity extends Activity {
 
     String numGames;
     String mInstruction;
@@ -61,7 +61,7 @@ public class UserDashboard extends Activity {
     private void onClickPlay() {
         String username = Tools.Username;
 
-        Intent intent = new Intent(getApplication(), MatchShape.class);
+        Intent intent = new Intent(getApplication(), MatchShapeActivity.class);
         intent.putExtra(Consts.NUM_GAMES, numGames);
         intent.putExtra(Consts.INSTRUCTION, mInstruction);
         intent.putExtra(Consts.USERNAME, username);

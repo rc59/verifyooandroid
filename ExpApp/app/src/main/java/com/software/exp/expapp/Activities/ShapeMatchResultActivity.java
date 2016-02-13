@@ -14,7 +14,7 @@ import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
-public class ShapeMatchResult extends Activity {
+public class ShapeMatchResultActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,7 +15,7 @@ import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.R;
 
 
-public class UserDetails extends Activity {
+public class UserDetailsActivity extends Activity {
 
     String mInstruction;
 
@@ -52,7 +52,7 @@ public class UserDetails extends Activity {
     private void onClickOK() {
         String userName = mEditText.getText().toString();
         if (userName.length() > 0) {
-            Intent intent = new Intent(getApplication(), SourceShape.class);
+            Intent intent = new Intent(getApplication(), SourceShapeActivity.class);
             intent.putExtra(Consts.ID, userName);
             intent.putExtra(Consts.INSTRUCTION, mInstruction);
             startActivity(intent);

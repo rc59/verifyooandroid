@@ -12,13 +12,17 @@ import android.widget.ImageView;
 import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
-public class ErrorPage extends Activity {
+public class ShapeCreatedACtivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_error_page);
+        setContentView(R.layout.activity_shape_created);
 
+        init();
+    }
+
+    private void init() {
         Button btnPlayAgain = (Button) findViewById(R.id.btnPlayAgain);
         btnPlayAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,9 +32,7 @@ public class ErrorPage extends Activity {
         });
 
         ImageView img = (ImageView) findViewById(R.id.imgView);
-        img.setImageResource(R.drawable.error);
-
-        setTitle(getString(R.string.errPage));
+        img.setImageResource(R.drawable.check);
     }
 
     private void onClickPlayAgain() {
@@ -41,7 +43,7 @@ public class ErrorPage extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_error_page, menu);
+        getMenuInflater().inflate(R.menu.menu_shape_created, menu);
         return true;
     }
 
