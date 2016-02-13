@@ -46,7 +46,7 @@ public class InstructionsActivity extends Activity {
     private void onClickOK() {
         Toast.makeText(getApplicationContext(), getString(R.string.pleaseWait), Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(getApplicationContext(), SourceShape.class);
+        Intent intent = new Intent(getApplicationContext(), SourceShapeActivity.class);
         String instruction = getIntent().getStringExtra(Consts.INSTRUCTION);
         String username = getIntent().getStringExtra(Consts.USERNAME);
         intent.putExtra(Consts.INSTRUCTION, instruction);

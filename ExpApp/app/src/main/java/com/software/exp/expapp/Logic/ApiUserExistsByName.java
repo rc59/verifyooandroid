@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-import com.software.exp.expapp.Activities.ErrorPage;
-import com.software.exp.expapp.Activities.Instructions;
-import com.software.exp.expapp.Activities.UserDashboard;
+import com.software.exp.expapp.Activities.ErrorPageActivity;
+import com.software.exp.expapp.Activities.InstructionsActivity;
+import com.software.exp.expapp.Activities.UserDashboardActivity;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -89,18 +89,18 @@ public class ApiUserExistsByName extends AsyncTask<String, String, String> {
         if (mSuccess) {
             if (isUserExists) {
                 Tools.Username = mUsername;
-                intent = new Intent(mAppContext, UserDashboard.class);
+                intent = new Intent(mAppContext, UserDashboardActivity.class);
                 intent.putExtra(Consts.NUM_GAMES, mNumGames);
                 intent.putExtra(Consts.USERNAME, mUsername);
                 intent.putExtra(Consts.INSTRUCTION, mInstruction);
             } else {
-                intent = new Intent(mAppContext, Instructions.class);
+                intent = new Intent(mAppContext, InstructionsActivity.class);
                 intent.putExtra(Consts.USERNAME, mUsername);
                 intent.putExtra(Consts.INSTRUCTION, mInstruction);
             }
         }
         else {
-            intent = new Intent(mAppContext, ErrorPage.class);
+            intent = new Intent(mAppContext, ErrorPageActivity.class);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

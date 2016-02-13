@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
-public class ShapeCreatedACtivity extends Activity {
+public class ShapeCreatedActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

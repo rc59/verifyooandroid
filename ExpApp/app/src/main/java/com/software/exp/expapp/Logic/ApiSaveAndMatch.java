@@ -7,9 +7,9 @@ import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.software.exp.expapp.Activities.ErrorPage;
-import com.software.exp.expapp.Activities.ShapeCreated;
-import com.software.exp.expapp.Activities.ShapeMatchResult;
+import com.software.exp.expapp.Activities.ErrorPageActivity;
+import com.software.exp.expapp.Activities.ShapeCreatedActivity;
+import com.software.exp.expapp.Activities.ShapeMatchResultActivity;
 import com.software.exp.expapp.R;
 
 import org.json.JSONObject;
@@ -140,12 +140,12 @@ public class ApiSaveAndMatch extends AsyncTask<String, String, String> {
 
             if (mAction == "save") {
                 if (mSuccess) {
-                    intent = new Intent(mAppContext, ShapeCreated.class);
+                    intent = new Intent(mAppContext, ShapeCreatedActivity.class);
                 } else {
-                    intent = new Intent(mAppContext, ErrorPage.class);
+                    intent = new Intent(mAppContext, ErrorPageActivity.class);
                 }
             } else {
-                intent = new Intent(mAppContext, ShapeMatchResult.class);
+                intent = new Intent(mAppContext, ShapeMatchResultActivity.class);
                 intent.putExtra(Consts.SHAPES_MATCH, mSuccess);
             }
 

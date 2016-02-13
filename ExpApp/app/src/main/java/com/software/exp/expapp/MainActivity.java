@@ -16,8 +16,8 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.software.exp.expapp.Activities.ErrorPage;
-import com.software.exp.expapp.Activities.UserDetailsName;
+import com.software.exp.expapp.Activities.ErrorPageActivity;
+import com.software.exp.expapp.Activities.UserDetailsNameActivity;
 import com.software.exp.expapp.Logic.ApiUserExists;
 import com.software.exp.expapp.Logic.ApiUserExistsByName;
 import com.software.exp.expapp.Logic.Consts;
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
                 boolean sentToken = sharedPreferences
                         .getBoolean(Consts.SENT_TOKEN_TO_SERVER, false);
                 if (!sentToken) {
-                    Intent intentError = new Intent(getApplicationContext(), ErrorPage.class);
+                    Intent intentError = new Intent(getApplicationContext(), ErrorPageActivity.class);
                     startActivity(intentError);
                 }
             }
@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
             boolean isByName = true;
 
             if (isByName) {
-                Intent intent = new Intent(getApplicationContext(), UserDetailsName.class);
+                Intent intent = new Intent(getApplicationContext(), UserDetailsNameActivity.class);
                 startActivity(intent);
             }
             else {

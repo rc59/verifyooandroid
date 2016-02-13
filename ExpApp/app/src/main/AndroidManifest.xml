@@ -47,47 +47,47 @@
         </receiver>
 
         <activity
-            android:name=".Activities.UserDetails"
+            android:name=".Activities.UserDetailsActivity"
             android:label="@string/title_activity_user_details" >
         </activity>
         <activity
-            android:name=".Activities.SourceShape"
+            android:name=".Activities.SourceShapeActivity"
             android:label="@string/title_activity_source_shape" >
         </activity>
         <activity
-            android:name=".Activities.ShapeCreated"
+            android:name=".Activities.ShapeCreatedActivity"
             android:label="@string/title_activity_shape_created" >
         </activity>
         <activity
-            android:name=".Activities.MatchShape"
+            android:name=".Activities.MatchShapeActivity"
             android:label="@string/title_activity_match_shape" >
         </activity>
         <activity
-            android:name=".Activities.Matching"
+            android:name=".Activities.MatchingActivity"
             android:label="@string/title_activity_matching" >
         </activity>
         <activity
-            android:name=".Activities.UserDashboard"
+            android:name=".Activities.UserDashboardActivity"
             android:label="@string/title_activity_user_dashboard" >
         </activity>
         <activity
-            android:name=".Activities.SavingShape"
+            android:name=".Activities.SavingShapeActivity"
             android:label="@string/title_activity_saving_shape" >
         </activity>
         <activity
-            android:name=".Activities.ShapeMatchResult"
+            android:name=".Activities.ShapeMatchResultActivity"
             android:label="@string/title_activity_shape_match_result" >
         </activity>
         <activity
-            android:name=".Activities.ErrorPage"
+            android:name=".Activities.ErrorPageActivity"
             android:label="@string/title_activity_error_page" >
         </activity>
         <activity
-            android:name=".Activities.Instructions"
+            android:name=".Activities.InstructionsActivity"
             android:label="@string/title_activity_instructions" >
         </activity>
         <activity
-            android:name=".Activities.UserDetailsName"
+            android:name=".Activities.UserDetailsNameActivity"
             android:label="@string/title_activity_user_details_name" >
         </activity>
 
