@@ -22,6 +22,8 @@ import com.software.exp.expapp.Logic.ApiUserExists;
 import com.software.exp.expapp.Logic.ApiUserExistsByName;
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.Logic.Tools;
+import com.software.exp.expapp.R;
+import com.software.exp.expapp.RegistrationIntentService;
 
 
 public class MainActivity extends Activity {
