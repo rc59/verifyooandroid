@@ -8,18 +8,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class ErrorPageActivity extends Activity {
+
+    @Bind(R.id.btnPlayAgain)
+    Button btnPlayAgain;
+    @Bind(R.id.imgView)
+    ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error_page);
+        ButterKnife.bind(this);
 
-        Button btnPlayAgain = (Button) findViewById(R.id.btnPlayAgain);
         btnPlayAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +36,6 @@ public class ErrorPageActivity extends Activity {
             }
         });
 
-        ImageView img = (ImageView) findViewById(R.id.imgView);
         img.setImageResource(R.drawable.error);
 
         setTitle(getString(R.string.errPage));

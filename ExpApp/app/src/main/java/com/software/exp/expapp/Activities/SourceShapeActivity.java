@@ -25,14 +25,16 @@ import android.widget.TextView;
 import com.software.exp.expapp.Logic.ApiSaveAndMatch;
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.Logic.ExpShape;
+import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.Logic.MotionEventCompact;
 import com.software.exp.expapp.Logic.Stroke;
 import com.software.exp.expapp.Logic.Tools;
-import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import flexjson.JSONSerializer;
 
 
@@ -43,13 +45,15 @@ public class SourceShapeActivity extends Activity {
 
     private String mInstruction;
 
-    private static TextView mLblStatus;
-
     private static GesturesProcessor mGesturesProcessor;
     private static GestureOverlayView mOverlay;
 
-    private Button mBtnRestart;
-    private Button mBtnSave;
+    @Bind(R.id.btnRestart)
+    Button mBtnRestart;
+    @Bind(R.id.btnSave)
+    Button mBtnSave;
+    @Bind(R.id.lblStatus)
+    TextView mLblStatus;
 
     private static ArrayList<Stroke> mShape = new ArrayList<Stroke>();
     private static ArrayList<Stroke> mShapeVerify = new ArrayList<Stroke>();
@@ -64,6 +68,8 @@ public class SourceShapeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_source_shape);
+        ButterKnife.bind(this);
+
         init();
     }
 
@@ -114,13 +120,10 @@ public class SourceShapeActivity extends Activity {
         mOverlay = (GestureOverlayView) findViewById(R.id.gestures_overlay);
         setColorInput();
 
-        mLblStatus = (TextView) findViewById(R.id.lblStatus);
         mLblStatus.setTextColor(Color.BLUE);
 
         mShape.clear();
 
-        mBtnSave = (Button) findViewById(R.id.btnSave);
-        mBtnRestart = (Button) findViewById(R.id.btnRestart);
         mTempStroke = new Stroke();
 
         //mBtnSave.setBackgroundColor(Color.LTGRAY);

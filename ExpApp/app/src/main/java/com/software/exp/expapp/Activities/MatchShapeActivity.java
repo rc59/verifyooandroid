@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.Logic.ExpShape;
+import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.Logic.MotionEventCompact;
 import com.software.exp.expapp.Logic.Stroke;
 import com.software.exp.expapp.Logic.Tools;
-import com.software.exp.expapp.MainActivity;
 import com.software.exp.expapp.R;
 
 import java.util.ArrayList;

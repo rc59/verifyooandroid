@@ -9,44 +9,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.R;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class UserDetailsActivity extends Activity {
 
     String mInstruction;
 
-    Button mBtnSubmit;
-    EditText mEditText;
+    @Bind(R.id.txtUserName)
+    TextView mEditText;
+    @Bind(R.id.btnOK)
+    TextView mBtnSubmit;
 
+    @Bind(R.id.imgUserDetails)
+    ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
-        init();
-    }
+        ButterKnife.bind(this);
 
-    private void init() {
-
-        mEditText = (EditText) findViewById(R.id.txtUserName);
-
-        mBtnSubmit = (Button) findViewById(R.id.btnOK);
-        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickOK();
-            }
-        });
-
-        ImageView img = (ImageView) findViewById(R.id.imgUserDetails);
         img.setImageResource(R.drawable.user);
 
         mInstruction = getIntent().getStringExtra(Consts.INSTRUCTION);
+        setTitle(getString(R.string.enterUserInfo));    }
 
-        setTitle(getString(R.string.enterUserInfo));
+
+    @OnClick(R.id.btnOK)
+    public void onClickBtnSubmit(Button button) {
+        onClickOK();
     }
 
     private void onClickOK() {

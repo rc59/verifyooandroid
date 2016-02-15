@@ -14,33 +14,35 @@ import android.widget.Toast;
 import com.software.exp.expapp.Logic.Consts;
 import com.software.exp.expapp.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class InstructionsActivity extends Activity {
+
+    @Bind(R.id.btnOK)
+    Button btnOk;
+    @Bind(R.id.lblInstructionsReg)
+    TextView lblInstructionsReg;
+    @Bind(R.id.lblInstructionsMatch)
+    TextView lblInstructionsMatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instructions);
-
-        init();
-    }
-
-    private void init() {
+        ButterKnife.bind(this);
 
         setTitle(getString(R.string.instructionsTitle));
-        TextView lblInstructionsReg = (TextView) findViewById(R.id.lblInstructionsReg);
-        TextView lblInstructionsMatch = (TextView) findViewById(R.id.lblInstructionsMatch);
 
         lblInstructionsReg.setPaintFlags(lblInstructionsReg.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         lblInstructionsMatch.setPaintFlags(lblInstructionsMatch.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        Button btnOk = (Button) findViewById(R.id.btnOK);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickOK();
             }
         });
-
     }
 
     private void onClickOK() {
