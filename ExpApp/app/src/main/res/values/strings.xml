@@ -63,5 +63,9 @@
     <string name="pleaseWait">נא המתן</string>
     <string name="action_exit">יציאה</string>
     <string name="gcmDefaultSenderId">843079122887</string>
+    <string name="instructions1">instructions1</string>
+    <string name="instructions2">instructions2</string>
+    <string name="instructions3">instructions3</string>
+    <string name="instructions4">instructions4</string>
 
 </resources>
