@@ -1,8 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activities.SourceShapeActivity">
+    tools:context="com.software.exp.expapp1.Activities.SourceShapeActivity">
     <item android:id="@+id/action_home" android:title="@string/action_home"
-        android:orderInCategory="100" android:showAsAction="never" />
-    <item android:id="@+id/action_exit" android:title="@string/action_exit"
-        android:orderInCategory="100" android:showAsAction="never" />
+        android:orderInCategory="100" android:showAsAction="never"/>
 </menu>

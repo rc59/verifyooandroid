@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">זיהוי צורות</string>
+    <string name="app_name">פסיכולוגיה של זיהוי צורות</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_user_details">UserDetails</string>
@@ -63,9 +63,19 @@
     <string name="pleaseWait">נא המתן</string>
     <string name="action_exit">יציאה</string>
     <string name="gcmDefaultSenderId">843079122887</string>
-    <string name="instructions1">instructions1</string>
-    <string name="instructions2">instructions2</string>
-    <string name="instructions3">instructions3</string>
-    <string name="instructions4">instructions4</string>
-
+    <string name="skip">דלג</string>
+    <string name="done">סיים</string>
+    <string name="drow_5">צייר 5</string>
+    <string name="drow_a">צייר A</string>
+    <string name="drow_r">צייר R</string>
+    <string name="drow_traingular">צייר משולש</string>
+    <string name="drow_heart">צייר לב</string>
+    <string name="drow_line">צייר קו אופקי ואנכי</string>
+    <string name="drow_eight">צייר 8</string>
+    <string name="next">הבא</string>
+    <string name="start_experiment">התחל ניסוי</string>
+    <string name="experiment_is_saved">הניסוי נשמר</string>
+    <string name="thank_you_for_participating">תודה על ההשתתפות בניסוי , אנא סגור את האפלקציה</string>
+    <string name="saving_experiment">שומר את הניסוי...</string>
 </resources>
+

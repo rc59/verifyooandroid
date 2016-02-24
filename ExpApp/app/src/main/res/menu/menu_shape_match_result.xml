@@ -2,7 +2,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activities.ShapeMatchResultActivity">
     <item android:id="@+id/action_home" android:title="@string/action_home"
-        android:orderInCategory="100" android:showAsAction="never" />
-    <item android:id="@+id/action_exit" android:title="@string/action_exit"
-        android:orderInCategory="100" android:showAsAction="never" />
+        android:orderInCategory="100" android:showAsAction="never"/>
 </menu>

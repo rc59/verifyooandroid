@@ -12,17 +12,17 @@
 
     <TextView
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/shapeCreated"
+        android:text="@string/thank_you_for_participating"
         android:layout_width="wrap_content"
         android:layout_gravity="center"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/startPlaying"
-        android:id="@+id/btnPlayAgain"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/startPlaying"-->
+        <!--android:id="@+id/btnPlayAgain"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="@dimen/activity_vertical_margin" />-->
 
 </LinearLayout>
