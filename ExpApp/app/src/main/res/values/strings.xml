@@ -70,7 +70,7 @@
     <string name="drow_r">צייר R</string>
     <string name="drow_traingular">צייר משולש</string>
     <string name="drow_heart">צייר לב</string>
-    <string name="drow_line">צייר קו אופקי ואנכי</string>
+    <string name="drow_line">צייר קו אופקי_ למטה ואלכסוני / מעל</string>
     <string name="drow_eight">צייר 8</string>
     <string name="next">הבא</string>
     <string name="start_experiment">התחל ניסוי</string>
