@@ -214,6 +214,7 @@ public class SourceShapeActivity extends Activity {
         expShape.Instruction = ShapesType.getInstructionName(loopCounter - 1);
         expShape.Strokes = mShape;
         shapes.ExpShapeList.add(expShape);
+        mShape = new ArrayList<Stroke>();
     }
 
     private void clearOverlay() {
