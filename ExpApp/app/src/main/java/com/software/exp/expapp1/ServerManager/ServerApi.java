@@ -42,15 +42,6 @@ public class ServerApi {
         return restAdapter.create(Service.class);
     }
 
-    public Call<ResponseObj> userExistsByName(String username) {
-        Service service = create();
-        ArrayMap<String, String> query = new ArrayMap<>();
-        query.put("username", username);
-
-        return service.userExistsByName(query);
-//        return service.details(id, query);
-    }
-
 
     public interface Service {
         @POST(USER_EXIST)

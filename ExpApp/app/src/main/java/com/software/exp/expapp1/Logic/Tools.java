@@ -3,6 +3,9 @@ package com.software.exp.expapp1.Logic;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.software.exp.expapp1.Models.ExpShape;
+import com.software.exp.expapp1.Models.Stroke;
+
 /**
  * Created by roy on 8/6/2015.
  */

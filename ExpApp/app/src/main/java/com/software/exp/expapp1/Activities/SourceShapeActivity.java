@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
@@ -25,13 +26,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.software.exp.expapp1.BuildConfig;
 import com.software.exp.expapp1.Logic.Consts;
-import com.software.exp.expapp1.Logic.ExpShape;
+import com.software.exp.expapp1.Models.ExpShape;
 import com.software.exp.expapp1.Logic.SaveRequest;
-import com.software.exp.expapp1.Logic.Shapes;
-import com.software.exp.expapp1.Logic.ShapesType;
+import com.software.exp.expapp1.Models.Shapes;
+import com.software.exp.expapp1.Models.ShapesType;
 import com.software.exp.expapp1.Logic.MotionEventCompact;
-import com.software.exp.expapp1.Logic.Stroke;
+import com.software.exp.expapp1.Models.Stroke;
 import com.software.exp.expapp1.Logic.Tools;
 import com.software.exp.expapp1.R;
 
@@ -136,6 +138,7 @@ public class SourceShapeActivity extends Activity {
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String user = prefs.getString(Consts.USERNAME, "");
 
+
         shapes = new Shapes(telephonyManager, wm, metrics);
         shapes.Name = user;
 
@@ -214,6 +217,7 @@ public class SourceShapeActivity extends Activity {
         expShape.Instruction = ShapesType.getInstructionName(shapeCounter - 1);
         expShape.Strokes = mShape;
         shapes.ExpShapeList.add(expShape);
+
         mShape = new ArrayList<Stroke>();
     }
 

@@ -7,8 +7,8 @@ android {
         applicationId 'com.software.exp.expapp1'
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 12
-        versionName "1.5"
+        versionCode 13
+        versionName "1.6"
         multiDexEnabled false
     }
     buildTypes {
