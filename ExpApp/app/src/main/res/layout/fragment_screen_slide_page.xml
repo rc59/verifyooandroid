@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.software.exp.expapp1.Fragments.ScreenSlidePageFragment">
+    tools:context="com.software.exp.expapp2.Fragments.ScreenSlidePageFragment">
 
 
     <ImageView

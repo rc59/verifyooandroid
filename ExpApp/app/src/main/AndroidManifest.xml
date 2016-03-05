@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.software.exp.expapp1" >
+    package="com.software.exp.expapp2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.software.exp.expapp1.Activities.MainActivity"
+            android:name="com.software.exp.expapp2.Activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,41 +37,41 @@
         </activity>
 
         <activity
-            android:name="com.software.exp.expapp1.Activities.SourceShapeActivity"
+            android:name="com.software.exp.expapp2.Activities.SourceShapeActivity"
             android:label="@string/title_activity_source_shape"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.software.exp.expapp1.Activities.ShapeCreatedActivity"
+            android:name="com.software.exp.expapp2.Activities.ShapeCreatedActivity"
             android:label="@string/title_activity_shape_created"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.software.exp.expapp1.Activities.SavingShapeActivity"
+            android:name="com.software.exp.expapp2.Activities.SavingShapeActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.software.exp.expapp1.Activities.ErrorPageActivity"
+            android:name="com.software.exp.expapp2.Activities.ErrorPageActivity"
             android:label="@string/title_activity_error_page"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.software.exp.expapp1.Activities.InstructionsActivity"
+            android:name="com.software.exp.expapp2.Activities.InstructionsActivity"
             android:screenOrientation="portrait">
         </activity>
         <service
-            android:name="com.software.exp.expapp1.RegistrationIntentService"
+            android:name="com.software.exp.expapp2.RegistrationIntentService"
             android:exported="false" >
         </service>
         <service
-            android:name="com.software.exp.expapp1.MyInstanceIDListenerService"
+            android:name="com.software.exp.expapp2.MyInstanceIDListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
-            android:name="com.software.exp.expapp1.MyGcmListenerService"
+            android:name="com.software.exp.expapp2.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

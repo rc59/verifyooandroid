@@ -1,4 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activities.MatchingActivity">
+    tools:context="com.software.exp.expapp2.Activities.MatchingActivity">
 </menu>
