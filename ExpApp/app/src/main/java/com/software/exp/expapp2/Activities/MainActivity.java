@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         });
         img.setImageResource(R.drawable.user);
 
-        setTitle(getString(R.string.enterUserInfo));
+        setTitle(getString(R.string.enterEmailAddress));
 
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String user = prefs.getString(Consts.USERNAME, "");

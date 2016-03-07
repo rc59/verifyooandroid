@@ -1,2 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <string name="app_name">משחק פסיכולוגי לזיהוי צורות</string>
+    <string name="title_activity_source_shape">SourceShape</string>
+    <string name="btnRestart">התחל מחדש</string>
+    <string name="title_activity_shape_created">בוצע</string>
+    <string name="title_activity_error">שגיאה</string>
+    <string name="title_activity_error_page">דף שגיאה</string>
+    <string name="loading">טוען...</string>
+    <string name="error1">שגיאה לא צפויה התרחשה</string>
+    <string name="error2">לחץ "חזור" על מנת לנסות שוב</string>
+    <string name="goHome">חזור למסך הפתיחה</string>
+    <string name="action_home">חזור למסך הפתיחה</string>
+    <string name="errPage">דף שגיאה</string>
+    <string name="mainPage"></string>
+    <string name="enterEmailAddress">הזן דואר אלקטרוני</string>
+    <string name="skip">דלג</string>
+    <string name="drow_5">צייר 5</string>
+    <string name="drow_a">צייר A</string>
+    <string name="drow_r">צייר R</string>
+    <string name="drow_traingular">צייר משולש</string>
+    <string name="drow_heart">צייר לב</string>
+    <string name="drow_line">צייר קו אופקי_ למטה ואלכסוני / מעל</string>
+    <string name="drow_eight">צייר 8</string>
+    <string name="start_experiment">התחל ניסוי</string>
+    <string name="thank_you_for_participating">תודה על ההשתתפות בניסוי , אנא סגור את האפלקציה</string>
+    <string name="saving_experiment">שומר את הניסוי...</string>
+    <string name="btnOk">אישור</string>
+    <string name="btnSave">שמור</string>
+    <string name="next">הבא</string>
+</resources>
+
