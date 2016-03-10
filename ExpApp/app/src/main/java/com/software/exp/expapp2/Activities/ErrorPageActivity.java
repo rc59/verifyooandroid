@@ -40,7 +40,7 @@ public class ErrorPageActivity extends Activity {
     }
 
     private void onClickPlayAgain() {
-        Intent intent = new Intent(getApplication(), MainActivity.class);
+        Intent intent = new Intent(getApplication(), LogInActivity.class);
         startActivity(intent);
     }
 
@@ -60,7 +60,7 @@ public class ErrorPageActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }

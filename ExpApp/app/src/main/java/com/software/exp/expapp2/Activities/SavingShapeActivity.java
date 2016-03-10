@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.software.exp.expapp2.Logic.SaveRequest;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
 
 public class SavingShapeActivity extends Activity {
@@ -19,7 +19,7 @@ public class SavingShapeActivity extends Activity {
     }
 
     private void saveShape() {
-        String jsonShape = Tools.jsonShape;
+        String jsonShape = Utils.jsonShape;
         new SaveRequest(getApplicationContext()).run(jsonShape);
     }
 

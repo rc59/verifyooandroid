@@ -10,7 +10,6 @@
     <string name="loading">טוען...</string>
     <string name="error1">שגיאה לא צפויה התרחשה</string>
     <string name="error2">לחץ "חזור" על מנת לנסות שוב</string>
-    <string name="goHome">חזור למסך הפתיחה</string>
     <string name="action_home">חזור למסך הפתיחה</string>
     <string name="errPage">דף שגיאה</string>
     <string name="mainPage"></string>
@@ -29,5 +28,10 @@
     <string name="btnOk">אישור</string>
     <string name="btnSave">שמור</string>
     <string name="next">הבא</string>
+    <string name="choose_language">בחר שפה</string>
+    <string name="english">english</string>
+    <string name="hebrew">עברית</string>
+    <string name="continue_">המשך</string>
+
 </resources>
 

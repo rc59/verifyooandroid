@@ -8,7 +8,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.software.exp.expapp2.BuildConfig;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 
 import java.util.ArrayList;
 
@@ -35,10 +35,10 @@ public class Shapes {
     public Shapes(TelephonyManager telephonyManager, WindowManager wm,DisplayMetrics metrics) {
         ExpShapeList = new ArrayList<ExpShape>();
         OS = Build.VERSION.RELEASE;
-        GcmToken = Tools.GcmToken;
+        GcmToken = Utils.GcmToken;
 
         DeviceId = telephonyManager.getDeviceId();
-        ModelName = Tools.getDeviceName();
+        ModelName = Utils.getDeviceName();
 
         Display display = wm.getDefaultDisplay();
         Point size = new Point();

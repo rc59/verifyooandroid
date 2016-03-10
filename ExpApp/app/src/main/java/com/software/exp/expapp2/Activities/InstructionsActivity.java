@@ -3,30 +3,20 @@ package com.software.exp.expapp2.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.cepheuen.progresspageindicator.ProgressPageIndicator;
+import com.sembozdemir.viewpagerarrowindicator.library.ViewPagerArrowIndicator;
 import com.software.exp.expapp2.Fragments.ScreenSlidePageFragment;
+import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
 
 public class InstructionsActivity extends FragmentActivity {
-
-    private int mPageNumber;
-
-
-//    @Bind(R.id.btnOK)
-//    Button btnOk;
-//    @Bind(R.id.lblInstructionsReg)
-//    TextView lblInstructionsReg;
-//    @Bind(R.id.lblInstructionsMatch)
-//    TextView lblInstructionsMatch;
 
     /**
      * The number of pages (wizard steps) to show in this demo.
@@ -44,20 +34,43 @@ public class InstructionsActivity extends FragmentActivity {
      */
     private PagerAdapter mPagerAdapter;
 
+    private boolean isRTL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instructions);
 
+        ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setCurrentPagerTitle(position);
+            }
+        };
+
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
+        mPager.addOnPageChangeListener(pageChangeListener);
         mPager.setAdapter(mPagerAdapter);
 
-        ProgressPageIndicator pagerIndicator = (ProgressPageIndicator) findViewById(R.id.dotsL);
-        pagerIndicator.setViewPager(mPager);
-        pagerIndicator.setStrokeColor(Color.RED);
-        pagerIndicator.setRadius(60);
+        isRTL = Utils.isRTL(getResources().getConfiguration().locale);
+
+        if(isRTL){
+            mPager.setCurrentItem(NUM_PAGES);
+        }
+
+        ViewPagerArrowIndicator viewPagerArrowIndicator = (ViewPagerArrowIndicator) findViewById(R.id.viewPagerArrowIndicator);
+        viewPagerArrowIndicator.bind(mPager);
 
     }
 
@@ -77,6 +90,19 @@ public class InstructionsActivity extends FragmentActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void setCurrentPagerTitle(Integer currentPage) {
+        if (isRTL){
+            currentPage -= 5;
+            currentPage = Math.abs(currentPage);
+        }
+        else{
+            currentPage +=1;
+        }
+
+        setTitle(currentPage + "/" + NUM_PAGES);
     }
 
 

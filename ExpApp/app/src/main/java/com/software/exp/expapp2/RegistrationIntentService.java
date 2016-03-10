@@ -11,7 +11,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.software.exp.expapp2.Logic.Consts;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 
 import java.io.IOException;
 
@@ -89,7 +89,7 @@ public class RegistrationIntentService extends IntentService {
             for (String topic : TOPICS) {
                 pubSub.subscribe(token, "/topics/" + topic, null);
             }
-            Tools.GcmToken = token;
+            Utils.GcmToken = token;
         } catch (Exception exc) {
             String msg = exc.getMessage();
         }

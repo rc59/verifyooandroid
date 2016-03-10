@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.software.exp.expapp2.Logic.Consts;
 import com.software.exp.expapp2.Logic.MotionEventCompact;
 import com.software.exp.expapp2.Logic.SaveRequest;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.Models.ExpShape;
 import com.software.exp.expapp2.Models.Shapes;
 import com.software.exp.expapp2.Models.ShapesType;
@@ -45,7 +45,7 @@ public class SourceShapeActivity extends Activity {
     public static final String MY_PREFS_NAME = "MyPrefsFile";
 
     static final int numberOfShapes = ShapesType.ShapesTypeEnum.values().length-1;
-    static final int numberOfLoops = 6;
+    static final int numberOfLoops = 1;
 
     private int shapeCounter = 0;
     private int loopCounter = 0;
@@ -239,7 +239,7 @@ public class SourceShapeActivity extends Activity {
         int id = item.getItemId();
 
         if (id == R.id.action_home) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
@@ -306,7 +306,7 @@ public class SourceShapeActivity extends Activity {
 
                     temp.VelocityX = mVelocityTracker.getXVelocity();
                     temp.VelocityY = mVelocityTracker.getXVelocity();
-                    temp.Velocity = Tools.pitagoras(temp.VelocityX, temp.VelocityY);
+                    temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                     mTempStroke.ListEvents.add(temp);
                 }
@@ -318,7 +318,7 @@ public class SourceShapeActivity extends Activity {
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
                 temp.VelocityY = mVelocityTracker.getXVelocity();
-                temp.Velocity = Tools.pitagoras(temp.VelocityX, temp.VelocityY);
+                temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);
             } else {
@@ -329,7 +329,7 @@ public class SourceShapeActivity extends Activity {
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
                 temp.VelocityY = mVelocityTracker.getXVelocity();
-                temp.Velocity = Tools.pitagoras(temp.VelocityX, temp.VelocityY);
+                temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);
             }

@@ -14,10 +14,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.software.exp.expapp2.Logic.Consts;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
 
-public class MainActivity extends Activity {
+public class LogInActivity extends Activity {
 
     Button mBtnSubmit;
     EditText mEditText;
@@ -28,8 +28,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_login);
         init();
     }
 
@@ -74,13 +73,13 @@ public class MainActivity extends Activity {
 
     private void onClickOK() {
         String userName = mEditText.getText().toString();
-        Tools.Username = userName;
+        Utils.Username = userName;
         if (userName.length() > 0) {
             SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Consts.USERNAME, userName);
             editor.commit(); //important, otherwise it wouldn't save.
-            Intent intent = new Intent(getApplicationContext(), InstructionsActivity.class);
+            Intent intent = new Intent(this, InstructionsActivity.class);
             startActivity(intent);
 
         }

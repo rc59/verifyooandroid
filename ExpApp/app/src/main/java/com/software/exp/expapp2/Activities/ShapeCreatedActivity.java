@@ -54,7 +54,7 @@ public class ShapeCreatedActivity extends Activity {
     }
 
     private void goToMainView(){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

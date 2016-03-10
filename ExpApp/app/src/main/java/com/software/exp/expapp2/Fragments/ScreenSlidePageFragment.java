@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.software.exp.expapp2.Activities.SourceShapeActivity;
 import com.software.exp.expapp2.Logic.Consts;
+import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
 
 import butterknife.Bind;
@@ -60,32 +61,68 @@ public class ScreenSlidePageFragment extends Fragment {
                 .inflate(R.layout.fragment_screen_slide_page, container, false);
         ButterKnife.bind(this, rootView);
 
-        if (mPageNumber == 0){
-            imageLabel.setImageResource(R.drawable.instruction1);
-            doneButton.setText(getString(R.string.skip));
-            doneButton.setVisibility(View.GONE);
-        }
+        if (Utils.isRTL(getResources().getConfiguration().locale)){
 
-        else if (mPageNumber == 1){
-            imageLabel.setImageResource(R.drawable.instruction2);
-            doneButton.setVisibility(View.GONE);
-        }
+            if (mPageNumber == 0){
+                imageLabel.setImageResource(R.drawable.instruction5);
+                doneButton.setText(getString(R.string.start_experiment));
+                doneButton.setVisibility(View.VISIBLE);
+            }
 
-        else if (mPageNumber == 2){
-            imageLabel.setImageResource(R.drawable.instruction3);
-            doneButton.setVisibility(View.GONE);
-        }
+            else if (mPageNumber == 1){
 
-        else if (mPageNumber == 3){
-            imageLabel.setImageResource(R.drawable.instruction4);
-            doneButton.setVisibility(View.GONE);
-        }
+                imageLabel.setImageResource(R.drawable.instruction4);
+                doneButton.setVisibility(View.GONE);
 
+            }
+
+            else if (mPageNumber == 2){
+                imageLabel.setImageResource(R.drawable.instruction3);
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else if (mPageNumber == 3){
+                imageLabel.setImageResource(R.drawable.instruction2);
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else{
+                imageLabel.setImageResource(R.drawable.instruction1);
+                doneButton.setText(getString(R.string.skip));
+                doneButton.setVisibility(View.GONE);
+            }
+
+        }
         else{
-            imageLabel.setImageResource(R.drawable.instruction5);
-            doneButton.setText(getString(R.string.start_experiment));
-            doneButton.setVisibility(View.VISIBLE);
+            if (mPageNumber == 0){
+                imageLabel.setImageResource(R.drawable.instruction1);
+                doneButton.setText(getString(R.string.skip));
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else if (mPageNumber == 1){
+                imageLabel.setImageResource(R.drawable.instruction2);
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else if (mPageNumber == 2){
+                imageLabel.setImageResource(R.drawable.instruction3);
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else if (mPageNumber == 3){
+                imageLabel.setImageResource(R.drawable.instruction4);
+                doneButton.setVisibility(View.GONE);
+            }
+
+            else{
+                imageLabel.setImageResource(R.drawable.instruction5);
+                doneButton.setText(getString(R.string.start_experiment));
+                doneButton.setVisibility(View.VISIBLE);
+            }
         }
+
+
         return rootView;
     }
 

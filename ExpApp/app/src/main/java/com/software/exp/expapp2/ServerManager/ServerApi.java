@@ -1,7 +1,7 @@
 package com.software.exp.expapp2.ServerManager;
 
 import com.software.exp.expapp2.Logic.ResponseObj;
-import com.software.exp.expapp2.Logic.Tools;
+import com.software.exp.expapp2.Logic.Utils;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ import retrofit.http.QueryMap;
  */
 public class ServerApi {
 
-    public static final String SERVER_BASE_URL = Tools.getUrl();
+    public static final String SERVER_BASE_URL = Utils.getUrl();
     public static final String USER_EXIST = "shapes/isUserExistsByName";
 
     private OkHttpClient mHttpClient;

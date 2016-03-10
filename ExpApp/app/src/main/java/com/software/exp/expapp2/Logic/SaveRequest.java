@@ -46,7 +46,7 @@ public class SaveRequest extends AsyncTask<String, String, String> {
 
         try {
             mSuccess = true;
-            String urlString = Tools.getUrl();
+            String urlString = Utils.getUrl();
             urlString += "shapes/createTemplate";
 
             URL url = new URL(urlString);
