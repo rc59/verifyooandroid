@@ -45,7 +45,7 @@ public class SourceShapeActivity extends Activity {
     public static final String MY_PREFS_NAME = "MyPrefsFile";
 
     static final int numberOfShapes = ShapesType.ShapesTypeEnum.values().length-1;
-    static final int numberOfLoops = 1;
+    static final int numberOfLoops = 6;
 
     private int shapeCounter = 0;
     private int loopCounter = 0;

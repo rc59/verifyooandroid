@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
     defaultConfig {
         applicationId 'com.software.exp.expapp2'
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 2
         versionName "1.1"
@@ -48,7 +48,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.github.sembozdemir:ViewPagerArrowIndicator:1.0.0'
+    compile 'klogi.com:rtlviewpager:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

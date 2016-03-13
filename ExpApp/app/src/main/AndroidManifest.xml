@@ -3,7 +3,7 @@
     package="com.software.exp.expapp2" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="15"
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />

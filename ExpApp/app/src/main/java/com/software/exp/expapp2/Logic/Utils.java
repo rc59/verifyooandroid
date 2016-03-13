@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import java.util.Locale;
@@ -21,9 +22,6 @@ public class Utils {
         return "http://52.26.178.48/";
     }
 
-    public static  String getTextUrl(){
-        return "http://0.0.0.0";
-    }
 
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
@@ -83,11 +81,19 @@ public class Utils {
     {
         String lang = locale.getLanguage();
         if( "iw".equals(lang) || "ar".equals(lang)
-                || "fa".equals(lang) || "ur".equals(lang) )
-        {
+                || "fa".equals(lang) || "ur".equals(lang) ) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public static String getUserCountryFromSim(Context context){
+        TelephonyManager teleMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (teleMgr != null){
+             String countryISOCode = teleMgr.getSimCountryIso();
+            return countryISOCode;
+        }
+        else return "";
     }
 }

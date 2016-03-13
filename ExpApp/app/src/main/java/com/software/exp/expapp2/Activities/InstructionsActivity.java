@@ -11,10 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.sembozdemir.viewpagerarrowindicator.library.ViewPagerArrowIndicator;
 import com.software.exp.expapp2.Fragments.ScreenSlidePageFragment;
-import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
+
+import klogi.com.RtlViewPager;
 
 public class InstructionsActivity extends FragmentActivity {
 
@@ -27,7 +27,7 @@ public class InstructionsActivity extends FragmentActivity {
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
-    public ViewPager mPager;
+    public RtlViewPager mPager;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -58,19 +58,11 @@ public class InstructionsActivity extends FragmentActivity {
             }
         };
 
-        mPager = (ViewPager) findViewById(R.id.pager);
+
+        mPager = (RtlViewPager)findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
         mPager.addOnPageChangeListener(pageChangeListener);
         mPager.setAdapter(mPagerAdapter);
-
-        isRTL = Utils.isRTL(getResources().getConfiguration().locale);
-
-        if(isRTL){
-            mPager.setCurrentItem(NUM_PAGES);
-        }
-
-        ViewPagerArrowIndicator viewPagerArrowIndicator = (ViewPagerArrowIndicator) findViewById(R.id.viewPagerArrowIndicator);
-        viewPagerArrowIndicator.bind(mPager);
 
     }
 
@@ -94,14 +86,15 @@ public class InstructionsActivity extends FragmentActivity {
 
 
     private void setCurrentPagerTitle(Integer currentPage) {
-        if (isRTL){
-            currentPage -= 5;
-            currentPage = Math.abs(currentPage);
-        }
-        else{
-            currentPage +=1;
-        }
+//        if (isRTL){
+//            currentPage -= 5;
+//            currentPage = Math.abs(currentPage);
+//        }
+//        else{
+//            currentPage +=1;
+//        }
 
+        currentPage +=1;
         setTitle(currentPage + "/" + NUM_PAGES);
     }
 

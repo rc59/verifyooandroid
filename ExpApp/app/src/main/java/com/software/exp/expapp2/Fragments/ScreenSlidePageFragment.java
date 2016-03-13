@@ -1,9 +1,9 @@
 package com.software.exp.expapp2.Fragments;
 
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.software.exp.expapp2.Activities.SourceShapeActivity;
 import com.software.exp.expapp2.Logic.Consts;
-import com.software.exp.expapp2.Logic.Utils;
 import com.software.exp.expapp2.R;
 
 import butterknife.Bind;
@@ -61,19 +60,48 @@ public class ScreenSlidePageFragment extends Fragment {
                 .inflate(R.layout.fragment_screen_slide_page, container, false);
         ButterKnife.bind(this, rootView);
 
-        if (Utils.isRTL(getResources().getConfiguration().locale)){
-
+//        if (Utils.isRTL(getResources().getConfiguration().locale)){
+//
+//            if (mPageNumber == 0){
+//                imageLabel.setImageResource(R.drawable.instruction5);
+//                doneButton.setText(getString(R.string.start_experiment));
+//                doneButton.setVisibility(View.VISIBLE);
+//            }
+//
+//            else if (mPageNumber == 1){
+//
+//                imageLabel.setImageResource(R.drawable.instruction4);
+//                doneButton.setVisibility(View.GONE);
+//
+//            }
+//
+//            else if (mPageNumber == 2){
+//                imageLabel.setImageResource(R.drawable.instruction3);
+//                doneButton.setVisibility(View.GONE);
+//            }
+//
+//            else if (mPageNumber == 3){
+//                imageLabel.setImageResource(R.drawable.instruction2);
+//                doneButton.setVisibility(View.GONE);
+//            }
+//
+//            else{
+//                imageLabel.setImageResource(R.drawable.instruction1);
+//                doneButton.setText(getString(R.string.skip));
+//                doneButton.setVisibility(View.GONE);
+//            }
+//
+//        }
+//        else{
             if (mPageNumber == 0){
-                imageLabel.setImageResource(R.drawable.instruction5);
-                doneButton.setText(getString(R.string.start_experiment));
-                doneButton.setVisibility(View.VISIBLE);
+                imageLabel.setImageResource(R.drawable.instruction1);
+                doneButton.setText(getString(R.string.skip));
+                doneButton.setVisibility(View.GONE);
             }
 
             else if (mPageNumber == 1){
-
-                imageLabel.setImageResource(R.drawable.instruction4);
+                imageLabel.setImageResource(R.drawable.instruction2);
                 doneButton.setVisibility(View.GONE);
-
             }
 
             else if (mPageNumber == 2){
@@ -82,35 +110,6 @@ public class ScreenSlidePageFragment extends Fragment {
             }
 
             else if (mPageNumber == 3){
-                imageLabel.setImageResource(R.drawable.instruction2);
-                doneButton.setVisibility(View.GONE);
-            }
-
-            else{
-                imageLabel.setImageResource(R.drawable.instruction1);
-                doneButton.setText(getString(R.string.skip));
-                doneButton.setVisibility(View.GONE);
-            }
-
-        }
-        else{
-            if (mPageNumber == 0){
-                imageLabel.setImageResource(R.drawable.instruction1);
-                doneButton.setText(getString(R.string.skip));
-                doneButton.setVisibility(View.GONE);
-            }
-
-            else if (mPageNumber == 1){
-                imageLabel.setImageResource(R.drawable.instruction2);
-                doneButton.setVisibility(View.GONE);
-            }
-
-            else if (mPageNumber == 2){
-                imageLabel.setImageResource(R.drawable.instruction3);
-                doneButton.setVisibility(View.GONE);
-            }
-
-            else if (mPageNumber == 3){
                 imageLabel.setImageResource(R.drawable.instruction4);
                 doneButton.setVisibility(View.GONE);
             }
@@ -120,7 +119,7 @@ public class ScreenSlidePageFragment extends Fragment {
                 doneButton.setText(getString(R.string.start_experiment));
                 doneButton.setVisibility(View.VISIBLE);
             }
-        }
+       // }
 
 
         return rootView;
