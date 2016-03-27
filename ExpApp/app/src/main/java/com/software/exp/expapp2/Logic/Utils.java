@@ -18,7 +18,7 @@ public class Utils {
     public static String GcmToken = "";
 
     public static String getUrl() {
-        //return "http://192.168.0.111:3001/";
+        //return "http://192.168.1.15:3001/";
         return "http://52.26.178.48/";
     }
 

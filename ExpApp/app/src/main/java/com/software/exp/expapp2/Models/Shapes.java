@@ -1,5 +1,6 @@
 package com.software.exp.expapp2.Models;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.telephony.TelephonyManager;
@@ -27,12 +28,14 @@ public class Shapes {
     public double ScreenHeight;
     public float Ydpi;
     public float Xdpi;
-    public User user;
+
+    public String UserCountry;
+    public String AppLocale;
 
 
     public ArrayList<ExpShape> ExpShapeList;
 
-    public Shapes(TelephonyManager telephonyManager, WindowManager wm,DisplayMetrics metrics) {
+    public Shapes(TelephonyManager telephonyManager, WindowManager wm,DisplayMetrics metrics,Context context) {
         ExpShapeList = new ArrayList<ExpShape>();
         OS = Build.VERSION.RELEASE;
         GcmToken = Utils.GcmToken;
@@ -50,6 +53,9 @@ public class Shapes {
         Xdpi = metrics.ydpi;
 
         Version = BuildConfig.VERSION_NAME;
+
+        UserCountry = Utils.getUserCountryFromSim(context);
+        AppLocale = context.getResources().getConfiguration().locale.getLanguage();
     }
 
 

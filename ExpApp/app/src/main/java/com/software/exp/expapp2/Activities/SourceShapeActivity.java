@@ -126,7 +126,6 @@ public class SourceShapeActivity extends Activity {
         mLblStatus.setTextColor(Color.BLUE);
 
         Intent intentPrev = getIntent();
-        String mUserName = intentPrev.getStringExtra(Consts.USERNAME);
 
         String serviceName = Context.TELEPHONY_SERVICE;
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(serviceName);
@@ -137,9 +136,8 @@ public class SourceShapeActivity extends Activity {
         String user = prefs.getString(Consts.USERNAME, "");
 
 
-        shapes = new Shapes(telephonyManager, wm, metrics);
+        shapes = new Shapes(telephonyManager, wm, metrics,this);
         shapes.Name = user;
-
 
         mOverlay = (GestureOverlayView) findViewById(R.id.gestures_overlay);
         setColorInput();

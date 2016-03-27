@@ -25,30 +25,30 @@ public class ShapesType {
 
     static public String getTitle(int num, Context context){
         if (num == ShapesTypeEnum.FIVE.getID()){
-            return context.getResources(). getString(R.string.drow_5);
+            return context.getResources(). getString(R.string.draw_5);
         }
 
         else if(num == ShapesTypeEnum.EIGHT.getID()) {
-            return context.getResources().getString(R.string.drow_eight);
+            return context.getResources().getString(R.string.draw_eight);
         }
 
         else if (num == ShapesTypeEnum.ALETTER.getID()){
-            return context.getResources(). getString(R.string.drow_a);
+            return context.getResources(). getString(R.string.draw_a);
         }
 
         else if (num == ShapesTypeEnum.RLETTER.getID()){
-            return context.getResources(). getString(R.string.drow_r);
+            return context.getResources(). getString(R.string.draw_r);
         }
 
         else if (num == ShapesTypeEnum.TRIANGULAR.getID()){
-            return context.getResources(). getString(R.string.drow_traingular);
+            return context.getResources(). getString(R.string.draw_triangular);
         }
         else if(num == ShapesTypeEnum.HEART.getID()){
-            return context.getResources().getString(R.string.drow_heart);
+            return context.getResources().getString(R.string.draw_heart);
         }
 
         else {//LINE
-            return context.getResources().getString(R.string.drow_line);
+            return context.getResources().getString(R.string.draw_line);
         }
     }
 
