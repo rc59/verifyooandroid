@@ -20,7 +20,7 @@
     <string name="draw_r">Draw R</string>
     <string name="draw_triangular">Draw triangular</string>
     <string name="draw_heart">Draw heart</string>
-    <string name="draw_line"></string>
+    <string name="draw_line">Draw a horizontal line _ and a diagonal line /  above</string>
     <string name="draw_eight">Draw 8</string>
     <string name="start_experiment">Start experiment</string>
     <string name="thank_you_for_participating">Thank you for participating in the experiment, please close the application</string>
