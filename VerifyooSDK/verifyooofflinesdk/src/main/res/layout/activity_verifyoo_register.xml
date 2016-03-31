@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black" >
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_gravity="left"
+        android:gravity="center_vertical"
+        android:background="@android:color/black" />
+
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gesturesOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="8"
+        android:gestureColor="@android:color/holo_blue_dark"
+        android:gestureStrokeType="multiple" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout1"
+            android:gravity="center" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnSave"
+                android:textColor="@android:color/white"
+                android:enabled="false"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/btnSave" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btnClear"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/btnSave"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:id="@+id/btnClear" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/textStrength"
+                android:text="Gesture Strength: [None]"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:text=""
+                android:id="@+id/textInstruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textStrength"
+                android:visibility="gone"
+                android:textColor="@android:color/holo_red_dark"
+                android:gravity="center_horizontal" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
