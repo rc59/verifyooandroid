@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mUserName = "user";
+        mUserName = "user-roy";
         mCompany = "Verifyoo";
 
         init();

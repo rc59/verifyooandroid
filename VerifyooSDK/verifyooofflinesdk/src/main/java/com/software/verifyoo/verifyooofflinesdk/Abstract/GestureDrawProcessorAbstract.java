@@ -26,9 +26,11 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     private Context mApplicationContext;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
+    private Sensor mGyro;
     private SensorEventListener mSensorListener;
 
     private float mAccX, mAccY, mAccZ;
+    private float mGyroX, mGyroY, mGyroZ;
 
     public Stroke getStroke() {
         return mTempStroke;
@@ -45,6 +47,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
         mSensorManager = (SensorManager) mApplicationContext.getSystemService(mApplicationContext.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         mSensorListener = new SensorEventListener() {
             @Override
@@ -56,6 +59,11 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                     mAccY = sensorEvent.values[1];
                     mAccZ = sensorEvent.values[2];
                 }
+                if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                    mGyroX = sensorEvent.values[0];
+                    mGyroY = sensorEvent.values[1];
+                    mGyroZ = sensorEvent.values[2];
+                }
             }
 
             @Override
@@ -63,6 +71,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
             }
         };
+
+        mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mSensorListener, mGyro, SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void InitPrevStroke(Stroke currentStroke, ArrayList<Stroke> listStrokes, double length) {
@@ -87,16 +98,19 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             mVelocityTracker.computeCurrentVelocity(1000);
 
             temp = UtilsConvert.ConvertMotionEvent(event);
-            temp.AngleY = mAccY;
+
             temp.AngleX = mAccX;
+            temp.AngleY = mAccY;
             temp.AngleZ = mAccZ;
+
+            temp.GyroX = mGyroX;
+            temp.GyroY = mGyroY;
+            temp.GyroZ = mGyroZ;
 
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();
 
             //mTempStroke.ListEvents.add(temp);
-
-            mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         } catch (Exception exc) {
             String msg = exc.getMessage();
         }
@@ -118,9 +132,14 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                 temp.EventTime = event.getHistoricalEventTime(idx);
                 temp.Pressure = event.getHistoricalPressure(idx);
                 temp.TouchSurface = event.getHistoricalSize(idx);
-                temp.AngleY = mAccY;
+
                 temp.AngleX = mAccX;
+                temp.AngleY = mAccY;
                 temp.AngleZ = mAccZ;
+
+                temp.GyroX = mGyroX;
+                temp.GyroY = mGyroY;
+                temp.GyroZ = mGyroZ;
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
                 temp.VelocityY = mVelocityTracker.getYVelocity();
@@ -131,9 +150,14 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             }
 
             temp = UtilsConvert.ConvertMotionEvent(event);
-            temp.AngleY = mAccY;
+
             temp.AngleX = mAccX;
+            temp.AngleY = mAccY;
             temp.AngleZ = mAccZ;
+
+            temp.GyroX = mGyroX;
+            temp.GyroY = mGyroY;
+            temp.GyroZ = mGyroZ;
 
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();
@@ -142,9 +166,14 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         }
         else {
             temp = UtilsConvert.ConvertMotionEvent(event);
-            temp.AngleY = mAccY;
+
             temp.AngleX = mAccX;
+            temp.AngleY = mAccY;
             temp.AngleZ = mAccZ;
+
+            temp.GyroX = mGyroX;
+            temp.GyroY = mGyroY;
+            temp.GyroZ = mGyroZ;
 
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();

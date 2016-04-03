@@ -1,8 +1,7 @@
 package com.software.verifyoo.verifyooofflinesdk.ServerAPI.Objects;
 
-import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsCalc;
-
 import VerifyooLogic.UserProfile.MotionEventCompact;
+import VerifyooLogic.Utils.UtilsCalc;
 
 /**
  * Created by roy on 2/24/2016.
@@ -18,9 +17,14 @@ public class ExpMotionEventCompact {
     public double Pressure;
     public double EventTime;
     public double TouchSurface;
-    public double AngleZ;
+
     public double AngleX;
     public double AngleY;
+    public double AngleZ;
+
+    public double GyroX;
+    public double GyroY;
+    public double GyroZ;
 
     public ExpMotionEventCompact(MotionEventCompact motionEventCompact) {
         RawX = motionEventCompact.RawXpixel;
@@ -33,8 +37,13 @@ public class ExpMotionEventCompact {
         Pressure = motionEventCompact.Pressure;
         EventTime = motionEventCompact.EventTime;
         TouchSurface = motionEventCompact.TouchSurface;
-        AngleZ = motionEventCompact.AngleZ;
+
         AngleX = motionEventCompact.AngleX;
         AngleY = motionEventCompact.AngleY;
+        AngleZ = motionEventCompact.AngleZ;
+
+        GyroX = motionEventCompact.AngleX;
+        GyroY = motionEventCompact.AngleY;
+        GyroZ = motionEventCompact.AngleZ;
     }
 }

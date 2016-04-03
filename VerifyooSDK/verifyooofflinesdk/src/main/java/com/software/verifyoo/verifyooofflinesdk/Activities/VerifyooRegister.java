@@ -25,7 +25,7 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
-import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsData;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsInstructions;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
@@ -210,7 +210,7 @@ public class VerifyooRegister extends GestureInputAbstract {
                 String jsonTemplate = serializer.deepSerialize(template);
 
                 try {
-                    String key = UtilsData.GetUserKey(mUserName);
+                    String key = UtilsGeneral.GetUserKey(mUserName);
                     jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();

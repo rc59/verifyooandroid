@@ -25,7 +25,7 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
-import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsData;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
 import java.io.FileNotFoundException;
@@ -166,7 +166,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
             try {
                 try {
-                    String key = UtilsData.GetUserKey(mUserName);
+                    String key = UtilsGeneral.GetUserKey(mUserName);
                     storedTemplate = AESCrypt.decrypt(key, storedTemplate);
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();
