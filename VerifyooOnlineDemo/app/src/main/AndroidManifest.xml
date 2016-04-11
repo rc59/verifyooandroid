@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.software.cognitho.cognithoapp" >
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.software.cognitho.cognithoapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.cognitho.com"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="cognitho"
+                    android:pathPrefix=""
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.cognithoapp.com"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="cognithoapp"
+                    android:pathPrefix=""
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.software.cognitho.cognithoapp" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ErrorPage"
+            android:label="@string/title_activity_error_page" >
+        </activity>
+        <activity
+            android:name=".Activities.InstructionDraw"
+            android:label="@string/title_activity_instruction" >
+        </activity>
+        <activity
+            android:name=".Activities.InstructionInputSelection"
+            android:label="@string/title_activity_instruction_input_selection" >
+        </activity>
+        <activity
+            android:name=".Activities.SavingTemplate"
+            android:label="@string/title_activity_saving_template" >
+        </activity>
+        <activity
+            android:name=".Activities.TemplateCreated"
+            android:label="@string/title_activity_template_created" >
+        </activity>
+        <activity
+            android:name=".Activities.SignInInputSelection"
+            android:label="@string/title_activity_sign_in_input_selection" >
+        </activity>
+        <activity
+            android:name=".Activities.SignInDraw"
+            android:label="@string/title_activity_sign_in_draw" >
+        </activity>
+        <activity
+            android:name=".Activities.VerifyTemplate"
+            android:label="@string/title_activity_verify_template" >
+        </activity>
+        <activity
+            android:name=".Activities.AuthResult"
+            android:label="@string/title_activity_auth_result" >
+        </activity>
+        <activity
+            android:name=".Activities.Test"
+            android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name=".Activities.TemplateUpdated"
+            android:label="@string/title_activity_template_updated" >
+        </activity>
+
+        <service
+            android:name="com.software.cognitho.cognithoapp.RegistrationIntentService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.software.cognitho.cognithoapp.AppInstanceIDListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.software.cognitho.cognithoapp.AppGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
