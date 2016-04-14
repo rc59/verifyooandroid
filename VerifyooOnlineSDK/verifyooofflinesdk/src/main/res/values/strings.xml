@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VerifyooOfflineSDK</string>
+    <string name="title_activity_test">Test</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_verifyoo_test">VerifyooTest</string>
+    <string name="title_activity_verifyoo_register">VerifyooRegister</string>
+    <string name="title_activity_verifyoo_authenticate">VerifyooAuthenticate</string>
+    <string name="btnSave">Save</string>
+    <string name="btnAuth">Authenticate</string>
+    <string name="btnClear">RESTART</string>
+    <string name="gestureStrNone">[None]</string>
+    <string name="gestureStrLow">Low</string>
+    <string name="gestureStrMedium">Medium</string>
+    <string name="gestureStrHigh">High</string>
+    <string name="gestureStrVeryHigh">Very High</string>
+    <string name="statusRepeatGesture">Please repeat gesture</string>
+    <string name="statusGesturesMismatch">Gestures do not match, please retry</string>
+    <string name="statusGesturesMatch">Gestures match, please save</string>
+
+</resources>
