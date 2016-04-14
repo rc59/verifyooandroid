@@ -244,7 +244,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         JSONSerializer serializer = new JSONSerializer();
         String jsonTemplate = serializer.deepSerialize(list);
 
-        ApiActionVerifyTemplates verifyTemplates = new ApiActionVerifyTemplates();
+        Intent intent = this.getIntent();
+        ApiActionVerifyTemplates verifyTemplates = new ApiActionVerifyTemplates(this);
         ApiHandler apiHandler = new ApiHandler(verifyTemplates);
         apiHandler.Execute(jsonTemplate);
 

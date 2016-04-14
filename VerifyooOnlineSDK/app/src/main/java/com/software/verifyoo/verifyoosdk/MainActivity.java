@@ -137,12 +137,14 @@ public class MainActivity extends ActionBarActivity {
         if (resultCode == RESULT_OK) {
             if (data != null) {
                 if (data.getExtras() != null &&
-                        data.getExtras().containsKey(VerifyooConsts.EXTRA_DOUBLE_SCORE) &&
                         data.getExtras().containsKey(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED)) {
 
-                    double score = data.getExtras().getDouble(VerifyooConsts.EXTRA_DOUBLE_SCORE);
                     boolean isAuthenticated = data.getExtras().getBoolean(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED);
 
+                    double score = 0;
+                    if (isAuthenticated) {
+                        score = 0.95;
+                    }
                     score = score * 10000;
                     score = Math.round(score);
                     score = score / 10000;
@@ -159,7 +161,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                     result += "%";
 
-                    mTxtScore.setText(result);
+                    //mTxtScore.setText(result);
 
                     mResultImage.setVisibility(View.VISIBLE);
                     if (score >= 0.9) {
