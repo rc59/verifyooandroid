@@ -3,6 +3,7 @@ package com.software.cognitho.cognithoapp.Activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,8 @@ public class VerifyTemplate extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_verify_template);
 
         init();

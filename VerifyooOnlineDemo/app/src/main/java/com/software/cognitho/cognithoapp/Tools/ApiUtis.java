@@ -7,7 +7,7 @@ public class ApiUtis {
     public static boolean isProd = true;
 
     public static String getBaseIP() {
-        String ip = "http://192.168.1.169/";
+        String ip = "http://192.168.1.151/";
 
         if(isProd) {
             ip = "http://52.34.215.246/";

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.software.cognitho.cognithoapp.MainActivity;
@@ -15,6 +18,8 @@ public class TemplateUpdated extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_template_updated);
 
         init();
@@ -25,6 +30,19 @@ public class TemplateUpdated extends Activity {
 
         ImageView image = (ImageView) findViewById(R.id.image);
         image.setImageResource(R.drawable.template);
+
+        Button btn = (Button) findViewById(R.id.btnGoHome);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickGoHome();
+            }
+        });
+    }
+
+    private void onClickGoHome() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

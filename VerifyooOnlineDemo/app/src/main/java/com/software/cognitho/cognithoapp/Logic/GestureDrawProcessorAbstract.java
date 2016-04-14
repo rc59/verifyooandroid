@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
@@ -27,6 +28,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     private MotionEventCompact mDownEvent;
 
     private float _accX, _accY, _accZ;
+    private CountDownTimer _timer;
 
     public Stroke getStroke() {
         return _tempStroke;
@@ -36,8 +38,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         _tempStroke = new Stroke();
     }
 
-    public void init(Context applicationContext) {
+    public void init(Context applicationContext, CountDownTimer timer) {
         _tempStroke = new Stroke();
+        _timer = timer;
         _applicationContext = applicationContext;
         _velocityTracker = VelocityTracker.obtain();
 
@@ -67,6 +70,10 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
         try {
             MotionEventCompact temp;
+
+            if (_timer != null) {
+                _timer.cancel();
+            }
 
             _velocityTracker.addMovement(event);
             _velocityTracker.computeCurrentVelocity(1000);

@@ -8,12 +8,14 @@ import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,9 +57,13 @@ public class InstructionDraw extends Activity {
     private double mXdpi;
     private double mYdpi;
 
+    CountDownTimer mTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_instruction_draw);
 
         init();
@@ -66,6 +72,17 @@ public class InstructionDraw extends Activity {
     private void init() {
         setTitle("Instruction " + String.valueOf(AppData.instructionIdx + 1));
         String instruction = "Please draw " + AppData.listInstructions.get(AppData.instructionIdx).Text;
+
+        mTimer = new CountDownTimer(600, 600) {
+
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                onClickConfirm();
+            }
+        };
 
         getDPI();
 
@@ -85,7 +102,7 @@ public class InstructionDraw extends Activity {
         else {
             mGesturesProcessor = new GestureDrawProcessor();
         }
-        mGesturesProcessor.init(getApplicationContext());
+        mGesturesProcessor.init(getApplicationContext(), mTimer);
 
         mOverlay = (GestureOverlayView) findViewById(R.id.gestures_overlay);
         mOverlay.addOnGestureListener(mGesturesProcessor);
@@ -117,11 +134,17 @@ public class InstructionDraw extends Activity {
         mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickConfirm();
+                onClickGoHome();
             }
         });
-        mBtnConfirm.setBackgroundColor(color);
+        //mBtnConfirm.setBackgroundColor(color);
     }
+
+    private void onClickGoHome() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
 
     private void getDPI() {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -134,6 +157,7 @@ public class InstructionDraw extends Activity {
             mStatus.setText(getString(R.string.repeatShape));
         }
 
+        mTimer = null;
         mBtnConfirm.setEnabled(false);
 
         String serviceName = Context.TELEPHONY_SERVICE;
@@ -169,9 +193,10 @@ public class InstructionDraw extends Activity {
         mTempStroke = new Stroke();
         mTempGesture = new GestureObj();
         mTemplate = null;
-        mBtnConfirm.setVisibility(View.VISIBLE);
-        mBtnConfirm.setEnabled(false);
-        mBtnSave.setVisibility(View.INVISIBLE);
+        mTimer.cancel();
+        //mBtnConfirm.setVisibility(View.VISIBLE);
+        //mBtnConfirm.setEnabled(false);
+        //mBtnSave.setVisibility(View.INVISIBLE);
     }
 
     private void clearOverlay() {
@@ -181,6 +206,7 @@ public class InstructionDraw extends Activity {
     }
 
     private void onClickSave() {
+        mOverlay.setEnabled(false);
         mTempGesture.InstructionIdx = AppData.listInstructions.get(AppData.instructionIdx).InstructionIdx;
         AppData.instructionIdx++;
         AppData.template.Gestures.add(mTempGesture);
@@ -218,6 +244,10 @@ public class InstructionDraw extends Activity {
             unRegisterSensors();
             Gesture gesture  = overlay.getGesture();
 
+            if (mTimer != null) {
+                mTimer.start();
+            }
+
             int strokesCount = gesture.getStrokes().size();
             if (strokesCount > 1) {
                 gesture.getStrokes().remove(0);
@@ -239,6 +269,10 @@ public class InstructionDraw extends Activity {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
             unRegisterSensors();
             Gesture gesture  = overlay.getGesture();
+
+            if (mTimer != null) {
+                mTimer.start();
+            }
 
             int strokesCount = gesture.getStrokes().size();
             if (strokesCount > 1) {

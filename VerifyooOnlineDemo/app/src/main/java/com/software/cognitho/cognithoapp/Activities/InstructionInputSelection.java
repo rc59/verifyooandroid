@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.software.cognitho.cognithoapp.General.AppData;
 import com.software.cognitho.cognithoapp.MainActivity;
@@ -15,6 +16,8 @@ public class InstructionInputSelection extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_instruction_input_selection);
 
         if (AppData.instructionIdx >= AppData.listInstructions.size()) {

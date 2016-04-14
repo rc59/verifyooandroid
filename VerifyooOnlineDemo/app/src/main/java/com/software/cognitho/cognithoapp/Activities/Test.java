@@ -6,11 +6,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.software.cognitho.cognithoapp.General.ActionTypeEnum;
 import com.software.cognitho.cognithoapp.General.AppData;
@@ -20,13 +23,26 @@ import com.software.cognitho.cognithoapp.Logic.ApiHandler;
 import com.software.cognitho.cognithoapp.Objects.Template;
 import com.software.cognitho.cognithoapp.R;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 public class Test extends Activity {
 
     EditText mTxtUserName;
+    TextView mTxtLoading;
+    Button mBtnSignIn;
+    Button mBtnSignUp;
+    Button mBtnUpdateUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_test);
 
         init();
@@ -38,40 +54,103 @@ public class Test extends Activity {
         AppData.CurrentNumInstructionsInTemplate = 0;
         AppData.CurrentNumOfFutilityInstructions = 0;
 
-        Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
-        Button btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        Button btnUpdateUser = (Button) findViewById(R.id.btnUpdateUser);
+        mBtnSignIn = (Button) findViewById(R.id.btnSignIn);
+        mBtnSignUp = (Button) findViewById(R.id.btnSignUp);
+        mBtnUpdateUser = (Button) findViewById(R.id.btnUpdateUser);
 
         mTxtUserName = (EditText) findViewById(R.id.txtUserName);
+        mTxtLoading = (TextView) findViewById(R.id.textLoading);
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
+        mBtnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickSignIn();
             }
         });
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        mBtnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickSignUp();
             }
         });
 
-        btnUpdateUser.setOnClickListener(new View.OnClickListener() {
+        mBtnUpdateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickUpdateUser();
             }
         });
+
+        String storedUsername = readFromFile();
+        if (storedUsername != null && storedUsername.length() > 0) {
+            mTxtUserName.setText(storedUsername);
+        }
+    }
+
+    private void writeToFile(String data) {
+        try {
+            //File file = new File(Environment.getExternalStorageDirectory(), "/shapeRecognition/user.txt");
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("shapesrec.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+        catch (Exception e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private String readFromFile() {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = openFileInput("shapesrec.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        catch (Exception e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        return ret;
     }
 
     private void initTemplate() {
         AppData.tokenId = "666";
         String user = mTxtUserName.getText().toString();
+
 //        if (user.length() == 0) {
 //            user = "u";
 //        }
+
+        mTxtUserName.setVisibility(View.GONE);
+        mBtnSignIn.setVisibility(View.GONE);
+        mBtnSignUp.setVisibility(View.GONE);
+        mBtnUpdateUser.setVisibility(View.GONE);
+        mTxtLoading.setVisibility(View.VISIBLE);
+
+        writeToFile(user);
+
         AppData.userId = user;
 
         String serviceName = Context.TELEPHONY_SERVICE;
