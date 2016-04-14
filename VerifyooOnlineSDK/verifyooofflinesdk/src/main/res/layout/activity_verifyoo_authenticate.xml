@@ -19,6 +19,29 @@
         android:visibility="gone"
         android:background="@android:color/black" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgVerifying"
+        android:visibility="gone"
+        android:layout_weight="4"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:text="Verifying...Please wait"
+        android:id="@+id/textVerifying"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="left"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_weight="4"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:background="@android:color/black" />
+
     <android.gesture.GestureOverlayView
         android:id="@+id/gesturesOverlay"
         android:layout_width="match_parent"

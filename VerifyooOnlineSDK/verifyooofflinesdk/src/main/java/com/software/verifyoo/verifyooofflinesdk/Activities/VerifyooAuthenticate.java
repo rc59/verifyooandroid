@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
@@ -244,7 +245,15 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         JSONSerializer serializer = new JSONSerializer();
         String jsonTemplate = serializer.deepSerialize(list);
 
-        Intent intent = this.getIntent();
+        mBtnAuth.setVisibility(View.GONE);
+        mBtnClear.setVisibility(View.GONE);
+        mOverlay.setVisibility(View.GONE);
+        ImageView image = (ImageView) findViewById(R.id.imgVerifying);
+        image.setVisibility(View.VISIBLE);
+        image.setImageResource(R.drawable.logo);
+        TextView textVerifying = (TextView) findViewById(R.id.textVerifying);
+        textVerifying.setVisibility(View.VISIBLE);
+
         ApiActionVerifyTemplates verifyTemplates = new ApiActionVerifyTemplates(this);
         ApiHandler apiHandler = new ApiHandler(verifyTemplates);
         apiHandler.Execute(jsonTemplate);

@@ -17,8 +17,6 @@ import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
-import java.util.Random;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -69,11 +67,9 @@ public class MainActivity extends ActionBarActivity {
 
         Button btnAuth = (Button) findViewById(R.id.btnAuth);
         Button btnReg = (Button) findViewById(R.id.btnReg);
-        Button btnHack = (Button) findViewById(R.id.btnHack);
 
         btnAuth.setBackgroundColor(color);
         btnReg.setBackgroundColor(color);
-        btnHack.setBackgroundColor(color);
 
         btnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,18 +77,10 @@ public class MainActivity extends ActionBarActivity {
                 onClickAuth();
             }
         });
-
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickReg();
-            }
-        });
-
-        btnHack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickHack();
             }
         });
     }
@@ -108,7 +96,6 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(getApplicationContext(), VerifyooRegister.class);
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
         i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
-        i.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_USE_REPEAT_GESTURE, false);
         startActivityForResult(i, 1);
     }
 
@@ -117,15 +104,6 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
         i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
-        startActivityForResult(i, 1);
-    }
-
-    private void onClickHack() {
-        InitScore();
-        Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
-        i.putExtra("IsHack", true);
         startActivityForResult(i, 1);
     }
 
@@ -141,30 +119,8 @@ public class MainActivity extends ActionBarActivity {
 
                     boolean isAuthenticated = data.getExtras().getBoolean(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED);
 
-                    double score = 0;
-                    if (isAuthenticated) {
-                        score = 0.95;
-                    }
-                    score = score * 10000;
-                    score = Math.round(score);
-                    score = score / 10000;
-
-                    if (score == 0) {
-                        Random generator = new Random();
-                        int i = 10 - generator.nextInt(10);
-                        score = ((double) i) / 1000;
-                    }
-
-                    String result = Double.toString(score * 100);
-                    if (result.length() > 4) {
-                        result = result.substring(0, 4);
-                    }
-                    result += "%";
-
-                    //mTxtScore.setText(result);
-
                     mResultImage.setVisibility(View.VISIBLE);
-                    if (score >= 0.9) {
+                    if (isAuthenticated) {
                         mResultImage.setImageResource(R.drawable.success);
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.GREEN);

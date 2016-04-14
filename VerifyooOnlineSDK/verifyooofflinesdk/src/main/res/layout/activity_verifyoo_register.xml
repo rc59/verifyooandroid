@@ -64,20 +64,10 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@+id/textStrength"
-                android:text="Gesture Strength: [None]"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="center_horizontal" />
-
-            <TextView
                 android:text=""
                 android:id="@+id/textInstruction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textStrength"
                 android:visibility="gone"
                 android:textColor="@android:color/holo_red_dark"
                 android:gravity="center_horizontal" />

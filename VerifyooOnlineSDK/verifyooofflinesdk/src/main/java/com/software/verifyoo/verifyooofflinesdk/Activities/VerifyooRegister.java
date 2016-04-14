@@ -54,7 +54,6 @@ public class VerifyooRegister extends GestureInputAbstract {
     private Button mBtnSave;
     private Button mBtnClear;
 
-    private TextView mTextStrength;
     private TextView mTextView;
     private TextView mTextStatus;
 
@@ -91,7 +90,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
             mCompanyName = getIntent().getStringExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME);
             mUserName = getIntent().getStringExtra(VerifyooConsts.EXTRA_STRING_USER_NAME);
-            mIsRequiredToRepeatGesture = getIntent().getBooleanExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_USE_REPEAT_GESTURE, true);
+            mIsRequiredToRepeatGesture = false;
         }
 
         if (mUserName == null || mUserName.length() == 0) {
@@ -154,7 +153,6 @@ public class VerifyooRegister extends GestureInputAbstract {
 
 
         mTextView = (TextView) findViewById(R.id.textInstruction);
-        mTextStrength = (TextView) findViewById(R.id.textStrength);
         mTextStatus = (TextView) findViewById(R.id.textStatus);
 
         if (!mIsRequiredToRepeatGesture) {
@@ -169,7 +167,6 @@ public class VerifyooRegister extends GestureInputAbstract {
         mListStrokes = new ArrayList<>();
         mListStrokesRepeat = new ArrayList<>();
         mTextStatus.setText("");
-        setGestureStrength(getString(R.string.gestureStrNone));
     }
 
     private void onClickSave() {
@@ -178,7 +175,6 @@ public class VerifyooRegister extends GestureInputAbstract {
         mTextStatus.setText("");
 
         if (mIsFirstGestureEntered || !mIsRequiredToRepeatGesture) {
-            setGestureStrength(getString(R.string.gestureStrNone));
             mIsFirstGestureEntered = false;
             CompactGesture gesture = new CompactGesture(mListStrokes);
             gesture.Instruction = UtilsInstructions.GetInstruction(mListGestures.size());
@@ -255,10 +251,6 @@ public class VerifyooRegister extends GestureInputAbstract {
     private void handleGeneralError(Exception exc) {
         String errorMessage = String.format(ConstsMessages.E00004, exc.getMessage());
         handleError(errorMessage);
-    }
-
-    private void setGestureStrength(String strength) {
-        mTextStrength.setText(String.format("Gesture Strength: %s", strength));
     }
 
     @Override
