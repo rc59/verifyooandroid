@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.software.exp.expapp" >
+    package="com.software.exp.expapp2" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:minSdkVersion="15"
+        android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,83 +27,55 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.software.exp.expapp.MainActivity"
-            android:label="@string/app_name" >
+            android:name="com.software.exp.expapp2.Activities.ChooseLanguageActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.software.exp.expapp" />
-            </intent-filter>
-        </receiver>
-
         <activity
-            android:name=".Activities.UserDetails"
-            android:label="@string/title_activity_user_details" >
-        </activity>
-        <activity
-            android:name=".Activities.SourceShape"
-            android:label="@string/title_activity_source_shape" >
-        </activity>
-        <activity
-            android:name=".Activities.ShapeCreated"
-            android:label="@string/title_activity_shape_created" >
-        </activity>
-        <activity
-            android:name=".Activities.MatchShape"
-            android:label="@string/title_activity_match_shape" >
-        </activity>
-        <activity
-            android:name=".Activities.Matching"
-            android:label="@string/title_activity_matching" >
-        </activity>
-        <activity
-            android:name=".Activities.UserDashboard"
-            android:label="@string/title_activity_user_dashboard" >
-        </activity>
-        <activity
-            android:name=".Activities.SavingShape"
-            android:label="@string/title_activity_saving_shape" >
-        </activity>
-        <activity
-            android:name=".Activities.ShapeMatchResult"
-            android:label="@string/title_activity_shape_match_result" >
-        </activity>
-        <activity
-            android:name=".Activities.ErrorPage"
-            android:label="@string/title_activity_error_page" >
-        </activity>
-        <activity
-            android:name=".Activities.Instructions"
-            android:label="@string/title_activity_instructions" >
-        </activity>
-        <activity
-            android:name=".Activities.UserDetailsName"
-            android:label="@string/title_activity_user_details_name" >
+            android:name=".Activities.LogInActivity"
+            android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name="com.software.exp.expapp2.Activities.SourceShapeActivity"
+            android:label="@string/title_activity_source_shape"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.ShapeCreatedActivity"
+            android:label="@string/title_activity_shape_created"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.SavingShapeActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.ErrorPageActivity"
+            android:label="@string/title_activity_error_page"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.InstructionsActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <service
-            android:name="com.software.exp.expapp.RegistrationIntentService"
+            android:name="com.software.exp.expapp2.RegistrationIntentService"
             android:exported="false" >
         </service>
         <service
-            android:name="com.software.exp.expapp.MyInstanceIDListenerService"
+            android:name="com.software.exp.expapp2.MyInstanceIDListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
-            android:name="com.software.exp.expapp.MyGcmListenerService"
+            android:name="com.software.exp.expapp2.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

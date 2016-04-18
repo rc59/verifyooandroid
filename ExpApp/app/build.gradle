@@ -1,15 +1,13 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion "20.0.0"
-
     defaultConfig {
-        applicationId "com.software.exp.expapp"
+        applicationId 'com.software.exp.expapp2'
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 7
+        versionCode 6
         versionName "1.5"
         multiDexEnabled false
     }
@@ -19,10 +17,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    signingConfigs {
+
+        release {
+            storeFile file("/Users/work/Documents/pattern_recognition.jks")
+            storePassword "Ch131182"
+            keyAlias "pattern_recognition"
+            keyPassword "Ch131182"
+        }
+    }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile files('libs/flexjson-2.1.jar')
-    compile 'com.google.android.gms:play-services:8.1.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
+    //    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    //    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.android.support:support-v13:23.2.0'
+    compile 'com.android.support:percent:23.1.1'
+    compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.siriscac:progresspageindicator:1.1.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'klogi.com:rtlviewpager:1.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
