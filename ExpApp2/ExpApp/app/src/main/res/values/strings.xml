@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Shape recognition game</string>
+    <string name="title_activity_source_shape">SourceShape</string>
+    <string name="btnRestart">Start over</string>
+    <string name="title_activity_shape_created">Done</string>
+    <string name="title_activity_error">Error</string>
+    <string name="title_activity_error_page">Error page</string>
+    <string name="loading">Loading...</string>
+    <string name="error1">An unexpected error occurred</string>
+    <string name="error2">Click "back" to try again</string>
+    <string name="action_home">Back to the start screen</string>
+    <string name="errPage">Error page</string>
+    <string name="mainPage"></string>
+    <string name="enterEmailAddress">Enter e-mail</string>
+    <string name="skip">Skip</string>
+    <string name="draw_5">Draw 5</string>
+    <string name="draw_a">Draw A</string>
+    <string name="draw_r">Draw R</string>
+    <string name="draw_triangular">Draw triangular</string>
+    <string name="draw_heart">Draw heart</string>
+    <string name="draw_line">Draw a horizontal line _ and a diagonal line /  above</string>
+    <string name="draw_eight">Draw 8</string>
+    <string name="start_experiment">Start experiment</string>
+    <string name="thank_you_for_participating">Thank you for participating in the experiment, please close the application</string>
+    <string name="saving_experiment">Saving experiment...</string>
+    <string name="btnOk">Ok</string>
+    <string name="btnSave">Save</string>
+    <string name="next">Next</string>
+    <string name="choose_language">Choose language</string>
+    <string name="english">english</string>
+    <string name="hebrew">עברית</string>
+    <string name="continue_">Continue</string>
+</resources>
+

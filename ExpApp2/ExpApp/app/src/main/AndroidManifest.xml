@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.software.exp.expapp2" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.software.exp.expapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.software.exp.expapp2.Activities.ChooseLanguageActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Activities.LogInActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.software.exp.expapp2.Activities.SourceShapeActivity"
+            android:label="@string/title_activity_source_shape"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.ShapeCreatedActivity"
+            android:label="@string/title_activity_shape_created"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.SavingShapeActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.ErrorPageActivity"
+            android:label="@string/title_activity_error_page"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.software.exp.expapp2.Activities.InstructionsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <service
+            android:name="com.software.exp.expapp2.RegistrationIntentService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.software.exp.expapp2.MyInstanceIDListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.software.exp.expapp2.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
