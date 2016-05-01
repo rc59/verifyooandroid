@@ -123,7 +123,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mVelocityTracker.addMovement(event);
         mVelocityTracker.computeCurrentVelocity(1000);
 
-        if (event.getHistorySize() > 1) {
+        if (event.getHistorySize() >= 1) {
             for (int idx = 0; idx < event.getHistorySize(); idx++) {
                 temp = new MotionEventCompact();
 
@@ -162,6 +162,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();
 
+            if (event.getPointerCount() > 1) {
+                temp.Xpixel2 = event.getX(1);
+                temp.Ypixel2 = event.getY(1);
+
+                if (event.getPointerCount() > 2) {
+                    temp.Xpixel3 = event.getX(2);
+                    temp.Ypixel3 = event.getY(2);
+                }
+            }
+
             mTempStroke.ListEvents.add(temp);
         }
         else {
@@ -177,6 +187,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();
+
+            if (event.getPointerCount() > 1) {
+                temp.Xpixel2 = event.getX(1);
+                temp.Ypixel2 = event.getY(1);
+
+                if (event.getPointerCount() > 2) {
+                    temp.Xpixel3 = event.getX(2);
+                    temp.Ypixel3 = event.getY(2);
+                }
+            }
 
             mTempStroke.ListEvents.add(temp);
         }

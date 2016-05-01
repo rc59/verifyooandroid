@@ -282,6 +282,53 @@ public class SourceShapeActivity extends Activity {
         public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
             mSensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             setColorInputing();
+
+            MotionEventCompact temp;
+
+            mVelocityTracker.addMovement(event);
+            mVelocityTracker.computeCurrentVelocity(1000);
+
+            if (event.getHistorySize() >= 1) {
+                for (int idx = 0; idx < event.getHistorySize(); idx++) {
+                    temp = new MotionEventCompact();
+                    temp.X = event.getHistoricalX(idx);
+                    temp.Y = event.getHistoricalY(idx);
+                    temp.EventTime = event.getHistoricalEventTime(idx);
+                    temp.Pressure = event.getHistoricalPressure(idx);
+                    temp.TouchSurface = event.getHistoricalSize(idx);
+                    temp.AngleY = mAccY;
+                    temp.AngleX = mAccX;
+                    temp.AngleZ = mAccZ;
+
+                    temp.VelocityX = mVelocityTracker.getXVelocity();
+                    temp.VelocityY = mVelocityTracker.getXVelocity();
+                    temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
+
+                    mTempStroke.ListEvents.add(temp);
+                }
+
+                temp = new MotionEventCompact(event);
+                temp.AngleY = mAccY;
+                temp.AngleX = mAccX;
+                temp.AngleZ = mAccZ;
+
+                temp.VelocityX = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
+
+                mTempStroke.ListEvents.add(temp);
+            } else {
+                temp = new MotionEventCompact(event);
+                temp.AngleY = mAccY;
+                temp.AngleX = mAccX;
+                temp.AngleZ = mAccZ;
+
+                temp.VelocityX = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
+
+                mTempStroke.ListEvents.add(temp);
+            }
         }
 
         public void onGesture(GestureOverlayView overlay, MotionEvent event) {
@@ -290,7 +337,7 @@ public class SourceShapeActivity extends Activity {
             mVelocityTracker.addMovement(event);
             mVelocityTracker.computeCurrentVelocity(1000);
 
-            if (event.getHistorySize() > 1) {
+            if (event.getHistorySize() >= 1) {
                 for (int idx = 0; idx < event.getHistorySize(); idx++) {
                     temp = new MotionEventCompact();
                     temp.X = event.getHistoricalX(idx);

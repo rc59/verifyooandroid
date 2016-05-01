@@ -9,7 +9,6 @@ android {
         targetSdkVersion 22
         versionCode 6
         versionName "1.5"
-        multiDexEnabled false
     }
     buildTypes {
         release {

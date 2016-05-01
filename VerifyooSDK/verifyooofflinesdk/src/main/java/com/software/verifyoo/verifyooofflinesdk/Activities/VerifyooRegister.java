@@ -41,7 +41,6 @@ import VerifyooLogic.Statistics.Mgr.NormMgr;
 import VerifyooLogic.UserProfile.CompactGesture;
 import VerifyooLogic.UserProfile.Stroke;
 import VerifyooLogic.UserProfile.Template;
-import VerifyooLogic.Utils.UtilsDeviceProperties;
 import flexjson.JSONSerializer;
 
 public class VerifyooRegister extends GestureInputAbstract {
@@ -113,8 +112,6 @@ public class VerifyooRegister extends GestureInputAbstract {
         mApiMgr = new ApiMgr();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        UtilsDeviceProperties.Xdpi = dm.xdpi;
-        UtilsDeviceProperties.Ydpi = dm.ydpi;
 
         setTitle(UtilsInstructions.GetInstruction(0));
         mNormMgr = new NormMgr();

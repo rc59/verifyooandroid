@@ -51,8 +51,6 @@ dependencies {
     compile 'klogi.com:rtlviewpager:1.0.0'
 }
 
-apply plugin: 'com.google.gms.google-services'
-
 
 
 

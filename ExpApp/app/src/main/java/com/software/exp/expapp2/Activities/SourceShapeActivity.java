@@ -290,7 +290,7 @@ public class SourceShapeActivity extends Activity {
             mVelocityTracker.addMovement(event);
             mVelocityTracker.computeCurrentVelocity(1000);
 
-            if (event.getHistorySize() > 1) {
+            if (event.getHistorySize() >= 1) {
                 for (int idx = 0; idx < event.getHistorySize(); idx++) {
                     temp = new MotionEventCompact();
                     temp.X = event.getHistoricalX(idx);
