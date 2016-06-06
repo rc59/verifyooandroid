@@ -47,8 +47,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mTempStroke = new Stroke();
     }
 
-    public void init(Context applicationContext, GestureOverlayView overlay, Bitmap bitmap) {
-        mBitMap = bitmap;
+    public void init(Context applicationContext, GestureOverlayView overlay) {
         mOverlay = overlay;
         mTempStroke = new Stroke();
         mApplicationContext = applicationContext;

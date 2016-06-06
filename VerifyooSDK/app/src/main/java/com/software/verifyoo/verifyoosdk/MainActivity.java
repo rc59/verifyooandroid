@@ -17,8 +17,6 @@ import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
-import java.util.Random;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -147,11 +145,11 @@ public class MainActivity extends ActionBarActivity {
                     score = Math.round(score);
                     score = score / 10000;
 
-                    if (score == 0) {
-                        Random generator = new Random();
-                        int i = 10 - generator.nextInt(10);
-                        score = ((double) i) / 1000;
-                    }
+//                    if (score == 0) {
+//                        Random generator = new Random();
+//                        int i = 10 - generator.nextInt(10);
+//                        score = ((double) i) / 1000;
+//                    }
 
                     String result = Double.toString(score * 100);
                     if (result.length() > 4) {
