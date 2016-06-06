@@ -1,7 +1,6 @@
 package com.software.verifyoo.verifyooofflinesdk.ServerAPI.Objects;
 
-import VerifyooLogic.UserProfile.MotionEventCompact;
-import VerifyooLogic.Utils.UtilsCalc;
+import Data.UserProfile.Raw.MotionEventCompact;
 
 /**
  * Created by roy on 2/24/2016.
@@ -27,23 +26,28 @@ public class ExpMotionEventCompact {
     public double GyroZ;
 
     public ExpMotionEventCompact(MotionEventCompact motionEventCompact) {
-        RawX = motionEventCompact.RawXpixel;
-        RawY = motionEventCompact.RawYpixel;
         X = motionEventCompact.Xpixel;
         Y = motionEventCompact.Ypixel;
         VelocityX = motionEventCompact.VelocityX;
         VelocityY = motionEventCompact.VelocityY;
-        Velocity = UtilsCalc.CalcPitagoras(VelocityX, Velocity);
+        Velocity = CalcPitagoras(VelocityX, Velocity);
         Pressure = motionEventCompact.Pressure;
         EventTime = motionEventCompact.EventTime;
         TouchSurface = motionEventCompact.TouchSurface;
 
-        AngleX = motionEventCompact.AngleX;
-        AngleY = motionEventCompact.AngleY;
-        AngleZ = motionEventCompact.AngleZ;
+        AngleX = motionEventCompact.AccelerometerX;
+        AngleY = motionEventCompact.AccelerometerY;
+        AngleZ = motionEventCompact.AccelerometerZ;
 
-        GyroX = motionEventCompact.AngleX;
-        GyroY = motionEventCompact.AngleY;
-        GyroZ = motionEventCompact.AngleZ;
+        GyroX = motionEventCompact.GyroX;
+        GyroY = motionEventCompact.GyroY;
+        GyroZ = motionEventCompact.GyroZ;
+    }
+
+    private double CalcPitagoras(double value1, double value2) {
+        double value = value1 * value1 + value2 * value2;
+        value = Math.sqrt(value);
+
+        return value;
     }
 }

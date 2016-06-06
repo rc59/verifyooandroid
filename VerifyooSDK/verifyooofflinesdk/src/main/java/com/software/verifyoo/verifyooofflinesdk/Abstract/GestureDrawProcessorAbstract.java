@@ -2,6 +2,7 @@ package com.software.verifyoo.verifyooofflinesdk.Abstract;
 
 import android.content.Context;
 import android.gesture.GestureOverlayView;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,8 +14,8 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
 
 import java.util.ArrayList;
 
-import VerifyooLogic.UserProfile.Stroke;
-import VerifyooLogic.UserProfile.MotionEventCompact;
+import Data.UserProfile.Raw.MotionEventCompact;
+import Data.UserProfile.Raw.Stroke;
 
 /**
  * Created by roy on 12/28/2015.
@@ -27,10 +28,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private Sensor mGyro;
-    private SensorEventListener mSensorListener;
+    private SensorEventListener mSensorListenerAcc;
+    private SensorEventListener mSensorListenerGyro;
 
     private float mAccX, mAccY, mAccZ;
     private float mGyroX, mGyroY, mGyroZ;
+
+    protected GestureOverlayView mOverlay;
+    protected Bitmap mBitMap;
+    protected int mWidth;
+    protected int mHeight;
 
     public Stroke getStroke() {
         return mTempStroke;
@@ -40,7 +47,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mTempStroke = new Stroke();
     }
 
-    public void init(Context applicationContext) {
+    public void init(Context applicationContext, GestureOverlayView overlay, Bitmap bitmap) {
+        mBitMap = bitmap;
+        mOverlay = overlay;
         mTempStroke = new Stroke();
         mApplicationContext = applicationContext;
         mVelocityTracker = VelocityTracker.obtain();
@@ -49,7 +58,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
-        mSensorListener = new SensorEventListener() {
+        mSensorListenerAcc = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 Sensor mySensor = sensorEvent.sensor;
@@ -59,10 +68,23 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                     mAccY = sensorEvent.values[1];
                     mAccZ = sensorEvent.values[2];
                 }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+        mSensorListenerGyro = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                Sensor mySensor = sensorEvent.sensor;
+
                 if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
-                    mGyroX = sensorEvent.values[0];
-                    mGyroY = sensorEvent.values[1];
-                    mGyroZ = sensorEvent.values[2];
+//                    mGyroX = sensorEvent.values[0];
+//                    mGyroY = sensorEvent.values[1];
+//                    mGyroZ = sensorEvent.values[2];
                 }
             }
 
@@ -72,21 +94,21 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             }
         };
 
-        mSensorManager.registerListener(mSensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(mSensorListener, mGyro, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mSensorListenerAcc, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mSensorListenerGyro, mGyro, SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void InitPrevStroke(Stroke currentStroke, ArrayList<Stroke> listStrokes, double length) {
-        currentStroke.Length = length;
-        if (listStrokes.size() > 0) {
-            Stroke prevStroke = listStrokes.get(listStrokes.size() - 1);
-            MotionEventCompact prevStrokeLastEvent = prevStroke.ListEvents.get(prevStroke.ListEvents.size() - 1);
-
-            currentStroke.PreviousStrokeLastEvent = prevStrokeLastEvent;
-            currentStroke.PreviousEndTime = prevStrokeLastEvent.EventTime;
-            currentStroke.PreviousEndX = prevStrokeLastEvent.Xpixel;
-            currentStroke.PreviousEndY = prevStrokeLastEvent.Ypixel;
-        }
+//        currentStroke.Length = length;
+//        if (listStrokes.size() > 0) {
+//            Stroke prevStroke = listStrokes.get(listStrokes.size() - 1);
+//            MotionEventCompact prevStrokeLastEvent = prevStroke.ListEvents.get(prevStroke.ListEvents.size() - 1);
+//
+////            currentStroke.PreviousStrokeLastEvent = prevStrokeLastEvent;
+////            currentStroke.PreviousEndTime = prevStrokeLastEvent.EventTime;
+////            currentStroke.PreviousEndX = prevStrokeLastEvent.Xpixel;
+////            currentStroke.PreviousEndY = prevStrokeLastEvent.Ypixel;
+//        }
     }
 
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
@@ -99,9 +121,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
             temp = UtilsConvert.ConvertMotionEvent(event);
 
-            temp.AngleX = mAccX;
-            temp.AngleY = mAccY;
-            temp.AngleZ = mAccZ;
+            temp.AccelerometerX = mAccX;
+            temp.AccelerometerY = mAccY;
+            temp.AccelerometerZ = mAccZ;
 
             temp.GyroX = mGyroX;
             temp.GyroY = mGyroY;
@@ -110,7 +132,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             temp.VelocityX = mVelocityTracker.getXVelocity();
             temp.VelocityY = mVelocityTracker.getYVelocity();
 
-            //mTempStroke.ListEvents.add(temp);
+            mTempStroke.ListEvents.add(temp);
         } catch (Exception exc) {
             String msg = exc.getMessage();
         }
@@ -118,24 +140,44 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     }
 
     public void onGesture(GestureOverlayView overlay, MotionEvent event) {
-        MotionEventCompact temp;
+        try {
 
-        mVelocityTracker.addMovement(event);
-        mVelocityTracker.computeCurrentVelocity(1000);
+            MotionEventCompact temp;
 
-        if (event.getHistorySize() >= 1) {
-            for (int idx = 0; idx < event.getHistorySize(); idx++) {
-                temp = new MotionEventCompact();
+            mVelocityTracker.addMovement(event);
+            mVelocityTracker.computeCurrentVelocity(1000);
 
-                temp.Xpixel = event.getHistoricalX(idx);
-                temp.Ypixel = event.getHistoricalY(idx);
-                temp.EventTime = event.getHistoricalEventTime(idx);
-                temp.Pressure = event.getHistoricalPressure(idx);
-                temp.TouchSurface = event.getHistoricalSize(idx);
+            if (event.getHistorySize() >= 1) {
+                for (int idx = 0; idx < event.getHistorySize(); idx++) {
+                    temp = new MotionEventCompact();
 
-                temp.AngleX = mAccX;
-                temp.AngleY = mAccY;
-                temp.AngleZ = mAccZ;
+                    temp.Xpixel = event.getHistoricalX(idx);
+                    temp.Ypixel = event.getHistoricalY(idx);
+                    temp.EventTime = event.getHistoricalEventTime(idx);
+                    temp.Pressure = event.getHistoricalPressure(idx);
+                    temp.TouchSurface = event.getHistoricalSize(idx);
+
+                    temp.AccelerometerX = mAccX;
+                    temp.AccelerometerY = mAccY;
+                    temp.AccelerometerZ = mAccZ;
+
+                    temp.GyroX = mGyroX;
+                    temp.GyroY = mGyroY;
+                    temp.GyroZ = mGyroZ;
+
+                    temp.VelocityX = mVelocityTracker.getXVelocity();
+                    temp.VelocityY = mVelocityTracker.getYVelocity();
+
+                    //temp.PointerCount = event.getPointerCount();
+
+                    mTempStroke.ListEvents.add(temp);
+                }
+
+                temp = UtilsConvert.ConvertMotionEvent(event);
+
+                temp.AccelerometerX = mAccX;
+                temp.AccelerometerY = mAccY;
+                temp.AccelerometerZ = mAccZ;
 
                 temp.GyroX = mGyroX;
                 temp.GyroY = mGyroY;
@@ -144,61 +186,47 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                 temp.VelocityX = mVelocityTracker.getXVelocity();
                 temp.VelocityY = mVelocityTracker.getYVelocity();
 
-                temp.PointerCount = event.getPointerCount();
+//            if (event.getPointerCount() > 1) {
+//                temp.Xpixel2 = event.getX(1);
+//                temp.Ypixel2 = event.getY(1);
+//
+//                if (event.getPointerCount() > 2) {
+//                    temp.Xpixel3 = event.getX(2);
+//                    temp.Ypixel3 = event.getY(2);
+//                }
+//            }
+
+                mTempStroke.ListEvents.add(temp);
+            } else {
+                temp = UtilsConvert.ConvertMotionEvent(event);
+
+                temp.AccelerometerX = mAccX;
+                temp.AccelerometerY = mAccY;
+                temp.AccelerometerZ = mAccZ;
+
+                temp.GyroX = mGyroX;
+                temp.GyroY = mGyroY;
+                temp.GyroZ = mGyroZ;
+
+                temp.VelocityX = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getYVelocity();
+
+//            if (event.getPointerCount() > 1) {
+//                temp.Xpixel2 = event.getX(1);
+//                temp.Ypixel2 = event.getY(1);
+//
+//                if (event.getPointerCount() > 2) {
+//                    temp.Xpixel3 = event.getX(2);
+//                    temp.Ypixel3 = event.getY(2);
+//                }
+//            }
 
                 mTempStroke.ListEvents.add(temp);
             }
-
-            temp = UtilsConvert.ConvertMotionEvent(event);
-
-            temp.AngleX = mAccX;
-            temp.AngleY = mAccY;
-            temp.AngleZ = mAccZ;
-
-            temp.GyroX = mGyroX;
-            temp.GyroY = mGyroY;
-            temp.GyroZ = mGyroZ;
-
-            temp.VelocityX = mVelocityTracker.getXVelocity();
-            temp.VelocityY = mVelocityTracker.getYVelocity();
-
-            if (event.getPointerCount() > 1) {
-                temp.Xpixel2 = event.getX(1);
-                temp.Ypixel2 = event.getY(1);
-
-                if (event.getPointerCount() > 2) {
-                    temp.Xpixel3 = event.getX(2);
-                    temp.Ypixel3 = event.getY(2);
-                }
-            }
-
-            mTempStroke.ListEvents.add(temp);
+            return;
         }
-        else {
-            temp = UtilsConvert.ConvertMotionEvent(event);
-
-            temp.AngleX = mAccX;
-            temp.AngleY = mAccY;
-            temp.AngleZ = mAccZ;
-
-            temp.GyroX = mGyroX;
-            temp.GyroY = mGyroY;
-            temp.GyroZ = mGyroZ;
-
-            temp.VelocityX = mVelocityTracker.getXVelocity();
-            temp.VelocityY = mVelocityTracker.getYVelocity();
-
-            if (event.getPointerCount() > 1) {
-                temp.Xpixel2 = event.getX(1);
-                temp.Ypixel2 = event.getY(1);
-
-                if (event.getPointerCount() > 2) {
-                    temp.Xpixel3 = event.getX(2);
-                    temp.Ypixel3 = event.getY(2);
-                }
-            }
-
-            mTempStroke.ListEvents.add(temp);
+        catch (Exception exc) {
+            String msg = exc.getMessage();
         }
     }
 
@@ -207,6 +235,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     }
 
     protected void unRegisterSensors() {
-        mSensorManager.unregisterListener(mSensorListener);
+        mSensorManager.unregisterListener(mSensorListenerGyro);
+        mSensorManager.unregisterListener(mSensorListenerAcc);
     }
 }

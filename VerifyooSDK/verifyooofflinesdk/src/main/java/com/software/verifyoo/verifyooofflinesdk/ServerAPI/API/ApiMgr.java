@@ -13,10 +13,10 @@ import com.software.verifyoo.verifyooofflinesdk.ServerAPI.Objects.ExpTemplate;
 
 import java.util.ArrayList;
 
-import VerifyooLogic.UserProfile.CompactGesture;
-import VerifyooLogic.UserProfile.MotionEventCompact;
-import VerifyooLogic.UserProfile.Stroke;
-import VerifyooLogic.UserProfile.Template;
+import Data.UserProfile.Raw.Gesture;
+import Data.UserProfile.Raw.MotionEventCompact;
+import Data.UserProfile.Raw.Stroke;
+import Data.UserProfile.Raw.Template;
 import flexjson.JSONSerializer;
 
 /**
@@ -77,7 +77,7 @@ public class ApiMgr {
     }
 
     private void ConvertTemplate(Template templateReg, ExpTemplate tempExpTemplate) {
-        CompactGesture tempGesture;
+        Gesture tempGesture;
         ExpShape tempExpShape;
         Stroke tempStroke;
         ExpStroke tempExpStroke;

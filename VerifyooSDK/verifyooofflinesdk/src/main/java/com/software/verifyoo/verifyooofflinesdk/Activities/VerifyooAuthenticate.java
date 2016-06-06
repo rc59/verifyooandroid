@@ -7,6 +7,7 @@ import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,11 +34,11 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
-import VerifyooLogic.Comparison.GestureComparer;
-import VerifyooLogic.UserProfile.CompactGesture;
-import VerifyooLogic.UserProfile.Stroke;
-import VerifyooLogic.UserProfile.Template;
-import VerifyooLogic.Utils.UtilsDeviceProperties;
+import Data.UserProfile.Extended.GestureExtended;
+import Data.UserProfile.Extended.TemplateExtended;
+import Data.UserProfile.Raw.Stroke;
+import Data.UserProfile.Raw.Template;
+import Logic.Comparison.GestureComparer;
 import flexjson.JSONDeserializer;
 
 
@@ -63,6 +64,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private double mXdpi;
     private double mYdpi;
+
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +109,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private void init() {
         mApiMgr = new ApiMgr();
 
+        getDPI();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        UtilsDeviceProperties.Xdpi = dm.xdpi;
-        UtilsDeviceProperties.Ydpi = dm.ydpi;
 
         setTitle("");
         mCurrentGesture = 0;
@@ -175,12 +177,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
                 Object listGesturesObj = deserializer.deserialize(storedTemplate);
                 mTemplateStored = (Template) listGesturesObj;
-                mTemplateStored.Init();
+                //mTemplateStored.Init();
             } catch (Exception exc) {
                 handleGeneralError(exc);
             }
 
-            ArrayList<CompactGesture> listGestures = mTemplateStored.ListGestures;
+            ArrayList<Data.UserProfile.Raw.Gesture> listGestures = mTemplateStored.ListGestures;
             mTextView.setText(listGestures.get(0).Instruction);
             setTitle(listGestures.get(0).Instruction);
         }
@@ -188,17 +190,20 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private void onClickAuth() {
         mBtnAuth.setEnabled(false);
-        ArrayList<CompactGesture> listGesturesStored = mTemplateStored.ListGestures;
+        ArrayList<Data.UserProfile.Raw.Gesture> listGesturesStored = mTemplateStored.ListGestures;
 
         ArrayList<Stroke> listStrokesStored = listGesturesStored.get(mCurrentGesture).ListStrokes;
 
-        CompactGesture gesture1 = new CompactGesture(mListStrokes);
-        CompactGesture gesture2 = new CompactGesture(listStrokesStored);
+        Data.UserProfile.Raw.Gesture gesture1 = new Data.UserProfile.Raw.Gesture();
+        gesture1.ListStrokes = mListStrokes;
+
+        Data.UserProfile.Raw.Gesture gesture2 = new Data.UserProfile.Raw.Gesture();
+        gesture2.ListStrokes = listStrokesStored;
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        GestureComparer gestureComparer = new GestureComparer();
+        GestureComparer gestureComparer = new GestureComparer(true);
 
         try {
             Template tempTemplateAuth = new Template();
@@ -209,7 +214,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             tempTemplateReg.ListGestures = new ArrayList<>();
             tempTemplateReg.ListGestures.add(gesture2);
 
-            getDPI();
             WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
             String state = "Authenticate";
@@ -223,7 +227,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             handleGeneralError(exc);
         }
 
-        double score = gestureComparer.Compare(gesture1, gesture2);
+        Template tempTemplate1 = new Template();
+        Template tempTemplate2 = new Template();
+
+        gesture1.Instruction = "RLETTER";
+        tempTemplate1.ListGestures.add(gesture1);
+        gesture2.Instruction = "RLETTER";
+        tempTemplate2.ListGestures.add(gesture2);
+
+        TemplateExtended templateExtended1 = new TemplateExtended(tempTemplate1);
+        TemplateExtended templateExtended2 = new TemplateExtended(tempTemplate2);
+
+        GestureExtended gestureExtended1 = templateExtended1.ListGestureExtended.get(0);
+        GestureExtended gestureExtended2 = templateExtended2.ListGestureExtended.get(0);
+
+        gestureComparer.CompareGestures(gestureExtended1, gestureExtended2);
+
+        double score = gestureComparer.GetScore();
 
         mAccumulatedScore += score;
         mCurrentGesture++;
@@ -328,9 +348,22 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
 
-            mListStrokes.add(mGesturesProcessor.getStroke());
+            Stroke tempStroke = mGesturesProcessor.getStroke();
+            tempStroke.Xdpi = mXdpi;
+            tempStroke.Ydpi = mYdpi;
+            tempStroke.Length = gesture.getLength();
+            mListStrokes.add(tempStroke);
             mGesturesProcessor.clearStroke();
             mBtnAuth.setEnabled(true);
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    clearOverlay();
+                }
+            };
+
+            handler.postDelayed(runnable, 100);
         }
     }
 }
