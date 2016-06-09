@@ -52,6 +52,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokes;
     private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokesRepeat;
+    private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokesTemp;
 
     private Button mBtnSave;
     private Button mBtnClear;
@@ -118,6 +119,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         mListStrokes = new ArrayList<>();
         mListStrokesRepeat = new ArrayList<>();
+        mListStrokesTemp = new ArrayList<>();
         mListGestures = new ArrayList<>();
 
         mIsFirstGestureEntered = false;
@@ -172,6 +174,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         mBtnSave.setEnabled(false);
         mListStrokes = new ArrayList<>();
         mListStrokesRepeat = new ArrayList<>();
+        mListStrokesTemp = new ArrayList<>();
         mTextStatus.setText("");
         setGestureStrength(getString(R.string.gestureStrNone));
     }
@@ -190,6 +193,7 @@ public class VerifyooRegister extends GestureInputAbstract {
             mListGestures.add(gesture);
             mListStrokes = new ArrayList<>();
             mListStrokesRepeat = new ArrayList<>();
+            mListStrokesTemp = new ArrayList<>();
 
             if (mListGestures.size() >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
                 Data.UserProfile.Raw.Template template = new Data.UserProfile.Raw.Template();
@@ -404,8 +408,48 @@ public class VerifyooRegister extends GestureInputAbstract {
                 tempStroke.Ydpi = mYdpi;
                 tempStroke.Length = gesture.getLength();
                 mListStrokes.add(tempStroke);
+                mListStrokesTemp.add(tempStroke);
                 //CheckGestureStrength();
             }
+
+//            if(mListStrokesTemp.size() % 2 == 0) {
+//                int idxMiddle = mListStrokesTemp.size() / 2;
+//                ArrayList<Stroke> tempList1 = new ArrayList<>();
+//                ArrayList<Stroke> tempList2 = new ArrayList<>();
+//
+//                Template template1 = new Template();
+//                Template template2 = new Template();
+//
+//                Data.UserProfile.Raw.Gesture tempGesture1 = new Data.UserProfile.Raw.Gesture();
+//                Data.UserProfile.Raw.Gesture tempGesture2 = new Data.UserProfile.Raw.Gesture();
+//
+//                for(int idx = 0; idx < mListStrokesTemp.size(); idx++) {
+//                    if (idx < idxMiddle) {
+//                        tempGesture1.ListStrokes.add(mListStrokesTemp.get(idx));
+//                    }
+//                    else {
+//                        tempGesture2.ListStrokes.add(mListStrokesTemp.get(idx));
+//                    }
+//                }
+//
+//                template1.ListGestures.add(tempGesture1);
+//                template1.ListGestures.add(tempGesture2);
+//
+//                TemplateExtended tempTemplateExtended1 = new TemplateExtended(template1);
+//                TemplateExtended tempTemplateExtended2 = new TemplateExtended(template2);
+//
+//                GestureExtended tempGestureExtended1 = tempTemplateExtended1.ListGestureExtended.get(0);
+//                GestureExtended tempGestureExtended2 = tempTemplateExtended2.ListGestureExtended.get(0);
+//
+//                GestureComparer gestureComparer = new GestureComparer(true);
+//                gestureComparer.CompareGestures(tempGestureExtended1, tempGestureExtended2);
+//                double score = gestureComparer.GetScore();
+//
+//                boolean isContinue = false;
+//                if (score > 0.9) {
+//                    isContinue = true;
+//                }
+//            }
 
             mGesturesProcessor.clearStroke();
 

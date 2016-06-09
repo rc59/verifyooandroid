@@ -194,11 +194,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         ArrayList<Stroke> listStrokesStored = listGesturesStored.get(mCurrentGesture).ListStrokes;
 
-        Data.UserProfile.Raw.Gesture gesture1 = new Data.UserProfile.Raw.Gesture();
-        gesture1.ListStrokes = mListStrokes;
+        Data.UserProfile.Raw.Gesture gestureAuth = new Data.UserProfile.Raw.Gesture();
+        gestureAuth.ListStrokes = mListStrokes;
 
-        Data.UserProfile.Raw.Gesture gesture2 = new Data.UserProfile.Raw.Gesture();
-        gesture2.ListStrokes = listStrokesStored;
+        Data.UserProfile.Raw.Gesture gestureBase = new Data.UserProfile.Raw.Gesture();
+        gestureBase.ListStrokes = listStrokesStored;
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -208,11 +208,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         try {
             Template tempTemplateAuth = new Template();
             tempTemplateAuth.ListGestures = new ArrayList<>();
-            tempTemplateAuth.ListGestures.add(gesture1);
+            tempTemplateAuth.ListGestures.add(gestureAuth);
 
             Template tempTemplateReg = new Template();
             tempTemplateReg.ListGestures = new ArrayList<>();
-            tempTemplateReg.ListGestures.add(gesture2);
+            tempTemplateReg.ListGestures.add(gestureBase);
 
             WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
@@ -227,21 +227,21 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             handleGeneralError(exc);
         }
 
-        Template tempTemplate1 = new Template();
-        Template tempTemplate2 = new Template();
+        Template tempTemplateAuth = new Template();
+        Template tempTemplateBase = new Template();
 
-        gesture1.Instruction = "RLETTER";
-        tempTemplate1.ListGestures.add(gesture1);
-        gesture2.Instruction = "RLETTER";
-        tempTemplate2.ListGestures.add(gesture2);
+        gestureAuth.Instruction = "RLETTER";
+        tempTemplateAuth.ListGestures.add(gestureAuth);
+        gestureBase.Instruction = "RLETTER";
+        tempTemplateBase.ListGestures.add(gestureBase);
 
-        TemplateExtended templateExtended1 = new TemplateExtended(tempTemplate1);
-        TemplateExtended templateExtended2 = new TemplateExtended(tempTemplate2);
+        TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
+        TemplateExtended templateExtendedBase = new TemplateExtended(tempTemplateBase);
 
-        GestureExtended gestureExtended1 = templateExtended1.ListGestureExtended.get(0);
-        GestureExtended gestureExtended2 = templateExtended2.ListGestureExtended.get(0);
+        GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(0);
+        GestureExtended gestureExtendedBase = templateExtendedBase.ListGestureExtended.get(0);
 
-        gestureComparer.CompareGestures(gestureExtended1, gestureExtended2);
+        gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
 
         double score = gestureComparer.GetScore();
 
