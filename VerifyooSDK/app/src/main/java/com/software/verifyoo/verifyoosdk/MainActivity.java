@@ -160,7 +160,7 @@ public class MainActivity extends ActionBarActivity {
                     mTxtScore.setText(result);
 
                     mResultImage.setVisibility(View.VISIBLE);
-                    if (score >= 0.9) {
+                    if (score >= 0.85) {
                         mResultImage.setImageResource(R.drawable.success);
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.GREEN);

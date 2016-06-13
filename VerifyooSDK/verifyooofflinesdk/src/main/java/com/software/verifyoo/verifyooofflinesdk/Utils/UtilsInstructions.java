@@ -5,14 +5,26 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
  */
 public class UtilsInstructions {
     public static String GetInstruction(int idx) {
-        String instruction = "Input a letter, digit and/or shape";
+        String instruction = "FIVE";
 
         switch (idx) {
+            case 0:
+                instruction = "FIVE";
+                break;
             case 1:
-                instruction = "Input two shapes";
+                instruction = "EIGHT";
                 break;
             case 2:
-                instruction = "Input two digits";
+                instruction = "ALETTER";
+                break;
+            case 3:
+                instruction = "RLETTER";
+                break;
+            case 4:
+                instruction = "TRIANGULAR";
+                break;
+            case 5:
+                instruction = "HEART";
                 break;
         }
 

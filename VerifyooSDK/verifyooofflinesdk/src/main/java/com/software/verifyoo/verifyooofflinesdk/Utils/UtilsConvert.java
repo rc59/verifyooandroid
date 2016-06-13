@@ -18,5 +18,31 @@ public class UtilsConvert {
 
         return tempEvent;
     }
+
+    public static String InstructionCodeToInstruction(String instructionCode) {
+        String instruction = "";
+        switch (instructionCode) {
+            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
+                instruction = "Letter A";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_EIGHT:
+                instruction = "Digit 8";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_FIVE:
+                instruction = "Digit 5";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_HEART:
+                instruction = "Heart";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
+                instruction = "Letter R";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_TRIANGULAR:
+                instruction = "Triangle";
+                break;
+        }
+
+        return instruction;
+    }
 }
 
