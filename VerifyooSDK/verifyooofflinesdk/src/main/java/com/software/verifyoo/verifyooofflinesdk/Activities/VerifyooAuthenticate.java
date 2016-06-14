@@ -246,89 +246,63 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         ArrayList<Data.UserProfile.Raw.Gesture> listGesturesStored = mTemplateStored.ListGestures;
         ArrayList<Data.UserProfile.Raw.Gesture> listGesturesToUse = new ArrayList<>();
 
+        int totalStrokes = 0;
         int currentIdx;
+
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
             currentIdx = mInstructionIndexes[idx];
+            totalStrokes += listGesturesStored.get(currentIdx).ListStrokes.size();
             listGesturesToUse.add(listGesturesStored.get(currentIdx));
         }
 
-        Data.UserProfile.Raw.Gesture tempGestureBase;
-        Data.UserProfile.Raw.Gesture tempGestureAuth;
-        int numStrokes;
+        double finalScore = 0;
+        boolean isAuth = false;
 
-        GestureComparer gestureComparer = new GestureComparer(true);
+        if(totalStrokes == mListStrokes.size()) {
+            Data.UserProfile.Raw.Gesture tempGestureBase;
+            Data.UserProfile.Raw.Gesture tempGestureAuth;
+            int numStrokes;
 
-        Template tempTemplateBase = new Template();
-        tempTemplateBase.ListGestures = new ArrayList<>();
+            GestureComparer gestureComparer = new GestureComparer(true);
 
-        Template tempTemplateAuth = new Template();
-        tempTemplateAuth.ListGestures = new ArrayList<>();
+            Template tempTemplateBase = new Template();
+            tempTemplateBase.ListGestures = new ArrayList<>();
 
-        for(int idxGesture = 0; idxGesture < listGesturesToUse.size(); idxGesture++) {
-            tempGestureBase = listGesturesToUse.get(idxGesture);
-            numStrokes = tempGestureBase.ListStrokes.size();
+            Template tempTemplateAuth = new Template();
+            tempTemplateAuth.ListGestures = new ArrayList<>();
 
-            tempGestureAuth = new Data.UserProfile.Raw.Gesture();
-            tempGestureAuth.Instruction = tempGestureBase.Instruction;
-            tempGestureAuth.ListStrokes = new ArrayList<>();
-            for(int idxStroke = 0; idxStroke < numStrokes; idxStroke++) {
-                tempGestureAuth.ListStrokes.add(mListStrokes.remove(0));
+            for(int idxGesture = 0; idxGesture < listGesturesToUse.size(); idxGesture++) {
+                tempGestureBase = listGesturesToUse.get(idxGesture);
+                numStrokes = tempGestureBase.ListStrokes.size();
+
+                tempGestureAuth = new Data.UserProfile.Raw.Gesture();
+                tempGestureAuth.Instruction = tempGestureBase.Instruction;
+                tempGestureAuth.ListStrokes = new ArrayList<>();
+                for(int idxStroke = 0; idxStroke < numStrokes; idxStroke++) {
+                    tempGestureAuth.ListStrokes.add(mListStrokes.remove(0));
+                }
+
+                tempTemplateBase.ListGestures.add(listGesturesToUse.get(idxGesture));
+                tempTemplateAuth.ListGestures.add(tempGestureAuth);
             }
 
-            tempTemplateBase.ListGestures.add(listGesturesToUse.get(idxGesture));
-            tempTemplateAuth.ListGestures.add(tempGestureAuth);
+            TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
+            TemplateExtended templateExtendedBase = new TemplateExtended(tempTemplateBase);
+
+            for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
+                GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
+                GestureExtended gestureExtendedBase = templateExtendedBase.ListGestureExtended.get(idxGesture);
+
+                gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+
+                double score = gestureComparer.GetScore();
+
+                mAccumulatedScore += score;
+                mListScores.add(score);
+            }
         }
 
-//        Data.UserProfile.Raw.Gesture gestureBase = listGesturesStored.get(mInstructionIndexes[mCurrentGesture]);
-//
-//        Data.UserProfile.Raw.Gesture gestureAuth = new Data.UserProfile.Raw.Gesture();
-//        gestureAuth.ListStrokes = mListStrokes;
-//        gestureAuth.Instruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
-//
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//
-//        GestureComparer gestureComparer = new GestureComparer(true);
-//
-//        try {
-//            Template tempTemplateAuth = new Template();
-//            tempTemplateAuth.ListGestures = new ArrayList<>();
-//            tempTemplateAuth.ListGestures.add(gestureAuth);
-//
-//            Template tempTemplateReg = new Template();
-//            tempTemplateReg.ListGestures = new ArrayList<>();
-//            tempTemplateReg.ListGestures.add(gestureBase);
-//
-//            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-//
-//            String state = "Authenticate";
-//            if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("IsHack")) {
-//                state = "Hack";
-//            }
-//
-//            ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, state, wm, mXdpi, mYdpi, true);
-//            mApiMgr.StoreData(params, tempTemplateAuth);
-//        } catch (Exception exc) {
-//            handleGeneralError(exc);
-//        }
-
-        TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
-        TemplateExtended templateExtendedBase = new TemplateExtended(tempTemplateBase);
-
-        for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
-            GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
-            GestureExtended gestureExtendedBase = templateExtendedBase.ListGestureExtended.get(idxGesture);
-
-            gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
-
-            double score = gestureComparer.GetScore();
-
-            mAccumulatedScore += score;
-            mListScores.add(score);
-        }
-
-        double finalScore = getFinalScore(mListScores);
-        boolean isAuth = false;
+        finalScore = getFinalScore(mListScores);
 
         if (finalScore > 0.85) {
             isAuth = true;
