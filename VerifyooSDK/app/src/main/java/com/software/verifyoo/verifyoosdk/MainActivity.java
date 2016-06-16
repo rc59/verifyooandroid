@@ -15,13 +15,17 @@ import android.widget.TextView;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooAuthenticate;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
+
+import java.util.Date;
 
 
 public class MainActivity extends ActionBarActivity {
 
     TextView mTxtScore;
     TextView mTxtStatus;
+    TextView mTxtTotalTime;
 
     ImageView mResultImage;
 
@@ -59,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
 
         mTxtScore = (TextView) findViewById(R.id.txtScore);
         mTxtStatus = (TextView) findViewById(R.id.txtStatus);
+        mTxtTotalTime = (TextView) findViewById(R.id.txtTotalTime);
 
         InitScore();
 
@@ -107,14 +112,19 @@ public class MainActivity extends ActionBarActivity {
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
         i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
         i.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_USE_REPEAT_GESTURE, false);
+
+        mTxtTotalTime.setText("");
         startActivityForResult(i, 1);
     }
 
     private void onClickAuth() {
+        mTxtScore.setText("Loading...Please wait");
         InitScore();
         Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
         i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
+
+        mTxtTotalTime.setText("");
         startActivityForResult(i, 1);
     }
 
@@ -133,6 +143,18 @@ public class MainActivity extends ActionBarActivity {
 
         mResultImage.setVisibility(View.GONE);
         if (resultCode == RESULT_OK) {
+            if (UtilsGeneral.StartTime != 0) {
+                double currTime = new Date().getTime();
+                double totalTime = currTime - UtilsGeneral.StartTime;
+                totalTime = totalTime / 1000;
+
+                mTxtTotalTime.setText(String.format("Total Time: %s seconds", String.valueOf(totalTime)));
+                UtilsGeneral.StartTime = 0;
+            }
+            else {
+                mTxtTotalTime.setText("");
+            }
+
             if (data != null) {
                 if (data.getExtras() != null &&
                         data.getExtras().containsKey(VerifyooConsts.EXTRA_DOUBLE_SCORE) &&

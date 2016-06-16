@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import Data.UserProfile.Extended.GestureExtended;
@@ -174,6 +175,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         if (!mIsRequiredToRepeatGesture) {
             mTextStatus.setVisibility(View.GONE);
         }
+        UtilsGeneral.StartTime = new Date().getTime();
     }
 
     private String getTitleString(String instructionCode) {

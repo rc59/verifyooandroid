@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -197,6 +198,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             setTitle(title);
             //setTitle(listGestures.get(mInstructionIndexes[0]).Instruction);
         }
+        UtilsGeneral.StartTime = new Date().getTime();
     }
 
     private String getTitle(ArrayList<Data.UserProfile.Raw.Gesture> listGestures) {

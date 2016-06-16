@@ -70,7 +70,7 @@
         android:id="@+id/btnHack"
         android:textColor="@android:color/white"
         android:layout_gravity="center_horizontal"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin" />
@@ -84,12 +84,20 @@
         android:textColor="@android:color/holo_red_dark"
         android:gravity="center_horizontal" />
 
+    <TextView
+        android:id="@+id/txtTotalTime"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtErrorMsg"
+        android:textColor="@android:color/holo_red_dark"
+        android:gravity="center_horizontal" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/resultImage"
         android:layout_gravity="center"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
+        android:paddingTop="@dimen/activity_horizontal_margin" />
 
 </LinearLayout>
