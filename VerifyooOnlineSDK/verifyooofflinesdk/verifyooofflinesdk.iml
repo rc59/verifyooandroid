@@ -98,7 +98,6 @@
     <orderEntry type="library" exported="" name="JTransforms-3.1" level="project" />
     <orderEntry type="library" exported="" name="flexjson-2.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
-    <orderEntry type="library" exported="" name="verifyoologic" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
   </component>
 </module>

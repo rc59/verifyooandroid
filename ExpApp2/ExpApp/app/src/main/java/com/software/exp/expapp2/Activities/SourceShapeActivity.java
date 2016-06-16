@@ -301,7 +301,7 @@ public class SourceShapeActivity extends Activity {
                     temp.AngleZ = mAccZ;
 
                     temp.VelocityX = mVelocityTracker.getXVelocity();
-                    temp.VelocityY = mVelocityTracker.getXVelocity();
+                    temp.VelocityY = mVelocityTracker.getYVelocity();
                     temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                     mTempStroke.ListEvents.add(temp);
@@ -313,7 +313,7 @@ public class SourceShapeActivity extends Activity {
                 temp.AngleZ = mAccZ;
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getYVelocity();
                 temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);
@@ -324,7 +324,7 @@ public class SourceShapeActivity extends Activity {
                 temp.AngleZ = mAccZ;
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getYVelocity();
                 temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);
@@ -350,7 +350,7 @@ public class SourceShapeActivity extends Activity {
                     temp.AngleZ = mAccZ;
 
                     temp.VelocityX = mVelocityTracker.getXVelocity();
-                    temp.VelocityY = mVelocityTracker.getXVelocity();
+                    temp.VelocityY = mVelocityTracker.getYVelocity();
                     temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                     mTempStroke.ListEvents.add(temp);
@@ -362,7 +362,7 @@ public class SourceShapeActivity extends Activity {
                 temp.AngleZ = mAccZ;
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getYVelocity();
                 temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);
@@ -373,7 +373,7 @@ public class SourceShapeActivity extends Activity {
                 temp.AngleZ = mAccZ;
 
                 temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getXVelocity();
+                temp.VelocityY = mVelocityTracker.getYVelocity();
                 temp.Velocity = Utils.pitagoras(temp.VelocityX, temp.VelocityY);
 
                 mTempStroke.ListEvents.add(temp);

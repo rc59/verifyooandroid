@@ -20,7 +20,6 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
 public class MainActivity extends ActionBarActivity {
 
-    TextView mTxtScore;
     TextView mTxtStatus;
 
     ImageView mResultImage;
@@ -57,12 +56,10 @@ public class MainActivity extends ActionBarActivity {
 
         mResultImage = (ImageView) findViewById(R.id.resultImage);
 
-        mTxtScore = (TextView) findViewById(R.id.txtScore);
         mTxtStatus = (TextView) findViewById(R.id.txtStatus);
 
         InitScore();
 
-        mTxtScore.setTextColor(color);
         mTxtStatus.setTextColor(color);
 
         Button btnAuth = (Button) findViewById(R.id.btnAuth);
@@ -86,7 +83,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void InitScore() {
-        mTxtScore.setText("No Score");
         mTxtStatus.setText("");
         mTxtError.setText("");
     }

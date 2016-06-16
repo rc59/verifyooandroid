@@ -1,7 +1,7 @@
 package com.software.exp.expapp2.Logic;
 
 public class Consts {
-    public static final float LENGTH_THRESHOLD = 120.0f;
+    public static final float LENGTH_THRESHOLD = 0;
     public static final int FADE_INTERVAL = 50000;
     public static final int FADE_INTERVAL_CLEAR = 0;
 
