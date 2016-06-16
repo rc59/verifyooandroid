@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
 import Data.UserProfile.Extended.GestureExtended;
@@ -243,8 +244,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private void onClickAuth() {
         mBtnAuth.setEnabled(false);
 
-        ArrayList<Data.UserProfile.Raw.Gesture> listGesturesStored = mTemplateStored.ListGestures;
-        ArrayList<Data.UserProfile.Raw.Gesture> listGesturesToUse = new ArrayList<>();
+        ArrayList<GestureExtended> listGesturesToUse = new ArrayList<>();
+
+        TemplateExtended templateStoredExtended = new TemplateExtended(mTemplateStored);
+        ArrayList<GestureExtended> listGesturesStored = templateStoredExtended.ListGestureExtended;
 
         int totalStrokes = 0;
         int currentIdx;
@@ -257,6 +260,15 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         double finalScore = 0;
         boolean isAuth = false;
+
+        String modelName = UtilsGeneral.getDeviceName();
+
+        HashMap<String, Double> compareFilters = new HashMap<>();
+        if (modelName != null && modelName.compareTo("LGE Nexus 5") != 0) {
+            compareFilters = new HashMap<>();
+            compareFilters.put("CompareGesturePressure", (double) 1);
+            compareFilters.put("CompareGestureSurface", (double) 1);
+        }
 
         if(totalStrokes == mListStrokes.size()) {
             Data.UserProfile.Raw.Gesture tempGestureBase;
@@ -291,9 +303,15 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
                 GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
-                GestureExtended gestureExtendedBase = templateExtendedBase.ListGestureExtended.get(idxGesture);
+                GestureExtended gestureExtendedBase = templateStoredExtended.ListGestureExtended.get(mInstructionIndexes[idxGesture]);
 
-                gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+                if (compareFilters.keySet().size() > 0) {
+                    gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
+                }
+                else {
+                    gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+                }
+
 
                 double score = gestureComparer.GetScore();
 

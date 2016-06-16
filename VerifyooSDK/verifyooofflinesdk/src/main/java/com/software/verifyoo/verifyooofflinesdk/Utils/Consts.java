@@ -8,7 +8,7 @@ public class Consts {
 
     public static final int DEFAULT_NUM_REQ_GESTURES_REG = 6;
     public static final int DEFAULT_NUM_REQ_GESTURES_AUTH = 3;
-    public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 2;
+    public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 3;
 
     public static final int FADE_INTERVAL = 50000;
     public static final int FADE_INTERVAL_CLEAR = 10;

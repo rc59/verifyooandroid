@@ -24,7 +24,7 @@ public abstract class GestureInputAbstract extends ActionBarActivity {
     protected ArrayList<Float> mListY;
 
     protected int mCount;
-    protected final int GESTURE_TRAIL_SIZE = 10;
+    protected final int GESTURE_TRAIL_SIZE = 30;
 
     private Handler handler = new Handler();
     public GestureInputAbstract() {
