@@ -64,7 +64,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private int mCurrentGesture;
 
-    private TemplateExtended mTemplateStored;
+    private Template mTemplateStored;
 
     ApiMgr mApiMgr;
 
@@ -178,7 +178,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             if (storedTemplate.length() > 0) {
 
-                JSONDeserializer<TemplateExtended> deserializer = new JSONDeserializer<TemplateExtended>();
+                JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
                 try {
                     try {
                         String key = UtilsGeneral.GetUserKey(mUserName);
@@ -189,7 +189,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     }
 
                     Object listGesturesObj = deserializer.deserialize(storedTemplate);
-                    mTemplateStored = (TemplateExtended) listGesturesObj;
+                    mTemplateStored = (Template) listGesturesObj;
+                    UtilsGeneral.StoredTemplateExtended = new TemplateExtended(mTemplateStored);
                     //mTemplateStored.Init();
                 } catch (Exception exc) {
                     handleGeneralError(exc);
@@ -197,7 +198,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         }
 
-        ArrayList<GestureExtended> listGestures = mTemplateStored.ListGestureExtended;
+        ArrayList<GestureExtended> listGestures = UtilsGeneral.StoredTemplateExtended.ListGestureExtended;
         mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
 
         String title = getTitle(listGestures);
@@ -253,7 +254,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         ArrayList<GestureExtended> listGesturesToUse = new ArrayList<>();
 
-        TemplateExtended templateStoredExtended = mTemplateStored;
+        TemplateExtended templateStoredExtended = UtilsGeneral.StoredTemplateExtended;
         ArrayList<GestureExtended> listGesturesStored = templateStoredExtended.ListGestureExtended;
 
         int totalStrokes = 0;

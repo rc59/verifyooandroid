@@ -23,22 +23,22 @@ public class UtilsConvert {
         String instruction = "";
         switch (instructionCode) {
             case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
-                instruction = "Letter A";
+                instruction = "A";
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_EIGHT:
-                instruction = "Digit 8";
+                instruction = "8";
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_FIVE:
-                instruction = "Digit 5";
+                instruction = "5";
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_HEART:
-                instruction = "Heart";
+                instruction = "♡";
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
-                instruction = "Letter R";
+                instruction = "R";
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_TRIANGULAR:
-                instruction = "Triangle";
+                instruction = "Δ";
                 break;
         }
 

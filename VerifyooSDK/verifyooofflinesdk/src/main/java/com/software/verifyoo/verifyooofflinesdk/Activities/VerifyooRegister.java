@@ -198,7 +198,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void onClickSave() {
-
+        setGestureStrength(getString(R.string.gestureStrNone));
         boolean isNumStrokesValid = true;
         String currentInstruction = UtilsInstructions.GetInstruction(mCurrentGesture);
         if(mHashNumStrokesPerGesture.containsKey(currentInstruction))
@@ -379,6 +379,29 @@ public class VerifyooRegister extends GestureInputAbstract {
         return super.onOptionsItemSelected(item);
     }
 
+    public void CheckGestureStrength() {
+        Data.UserProfile.Raw.Gesture tempGesture = new Data.UserProfile.Raw.Gesture();
+        tempGesture.ListStrokes = mListStrokes;
+        tempGesture.Instruction = UtilsInstructions.GetInstruction(mCurrentGesture);
+
+        Template tempTemplate = new Template();
+        tempTemplate.ListGestures = mListGestures;
+        tempTemplate.ListGestures.add(tempGesture);
+
+        try {
+            TemplateExtended tempTemplateExtended = new TemplateExtended(tempTemplate);
+            GestureExtended tempGestureExtended = tempTemplateExtended.ListGestureExtended.get(mCurrentGesture);
+            String gestureStrength = tempGestureExtended.GetGestureStrength();
+            setGestureStrength(gestureStrength);
+        } catch (Exception exc) {
+            handleGeneralError(exc);
+        }
+
+        int idxGestureToRemove = tempTemplate.ListGestures.size();
+        tempTemplate.ListGestures.remove(idxGestureToRemove - 1);
+
+    }
+
 //    public void CheckGestureStrength() {
 //        Data.UserProfile.Raw.Gesture tempGesture = new Data.UserProfile.Raw.Gesture();
 //        tempGesture.ListStrokes = mListStrokes;
@@ -434,27 +457,29 @@ public class VerifyooRegister extends GestureInputAbstract {
 //        }
 //    }
 
-    public class GestureDrawProcessorRegister extends GestureDrawProcessorAbstract {
-        public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
-            unRegisterSensors();
-            super.onGesture(overlay, event);
+        public class GestureDrawProcessorRegister extends GestureDrawProcessorAbstract {
+            public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+                unRegisterSensors();
+                super.onGesture(overlay, event);
 
-            mBtnSave.setEnabled(true);
-            Gesture gesture  = overlay.getGesture();
+                mBtnSave.setEnabled(true);
+                Gesture gesture = overlay.getGesture();
 
-            int strokesCount = gesture.getStrokes().size();
-            if (strokesCount > 1) {
-                gesture.getStrokes().remove(0);
+                int strokesCount = gesture.getStrokes().size();
+                if (strokesCount > 1) {
+                    gesture.getStrokes().remove(0);
+                }
+
+                Stroke tempStroke = mGesturesProcessor.getStroke();
+                tempStroke.Xdpi = mXdpi;
+                tempStroke.Ydpi = mYdpi;
+                tempStroke.Length = gesture.getLength();
+                mListStrokes.add(tempStroke);
+                mListStrokesTemp.add(tempStroke);
+
+                mGesturesProcessor.clearStroke();
+
+                CheckGestureStrength();
             }
-
-            Stroke tempStroke = mGesturesProcessor.getStroke();
-            tempStroke.Xdpi = mXdpi;
-            tempStroke.Ydpi = mYdpi;
-            tempStroke.Length = gesture.getLength();
-            mListStrokes.add(tempStroke);
-            mListStrokesTemp.add(tempStroke);
-
-            mGesturesProcessor.clearStroke();
         }
     }
-}
