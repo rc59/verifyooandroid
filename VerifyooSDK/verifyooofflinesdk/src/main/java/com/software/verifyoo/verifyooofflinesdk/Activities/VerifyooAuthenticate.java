@@ -64,7 +64,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private int mCurrentGesture;
 
-    private Template mTemplateStored;
+    private TemplateExtended mTemplateStored;
 
     ApiMgr mApiMgr;
 
@@ -163,45 +163,50 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         });
 
-        InputStream inputStream = null;
-        try {
-            inputStream = openFileInput(Files.GetFileName(mUserName));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            handleError(ConstsMessages.E00002);
+        if (UtilsGeneral.StoredTemplateExtended != null) {
+            mTemplateStored = UtilsGeneral.StoredTemplateExtended;
         }
-        String storedTemplate = Files.readFromFile(inputStream);
-
-        if (storedTemplate.length() > 0) {
-
-            JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
+        else {
+            InputStream inputStream = null;
             try {
-                try {
-                    String key = UtilsGeneral.GetUserKey(mUserName);
-                    storedTemplate = AESCrypt.decrypt(key, storedTemplate);
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                    handleError(ConstsMessages.E00003);
-                }
-
-                Object listGesturesObj = deserializer.deserialize(storedTemplate);
-                mTemplateStored = (Template) listGesturesObj;
-                //mTemplateStored.Init();
-            } catch (Exception exc) {
-                handleGeneralError(exc);
+                inputStream = openFileInput(Files.GetFileName(mUserName));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                handleError(ConstsMessages.E00002);
             }
+            String storedTemplate = Files.readFromFile(inputStream);
 
-            ArrayList<Data.UserProfile.Raw.Gesture> listGestures = mTemplateStored.ListGestures;
-            mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
+            if (storedTemplate.length() > 0) {
 
-            String title = getTitle(listGestures);
-            setTitle(title);
-            //setTitle(listGestures.get(mInstructionIndexes[0]).Instruction);
+                JSONDeserializer<TemplateExtended> deserializer = new JSONDeserializer<TemplateExtended>();
+                try {
+                    try {
+                        String key = UtilsGeneral.GetUserKey(mUserName);
+                        storedTemplate = AESCrypt.decrypt(key, storedTemplate);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                        handleError(ConstsMessages.E00003);
+                    }
+
+                    Object listGesturesObj = deserializer.deserialize(storedTemplate);
+                    mTemplateStored = (TemplateExtended) listGesturesObj;
+                    //mTemplateStored.Init();
+                } catch (Exception exc) {
+                    handleGeneralError(exc);
+                }
+            }
         }
+
+        ArrayList<GestureExtended> listGestures = mTemplateStored.ListGestureExtended;
+        mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
+
+        String title = getTitle(listGestures);
+        setTitle(title);
+
         UtilsGeneral.StartTime = new Date().getTime();
     }
 
-    private String getTitle(ArrayList<Data.UserProfile.Raw.Gesture> listGestures) {
+    private String getTitle(ArrayList<GestureExtended> listGestures) {
         String title = "";
 
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
@@ -248,7 +253,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         ArrayList<GestureExtended> listGesturesToUse = new ArrayList<>();
 
-        TemplateExtended templateStoredExtended = new TemplateExtended(mTemplateStored);
+        TemplateExtended templateStoredExtended = mTemplateStored;
         ArrayList<GestureExtended> listGesturesStored = templateStoredExtended.ListGestureExtended;
 
         int totalStrokes = 0;

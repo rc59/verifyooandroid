@@ -3,10 +3,14 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
 import android.os.Build;
 import android.text.TextUtils;
 
+import Data.UserProfile.Extended.TemplateExtended;
+
 /**
  * Created by roy on 2/25/2016.
  */
 public class UtilsGeneral {
+    public static TemplateExtended StoredTemplateExtended;
+
     public static double StartTime;
 
     public static void SimulateException() {

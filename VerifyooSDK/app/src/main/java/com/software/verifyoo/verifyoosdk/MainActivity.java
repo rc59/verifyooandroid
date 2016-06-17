@@ -3,6 +3,7 @@ package com.software.verifyoo.verifyoosdk;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,11 +15,20 @@ import android.widget.TextView;
 
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooAuthenticate;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
+import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
+import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.util.Date;
+
+import Data.UserProfile.Extended.TemplateExtended;
+import Data.UserProfile.Raw.Template;
+import flexjson.JSONDeserializer;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,6 +44,9 @@ public class MainActivity extends ActionBarActivity {
 
     TextView mTxtError;
 
+    Button mBtnAuth;
+    ImageView mImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +56,78 @@ public class MainActivity extends ActionBarActivity {
         mCompany = "Verifyoo";
 
         init();
+        postInit();
+    }
+
+    protected void loadTemplate() {
+        InputStream inputStream = null;
+        try {
+            inputStream = openFileInput(Files.GetFileName(mUserName));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+//                mTxtError.setText(e.getMessage());
+        }
+        String storedTemplate = Files.readFromFile(inputStream);
+
+        if (storedTemplate.length() > 0) {
+
+            JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
+            try {
+                try {
+                    String key = UtilsGeneral.GetUserKey(mUserName);
+                    storedTemplate = AESCrypt.decrypt(key, storedTemplate);
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+//                        mTxtError.setText(e.getMessage());
+                }
+
+                Object listGesturesObj = deserializer.deserialize(storedTemplate);
+                TemplateExtended templateExtended = new TemplateExtended((Template) listGesturesObj);
+                UtilsGeneral.StoredTemplateExtended = templateExtended;
+                //mTemplateStored.Init();
+            } catch (Exception e) {
+//                    mTxtError.setText(e.getMessage());
+            }
+
+        }
+    }
+
+    private class TemplateLoader extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            loadTemplate();
+//            TextView txt = (TextView) findViewById(R.id.output);
+//            txt.setText("Executed");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            InitScore();
+            mBtnAuth.setVisibility(View.VISIBLE);
+            mImage.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mBtnAuth.setVisibility(View.INVISIBLE);
+            mImage.setVisibility(View.INVISIBLE);
+            mTxtStatus.setText("Loading...Please wait");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+
+    private void postInit() {
+        if (UtilsGeneral.StoredTemplateExtended == null) {
+            new TemplateLoader().execute("");
+        }
+        else {
+            InitScore();
+        }
     }
 
     private void init() {
@@ -56,8 +141,8 @@ public class MainActivity extends ActionBarActivity {
 
         mTxtError = (TextView) findViewById(R.id.txtErrorMsg);
 
-        ImageView image = (ImageView) findViewById(R.id.welcomeImage);
-        image.setImageResource(R.drawable.logo);
+        mImage = (ImageView) findViewById(R.id.welcomeImage);
+        mImage.setImageResource(R.drawable.logo);
 
         mResultImage = (ImageView) findViewById(R.id.resultImage);
 
@@ -65,20 +150,18 @@ public class MainActivity extends ActionBarActivity {
         mTxtStatus = (TextView) findViewById(R.id.txtStatus);
         mTxtTotalTime = (TextView) findViewById(R.id.txtTotalTime);
 
-        InitScore();
-
         mTxtScore.setTextColor(color);
         mTxtStatus.setTextColor(color);
 
-        Button btnAuth = (Button) findViewById(R.id.btnAuth);
+        mBtnAuth = (Button) findViewById(R.id.btnAuth);
         Button btnReg = (Button) findViewById(R.id.btnReg);
         Button btnHack = (Button) findViewById(R.id.btnHack);
 
-        btnAuth.setBackgroundColor(color);
+        mBtnAuth.setBackgroundColor(color);
         btnReg.setBackgroundColor(color);
         btnHack.setBackgroundColor(color);
 
-        btnAuth.setOnClickListener(new View.OnClickListener() {
+        mBtnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickAuth();
