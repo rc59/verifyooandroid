@@ -308,7 +308,15 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_register) {
             onClickReg();
         }
+        if (id == R.id.action_analysis) {
+            onClickAnalysis();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onClickAnalysis() {
+        Intent i = new Intent(getApplicationContext(), Analysis.class);
+        startActivity(i);
     }
 }

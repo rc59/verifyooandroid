@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
+import Data.Comparison.CompareResultSummary;
+import Data.Comparison.Interfaces.ICompareResult;
 import Data.UserProfile.Extended.GestureExtended;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
@@ -113,6 +115,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void init() {
+        IsShowTrail = true;
         initInstructionIndexes();
         mApiMgr = new ApiMgr();
 
@@ -132,13 +135,14 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
-        int color = Color.parseColor(Consts.VERIFYOO_BLUE);
+        int colorGreen = Color.parseColor(Consts.VERIFYOO_GREEN);
+        int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
-        mBtnAuth.setBackgroundColor(color);
+        mBtnAuth.setBackgroundColor(colorGreen);
 
         mBtnClear = (Button) findViewById(R.id.btnClear);
-        mBtnClear.setBackgroundColor(color);
+        mBtnClear.setBackgroundColor(colorGray);
 
         mBtnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +219,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             title += ", ";
         }
 
-        title = "Input " + title.substring(0, title.length() - 2);
+        title = "DRAW " + title.substring(0, title.length() - 2);
         return title;
     }
 
@@ -309,6 +313,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
             TemplateExtended templateExtendedBase = new TemplateExtended(tempTemplateBase);
 
+            String gestureResultSummary;
+            StringBuilder stringBuilder = new StringBuilder();
+
             for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
                 GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
                 GestureExtended gestureExtendedBase = templateStoredExtended.ListGestureExtended.get(mInstructionIndexes[idxGesture]);
@@ -320,13 +327,19 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
                 }
 
+                gestureResultSummary = resultSummaryToString(gestureComparer.GetResultsSummary());
+
+                stringBuilder.append(String.format("[%s: %s], ", String.valueOf(idxGesture), gestureResultSummary));
 
                 double score = gestureComparer.GetScore();
 
                 mAccumulatedScore += score;
                 mListScores.add(score);
             }
+
+            UtilsGeneral.ResultAnalysis = stringBuilder.toString();
         }
+
 
         finalScore = getFinalScore(mListScores);
 
@@ -339,6 +352,46 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         intent.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED, isAuth);
         this.setResult(RESULT_OK, intent);
         finish();
+    }
+
+    private String resultSummaryToString(CompareResultSummary compareResultSummary) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        ICompareResult compareResult;
+        String paramName;
+        double paramScore;
+        double paramWeight;
+
+        String paramScoreStr;
+        String paramWeightStr;
+
+        String tempParamSummary;
+
+        int maxLength = 5;
+        int currentLength;
+
+        for(int idx = 0; idx < compareResultSummary.ListCompareResults.size(); idx++) {
+            compareResult = compareResultSummary.ListCompareResults.get(idx);
+
+            paramName = compareResult.GetName();
+            paramScore = compareResult.GetValue();
+            paramWeight = compareResult.GetWeight();
+
+            paramScoreStr = String.valueOf(paramScore);
+            paramWeightStr = String.valueOf(paramWeight);
+
+            if (paramScoreStr.length() > maxLength) {
+                paramScoreStr = paramScoreStr.substring(0, maxLength);
+            }
+            if (paramWeightStr.length() > maxLength) {
+                paramWeightStr = paramWeightStr.substring(0, maxLength);
+            }
+
+            tempParamSummary = String.format("{%s: %s (%s)}, ", paramName, paramScoreStr, paramWeightStr);
+
+            stringBuilder.append(tempParamSummary);
+        }
+        return stringBuilder.toString();
     }
 
     private Data.UserProfile.Raw.Gesture getGestureByInstruction(ArrayList<Data.UserProfile.Raw.Gesture> listGestures, String instructionCode) {
@@ -454,6 +507,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private void onClickClear() {
         clearOverlay();
+        mBtnAuth.setVisibility(View.INVISIBLE);
+        mBtnClear.setVisibility(View.INVISIBLE);
         mListStrokes = new ArrayList<>();
     }
 
@@ -520,21 +575,27 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             super.onGesture(overlay, event);
 
             Gesture gesture  = overlay.getGesture();
+            double currentLength = gesture.getLength();
 
             int strokesCount = gesture.getStrokes().size();
             if (strokesCount > 1) {
                 gesture.getStrokes().remove(0);
             }
 
-            super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
+            if (currentLength > 50) {
+                super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
 
-            Stroke tempStroke = mGesturesProcessor.getStroke();
-            tempStroke.Xdpi = mXdpi;
-            tempStroke.Ydpi = mYdpi;
-            tempStroke.Length = gesture.getLength();
-            mListStrokes.add(tempStroke);
-            mGesturesProcessor.clearStroke();
-            mBtnAuth.setEnabled(true);
+                Stroke tempStroke = mGesturesProcessor.getStroke();
+                tempStroke.Xdpi = mXdpi;
+                tempStroke.Ydpi = mYdpi;
+                tempStroke.Length = gesture.getLength();
+                mListStrokes.add(tempStroke);
+                mGesturesProcessor.clearStroke();
+                mBtnAuth.setEnabled(true);
+
+                mBtnAuth.setVisibility(View.VISIBLE);
+                mBtnClear.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

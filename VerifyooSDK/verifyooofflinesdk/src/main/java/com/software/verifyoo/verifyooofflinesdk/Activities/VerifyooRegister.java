@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureInputAbstract;
@@ -54,15 +53,13 @@ public class VerifyooRegister extends GestureInputAbstract {
     private ArrayList<Data.UserProfile.Raw.Gesture> mListGestures;
 
     private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokes;
-    private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokesRepeat;
     private ArrayList<Data.UserProfile.Raw.Stroke> mListStrokesTemp;
 
     private Button mBtnSave;
     private Button mBtnClear;
 
-    private TextView mTextStrength;
-    private TextView mTextView;
     private TextView mTextStatus;
+    private View mLayoutStatus;
 
     boolean mIsRequiredToRepeatGesture;
 
@@ -115,6 +112,15 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
     }
 
+    private void updateTitle(String instruction) {
+        int total = (Consts.DEFAULT_NUM_REQ_GESTURES_REG * Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION);
+        int currentGeseture = mListGestures.size() + 1;
+        String completion = String.format("(%s/%s)", String.valueOf(currentGeseture), String.valueOf(total));
+        String title = String.format("%s %s", completion, instruction);
+
+        setTitle(title);
+    }
+
     private void init() {
         mHashNumStrokesPerGesture = new HashMap<>();
         mNumberRepeats = 1;
@@ -124,12 +130,11 @@ public class VerifyooRegister extends GestureInputAbstract {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        setTitle(getTitleString(UtilsInstructions.GetInstruction(0)));
-
         mListStrokes = new ArrayList<>();
-        mListStrokesRepeat = new ArrayList<>();
         mListStrokesTemp = new ArrayList<>();
         mListGestures = new ArrayList<>();
+
+        updateTitle(getTitleString(UtilsInstructions.GetInstruction(0)));
 
         mIsFirstGestureEntered = false;
 
@@ -137,13 +142,14 @@ public class VerifyooRegister extends GestureInputAbstract {
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
-        int color = Color.parseColor(Consts.VERIFYOO_BLUE);
+        int colorGreen = Color.parseColor(Consts.VERIFYOO_GREEN);
+        int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
 
         mBtnSave = (Button) findViewById(R.id.btnSave);
-        mBtnSave.setBackgroundColor(color);
+        mBtnSave.setBackgroundColor(colorGreen);
 
         mBtnClear = (Button) findViewById(R.id.btnClear);
-        mBtnClear.setBackgroundColor(color);
+        mBtnClear.setBackgroundColor(colorGray);
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,20 +174,15 @@ public class VerifyooRegister extends GestureInputAbstract {
         });
 
 
-        mTextView = (TextView) findViewById(R.id.textInstruction);
-        mTextStrength = (TextView) findViewById(R.id.textStrength);
         mTextStatus = (TextView) findViewById(R.id.textStatus);
-
-        if (!mIsRequiredToRepeatGesture) {
-            mTextStatus.setVisibility(View.GONE);
-        }
+        mLayoutStatus = findViewById(R.id.layoutStatus);
         UtilsGeneral.StartTime = new Date().getTime();
     }
 
     private String getTitleString(String instructionCode) {
         String title = UtilsConvert.InstructionCodeToInstruction(instructionCode);
 
-        title = String.format("Input %s", title);
+        title = String.format("DRAW %s", title);
 
         return title;
     }
@@ -190,15 +191,30 @@ public class VerifyooRegister extends GestureInputAbstract {
         mIsFirstGestureEntered = false;
         clearOverlay();
         mBtnSave.setEnabled(false);
+
+        mBtnSave.setVisibility(View.INVISIBLE);
+        mBtnClear.setVisibility(View.INVISIBLE);
+
         mListStrokes = new ArrayList<>();
-        mListStrokesRepeat = new ArrayList<>();
         mListStrokesTemp = new ArrayList<>();
-        mTextStatus.setText("");
-        setGestureStrength(getString(R.string.gestureStrNone));
+        updateStatus("");
+    }
+
+    private void updateStatus(String status) {
+        mTextStatus.setText(status);
+        if (status.length() > 0) {
+            mLayoutStatus.setVisibility(View.VISIBLE);
+        }
+        else {
+            mLayoutStatus.setVisibility(View.GONE);
+        }
     }
 
     private void onClickSave() {
-        setGestureStrength(getString(R.string.gestureStrNone));
+        clearOverlay();
+        mBtnSave.setVisibility(View.INVISIBLE);
+        mBtnClear.setVisibility(View.INVISIBLE);
+
         boolean isNumStrokesValid = true;
         String currentInstruction = UtilsInstructions.GetInstruction(mCurrentGesture);
         if(mHashNumStrokesPerGesture.containsKey(currentInstruction))
@@ -267,10 +283,10 @@ public class VerifyooRegister extends GestureInputAbstract {
                 }
             }
 
-            setTitle(getTitleString(UtilsInstructions.GetInstruction(mCurrentGesture)));
+            updateTitle(getTitleString(UtilsInstructions.GetInstruction(mCurrentGesture)));
         }
         else {
-            Toast.makeText(getApplicationContext(), "The gestures are not similar", Toast.LENGTH_SHORT).show();
+            updateStatus("The gestures are not similar");
             mListStrokes.clear();
         }
     }
@@ -353,10 +369,6 @@ public class VerifyooRegister extends GestureInputAbstract {
         handleError(errorMessage);
     }
 
-    private void setGestureStrength(String strength) {
-        mTextStrength.setText(String.format("Gesture Strength: %s", strength));
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -379,107 +391,58 @@ public class VerifyooRegister extends GestureInputAbstract {
         return super.onOptionsItemSelected(item);
     }
 
-    public void CheckGestureStrength() {
-        Data.UserProfile.Raw.Gesture tempGesture = new Data.UserProfile.Raw.Gesture();
-        tempGesture.ListStrokes = mListStrokes;
-        tempGesture.Instruction = UtilsInstructions.GetInstruction(mCurrentGesture);
-
-        Template tempTemplate = new Template();
-        tempTemplate.ListGestures = mListGestures;
-        tempTemplate.ListGestures.add(tempGesture);
-
-        try {
-            TemplateExtended tempTemplateExtended = new TemplateExtended(tempTemplate);
-            GestureExtended tempGestureExtended = tempTemplateExtended.ListGestureExtended.get(mCurrentGesture);
-            String gestureStrength = tempGestureExtended.GetGestureStrength();
-            setGestureStrength(gestureStrength);
-        } catch (Exception exc) {
-            handleGeneralError(exc);
-        }
-
-        int idxGestureToRemove = tempTemplate.ListGestures.size();
-        tempTemplate.ListGestures.remove(idxGestureToRemove - 1);
-
-    }
-
 //    public void CheckGestureStrength() {
 //        Data.UserProfile.Raw.Gesture tempGesture = new Data.UserProfile.Raw.Gesture();
 //        tempGesture.ListStrokes = mListStrokes;
+//        tempGesture.Instruction = UtilsInstructions.GetInstruction(mCurrentGesture);
 //
-//        setGestureStrength(getString(R.string.gestureStrLow));
+//        Template tempTemplate = new Template();
+//        tempTemplate.ListGestures = mListGestures;
+//        tempTemplate.ListGestures.add(tempGesture);
 //
-//        int numStrokesLongerThanMin = 0;
-//        double sumStrokeLengths = 0;
-//
-//        StrokeComparer strokeComparer = new StrokeComparer();
-//        Stroke tempStrokeCurrent, tempStrokePrev;
-//        double tempStrokeScore;
-//
-//        for (int idxStroke = 0; idxStroke < tempGesture.ListStrokes.size(); idxStroke++) {
-//            if (idxStroke == 0) {
-//                if (tempGesture.ListStrokes.get(idxStroke).Length > Consts.MIN_STROKE_LENGTH) {
-//                    numStrokesLongerThanMin++;
-//                    sumStrokeLengths += tempGesture.ListStrokes.get(idxStroke).Length;
-//                }
-//            }
-//            else {
-//
-//                try {
-//                    tempStrokeCurrent = tempGesture.ListStrokes.get(idxStroke);
-//                    tempStrokePrev = tempGesture.ListStrokes.get(idxStroke - 1);
-//
-//                    tempStrokeCurrent.InitParams();
-//                    tempStrokePrev.InitParams();
-//
-//                    tempStrokeScore = 1;
-//                    tempStrokeScore = strokeComparer.Compare(tempStrokeCurrent, tempStrokePrev);
-//                } catch (Exception exc) {
-//                    tempStrokeScore = 1;
-//                }
-//
-//                if (tempStrokeScore < 0.85) {
-//                    if (tempGesture.ListStrokes.get(idxStroke).Length > Consts.MIN_STROKE_LENGTH) {
-//                        numStrokesLongerThanMin++;
-//                        sumStrokeLengths += tempGesture.ListStrokes.get(idxStroke).Length;
-//                    }
-//                }
-//            }
+//        try {
+//            TemplateExtended tempTemplateExtended = new TemplateExtended(tempTemplate);
+//            GestureExtended tempGestureExtended = tempTemplateExtended.ListGestureExtended.get(mCurrentGesture);
+//            String gestureStrength = tempGestureExtended.GetGestureStrength();
+//            setGestureStrength(gestureStrength);
+//        } catch (Exception exc) {
+//            handleGeneralError(exc);
 //        }
 //
-//        if (numStrokesLongerThanMin >= 1 && sumStrokeLengths > 3000) {
-//            setGestureStrength(getString(R.string.gestureStrMedium));
-//        }
-//        if (numStrokesLongerThanMin >= 2 && sumStrokeLengths > 4000) {
-//            setGestureStrength(getString(R.string.gestureStrHigh));
-//        }
-//        if (numStrokesLongerThanMin >= 3 && sumStrokeLengths > 5000) {
-//            setGestureStrength(getString(R.string.gestureStrVeryHigh));
-//        }
+//        int idxGestureToRemove = tempTemplate.ListGestures.size();
+//        tempTemplate.ListGestures.remove(idxGestureToRemove - 1);
+//
 //    }
 
-        public class GestureDrawProcessorRegister extends GestureDrawProcessorAbstract {
-            public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
-                unRegisterSensors();
-                super.onGesture(overlay, event);
+    public class GestureDrawProcessorRegister extends GestureDrawProcessorAbstract {
+        public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+            unRegisterSensors();
+            super.onGesture(overlay, event);
 
-                mBtnSave.setEnabled(true);
-                Gesture gesture = overlay.getGesture();
+            updateStatus("");
+            mBtnSave.setEnabled(true);
+            Gesture gesture = overlay.getGesture();
+            double currentLength = gesture.getLength();
 
-                int strokesCount = gesture.getStrokes().size();
-                if (strokesCount > 1) {
-                    gesture.getStrokes().remove(0);
-                }
+            int strokesCount = gesture.getStrokes().size();
+            if (strokesCount > 1) {
+                gesture.getStrokes().remove(0);
+            }
 
-                Stroke tempStroke = mGesturesProcessor.getStroke();
-                tempStroke.Xdpi = mXdpi;
-                tempStroke.Ydpi = mYdpi;
-                tempStroke.Length = gesture.getLength();
+            Stroke tempStroke = mGesturesProcessor.getStroke();
+            tempStroke.Xdpi = mXdpi;
+            tempStroke.Ydpi = mYdpi;
+            tempStroke.Length = gesture.getLength();
+
+            if (currentLength > 50) {
                 mListStrokes.add(tempStroke);
                 mListStrokesTemp.add(tempStroke);
 
-                mGesturesProcessor.clearStroke();
-
-                CheckGestureStrength();
+                mBtnSave.setVisibility(View.VISIBLE);
+                mBtnClear.setVisibility(View.VISIBLE);
             }
+
+            mGesturesProcessor.clearStroke();
         }
     }
+}

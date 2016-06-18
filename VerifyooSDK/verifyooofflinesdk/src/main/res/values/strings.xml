@@ -8,9 +8,9 @@
     <string name="title_activity_verifyoo_test">VerifyooTest</string>
     <string name="title_activity_verifyoo_register">VerifyooRegister</string>
     <string name="title_activity_verifyoo_authenticate">VerifyooAuthenticate</string>
-    <string name="btnSave">Save</string>
+    <string name="btnSave">  DONE</string>
     <string name="btnAuth">Authenticate</string>
-    <string name="btnClear">RESTART</string>
+    <string name="btnClear">  REDRAW</string>
     <string name="gestureStrNone">[None]</string>
     <string name="gestureStrLow">Low</string>
     <string name="gestureStrMedium">Medium</string>

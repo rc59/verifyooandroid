@@ -16,5 +16,6 @@ public class Consts {
     public static final String STORAGE_FILE = "template.txt";
 
     public static final String VERIFYOO_BLUE = "#0474B2";
-
+    public static final String VERIFYOO_GREEN = "#14781A";
+    public static final String VERIFYOO_GRAY = "#6E6E6E";
 }

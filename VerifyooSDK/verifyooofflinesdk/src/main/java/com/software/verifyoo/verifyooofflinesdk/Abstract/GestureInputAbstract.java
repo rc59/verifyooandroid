@@ -3,7 +3,6 @@ package com.software.verifyoo.verifyooofflinesdk.Abstract;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.Path;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,10 +25,7 @@ public abstract class GestureInputAbstract extends ActionBarActivity {
     protected int mCount;
     protected final int GESTURE_TRAIL_SIZE = 30;
 
-    private Handler handler = new Handler();
-    public GestureInputAbstract() {
-
-    }
+    public boolean IsShowTrail = false;
 
     protected void clearOverlay() {
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
@@ -58,35 +54,37 @@ public abstract class GestureInputAbstract extends ActionBarActivity {
             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
             mOverlay.setBackgroundColor(Color.rgb(33, 33, 33));
 
-            mOverlay.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    mListX.add(event.getX());
-                    mListY.add(event.getY());
+            if (IsShowTrail) {
+                mOverlay.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        mListX.add(event.getX());
+                        mListY.add(event.getY());
 
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        mOverlay.cancelClearAnimation();
-                        mListX.clear();
-                        mListY.clear();
-                    }
-                    else {
-                        if(mListX.size() > GESTURE_TRAIL_SIZE) {
-
-                            mListX.remove(0);
-                            mListY.remove(0);
-                            Path path = new Path();
-
-                            path.moveTo(mListX.get(0), mListY.get(0));
-
-                            for(int idx = 1; idx < mListX.size(); idx++) {
-                                path.lineTo(mListX.get(idx), mListY.get(idx));
-                            }
-                            mOverlay.getGesturePath().set(path);
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
+                            mOverlay.cancelClearAnimation();
+                            mListX.clear();
+                            mListY.clear();
                         }
+                        else {
+                            if(mListX.size() > GESTURE_TRAIL_SIZE) {
+
+                                mListX.remove(0);
+                                mListY.remove(0);
+                                Path path = new Path();
+
+                                path.moveTo(mListX.get(0), mListY.get(0));
+
+                                for(int idx = 1; idx < mListX.size(); idx++) {
+                                    path.lineTo(mListX.get(idx), mListY.get(idx));
+                                }
+                                mOverlay.getGesturePath().set(path);
+                            }
+                        }
+                        return true;
                     }
-                    return true;
-                }
-            });
+                });
+            }
 
             mGesturesProcessor.init(getApplicationContext(), mOverlay);
         } catch (Exception exc) {

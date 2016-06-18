@@ -11,6 +11,7 @@ import Data.UserProfile.Extended.TemplateExtended;
 public class UtilsGeneral {
     public static TemplateExtended StoredTemplateExtended;
 
+    public static String ResultAnalysis;
     public static double StartTime;
 
     public static void SimulateException() {
@@ -58,4 +59,17 @@ public class UtilsGeneral {
         return phrase;
     }
 
+    public static double Round(double value, int decimals) {
+        for(int idx = 0; idx < decimals; idx++) {
+            value = value * 10;
+        }
+
+        int tempValue = (int) value;
+        value = tempValue;
+
+        for(int idx = 0; idx < decimals; idx++) {
+            value = value / 10;
+        }
+        return value;
+    }
 }
