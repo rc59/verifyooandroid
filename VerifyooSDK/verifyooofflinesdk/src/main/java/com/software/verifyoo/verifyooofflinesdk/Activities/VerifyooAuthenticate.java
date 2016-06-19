@@ -498,10 +498,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             tempWeight = idx + 1;
             weights += tempWeight;
 
-            scores += tempWeight * mListScores.get(idx);
+//            scores += tempWeight * mListScores.get(idx);
+            scores += mListScores.get(idx);
         }
 
-        double finalScore = scores / weights;
+        double finalScore = scores / mListScores.size();
         return finalScore;
     }
 
