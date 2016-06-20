@@ -35,7 +35,6 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -207,8 +206,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         String title = getTitle(listGestures);
         setTitle(title);
-
-        UtilsGeneral.StartTime = new Date().getTime();
     }
 
     private String getTitle(ArrayList<GestureExtended> listGestures) {
@@ -329,9 +326,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
                 gestureResultSummary = resultSummaryToString(gestureComparer.GetResultsSummary());
 
-                stringBuilder.append(String.format("[%s: %s], ", String.valueOf(idxGesture), gestureResultSummary));
-
                 double score = gestureComparer.GetScore();
+                String strScore = String.valueOf(score);
+                if (strScore.length() > 5) {
+                    strScore = strScore.substring(0, 5);
+                }
+                stringBuilder.append(String.format("[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
 
                 mAccumulatedScore += score;
                 mListScores.add(score);

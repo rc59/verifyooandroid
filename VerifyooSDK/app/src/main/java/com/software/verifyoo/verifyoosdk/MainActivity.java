@@ -190,6 +190,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onClickReg() {
+        UtilsGeneral.StartTime = 0;
         InitScore();
         Intent i = new Intent(getApplicationContext(), VerifyooRegister.class);
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
@@ -201,6 +202,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onClickAuth() {
+        UtilsGeneral.StartTime = 0;
         mTxtScore.setText("Loading...Please wait");
         InitScore();
         Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);

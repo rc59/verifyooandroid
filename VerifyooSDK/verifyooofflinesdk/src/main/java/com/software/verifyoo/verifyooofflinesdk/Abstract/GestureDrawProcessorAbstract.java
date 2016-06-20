@@ -11,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import Data.UserProfile.Raw.MotionEventCompact;
 import Data.UserProfile.Raw.Stroke;
@@ -113,6 +115,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
 
         try {
+            if (UtilsGeneral.StartTime == 0) {
+                UtilsGeneral.StartTime = new Date().getTime();
+            }
             MotionEventCompact temp;
 
             mVelocityTracker.addMovement(event);
