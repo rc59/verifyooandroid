@@ -115,8 +115,8 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
 
         try {
-            if (UtilsGeneral.StartTime == 0) {
-                UtilsGeneral.StartTime = new Date().getTime();
+            if (UtilsGeneral.AuthStartTime == 0) {
+                UtilsGeneral.AuthStartTime = new Date().getTime();
             }
             MotionEventCompact temp;
 

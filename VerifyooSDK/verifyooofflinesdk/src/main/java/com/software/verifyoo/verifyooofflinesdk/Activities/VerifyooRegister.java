@@ -176,7 +176,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         mTextStatus = (TextView) findViewById(R.id.textStatus);
         mLayoutStatus = findViewById(R.id.layoutStatus);
-        UtilsGeneral.StartTime = new Date().getTime();
+        UtilsGeneral.AuthStartTime = new Date().getTime();
     }
 
     private String getTitleString(String instructionCode) {
@@ -188,12 +188,13 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void onClickClear() {
+        mBtnSave.setVisibility(View.INVISIBLE);
+        mBtnClear.setVisibility(View.INVISIBLE);
+
+        UtilsGeneral.AuthStartTime = 0;
         mIsFirstGestureEntered = false;
         clearOverlay();
         mBtnSave.setEnabled(false);
-
-        mBtnSave.setVisibility(View.INVISIBLE);
-        mBtnClear.setVisibility(View.INVISIBLE);
 
         mListStrokes = new ArrayList<>();
         mListStrokesTemp = new ArrayList<>();
@@ -211,9 +212,10 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void onClickSave() {
-        clearOverlay();
         mBtnSave.setVisibility(View.INVISIBLE);
         mBtnClear.setVisibility(View.INVISIBLE);
+
+        clearOverlay();
 
         boolean isNumStrokesValid = true;
         String currentInstruction = UtilsInstructions.GetInstruction(mCurrentGesture);
@@ -416,6 +418,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     public class GestureDrawProcessorRegister extends GestureDrawProcessorAbstract {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+            UtilsGeneral.AuthEndTime = new Date().getTime();
+
             unRegisterSensors();
             super.onGesture(overlay, event);
 

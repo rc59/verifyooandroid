@@ -24,7 +24,6 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.util.Date;
 
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
@@ -190,7 +189,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onClickReg() {
-        UtilsGeneral.StartTime = 0;
+        UtilsGeneral.AuthStartTime = 0;
         InitScore();
         Intent i = new Intent(getApplicationContext(), VerifyooRegister.class);
         i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
@@ -202,7 +201,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onClickAuth() {
-        UtilsGeneral.StartTime = 0;
+        UtilsGeneral.AuthStartTime = 0;
         mTxtScore.setText("Loading...Please wait");
         InitScore();
         Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
@@ -228,13 +227,12 @@ public class MainActivity extends ActionBarActivity {
 
         mResultImage.setVisibility(View.GONE);
         if (resultCode == RESULT_OK) {
-            if (UtilsGeneral.StartTime != 0) {
-                double currTime = new Date().getTime();
-                double totalTime = currTime - UtilsGeneral.StartTime;
+            if (UtilsGeneral.AuthStartTime != 0) {
+                double totalTime = UtilsGeneral.AuthEndTime - UtilsGeneral.AuthStartTime;
                 totalTime = totalTime / 1000;
 
                 mTxtTotalTime.setText(String.format("Total Time: %s seconds", String.valueOf(totalTime)));
-                UtilsGeneral.StartTime = 0;
+                UtilsGeneral.AuthStartTime = 0;
             }
             else {
                 mTxtTotalTime.setText("");

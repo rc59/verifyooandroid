@@ -12,7 +12,8 @@ public class UtilsGeneral {
     public static TemplateExtended StoredTemplateExtended;
 
     public static String ResultAnalysis;
-    public static double StartTime;
+    public static double AuthStartTime;
+    public static double AuthEndTime;
 
     public static void SimulateException() {
         int x = 1;
