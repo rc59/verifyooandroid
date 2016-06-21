@@ -4,12 +4,14 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import Data.UserProfile.Extended.TemplateExtended;
+import Data.UserProfile.Raw.Template;
 
 /**
  * Created by roy on 2/25/2016.
  */
 public class UtilsGeneral {
     public static TemplateExtended StoredTemplateExtended;
+    public static Template StoredTemplate;
 
     public static String ResultAnalysis;
     public static double AuthStartTime;

@@ -38,9 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@string/btnSave"
             android:textColor="@android:color/white"
-            android:enabled="false"
             android:drawableLeft="@drawable/accept"
-            android:visibility="invisible"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/btnAuth" />
 
@@ -48,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btnClear"
-            android:visibility="invisible"
             android:drawableLeft="@drawable/restart"
             android:textColor="@android:color/white"
             android:layout_toRightOf="@id/btnAuth"

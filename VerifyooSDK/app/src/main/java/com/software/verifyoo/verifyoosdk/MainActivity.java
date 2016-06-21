@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
                 Object listGesturesObj = deserializer.deserialize(storedTemplate);
                 TemplateExtended templateExtended = new TemplateExtended((Template) listGesturesObj);
                 UtilsGeneral.StoredTemplateExtended = templateExtended;
+                UtilsGeneral.StoredTemplate = (Template) listGesturesObj;
                 //mTemplateStored.Init();
             } catch (Exception e) {
 //                    mTxtError.setText(e.getMessage());
