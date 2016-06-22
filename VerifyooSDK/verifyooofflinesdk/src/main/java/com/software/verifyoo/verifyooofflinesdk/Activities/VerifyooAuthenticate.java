@@ -221,10 +221,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
             title += UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction);
-            title += ", ";
+            title += " ";
         }
 
-        title = title.substring(0, title.length() - 2);
         return title;
     }
 
@@ -244,8 +243,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_REG; idx++) {
             isRandomGenerated = false;
             while(!isRandomGenerated) {
-                tempRandom1 = rand.nextInt(6);
-                tempRandom2 = rand.nextInt(6);
+                tempRandom1 = rand.nextInt(9);
+                tempRandom2 = rand.nextInt(9);
 
                 if (tempRandom1 != tempRandom2) {
                     isRandomGenerated = true;

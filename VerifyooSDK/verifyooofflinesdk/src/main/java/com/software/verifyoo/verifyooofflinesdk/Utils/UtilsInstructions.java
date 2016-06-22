@@ -5,26 +5,35 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
  */
 public class UtilsInstructions {
     public static String GetInstruction(int idx) {
-        String instruction = "FIVE";
+        String instruction = ConstsInstructions.INSTRUCTION_CODE_FIVE;
 
         switch (idx) {
             case 0:
-                instruction = "FIVE";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_FIVE;
                 break;
             case 1:
-                instruction = "EIGHT";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_EIGHT;
                 break;
             case 2:
-                instruction = "ALETTER";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_ALETTER;
                 break;
             case 3:
-                instruction = "RLETTER";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_RLETTER;
                 break;
             case 4:
-                instruction = "TRIANGULAR";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_TRIANGULAR;
                 break;
             case 5:
-                instruction = "HEART";
+                instruction = ConstsInstructions.INSTRUCTION_CODE_HEART;
+                break;
+            case 6:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_TWO;
+                break;
+            case 7:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_BLETTER;
+                break;
+            case 8:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_GLETTER;
                 break;
         }
 

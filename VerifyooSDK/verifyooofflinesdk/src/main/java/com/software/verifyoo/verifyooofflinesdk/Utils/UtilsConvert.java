@@ -40,6 +40,15 @@ public class UtilsConvert {
             case ConstsInstructions.INSTRUCTION_CODE_TRIANGULAR:
                 instruction = "Δ";
                 break;
+            case ConstsInstructions.INSTRUCTION_CODE_BLETTER:
+                instruction = "B";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_GLETTER:
+                instruction = "G";
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_TWO:
+                instruction = "2";
+                break;
         }
 
         return instruction;
