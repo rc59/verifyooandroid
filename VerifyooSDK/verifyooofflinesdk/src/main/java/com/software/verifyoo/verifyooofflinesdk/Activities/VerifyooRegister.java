@@ -191,7 +191,6 @@ public class VerifyooRegister extends GestureInputAbstract {
         mBtnSave.setVisibility(View.INVISIBLE);
         mBtnClear.setVisibility(View.INVISIBLE);
 
-        UtilsGeneral.AuthStartTime = 0;
         mIsFirstGestureEntered = false;
         clearOverlay();
         mBtnSave.setEnabled(false);
@@ -323,6 +322,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 //        }
 
         TemplateExtended templateExtended = new TemplateExtended(template);
+        UtilsGeneral.StoredTemplate = template;
         UtilsGeneral.StoredTemplateExtended = templateExtended;
 
         String jsonTemplate = serializer.deepSerialize(template);

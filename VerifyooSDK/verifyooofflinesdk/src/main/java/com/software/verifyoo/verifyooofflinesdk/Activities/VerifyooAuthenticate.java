@@ -353,7 +353,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         if (finalScore > 0.85) {
             isAuth = true;
 
-            //UpdateTemplate();
+            UpdateTemplate();
         }
 
         Intent intent = this.getIntent();
@@ -363,12 +363,37 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         finish();
     }
 
+    private int FindOldestGestureByInstruction(String instruction) {
+        Template storedTemplate = UtilsGeneral.StoredTemplate;
+
+        int idxOldestGesture = -1;
+        double tempStartTime = 0;
+        double currentStartTime = 0;
+
+        for(int idxGestureStored = 0; idxGestureStored < storedTemplate.ListGestures.size(); idxGestureStored++) {
+            if (storedTemplate.ListGestures.get(idxGestureStored).Instruction.compareTo(instruction) == 0) {
+                if (idxOldestGesture == -1) {
+                    idxOldestGesture = idxGestureStored;
+                    currentStartTime = storedTemplate.ListGestures.get(idxGestureStored).ListStrokes.get(0).ListEvents.get(0).EventTime;
+                }
+                else {
+                    tempStartTime = storedTemplate.ListGestures.get(idxGestureStored).ListStrokes.get(0).ListEvents.get(0).EventTime;
+
+                    if (tempStartTime < currentStartTime) {
+                        idxOldestGesture = idxGestureStored;
+                        currentStartTime = tempStartTime;
+                    }
+                }
+            }
+        }
+
+        return idxOldestGesture;
+    }
+
     private void UpdateTemplate() {
         Template storedTemplate = UtilsGeneral.StoredTemplate;
 
         Data.UserProfile.Raw.Gesture tempGesture;
-
-        boolean isMaxGestureCount;
 
         HashMap<String, Double> hashGestureCount = new HashMap<>();
         String tempInstruction;
@@ -387,15 +412,20 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         }
 
+        int idxGestureToRemove;
         for(int idxGestureAuth = 0; idxGestureAuth < mTemplateAuth.ListGestures.size(); idxGestureAuth++) {
             tempGesture = mTemplateAuth.ListGestures.get(idxGestureAuth);
 
             for(int idxGestureStored = 0; idxGestureStored < Consts.DEFAULT_NUM_REQ_GESTURES_REG; idxGestureStored++) {
                 if (storedTemplate.ListGestures.get(idxGestureStored).Instruction.compareTo(tempGesture.Instruction) == 0) {
                     if (hashGestureCount.get(storedTemplate.ListGestures.get(idxGestureStored).Instruction) >= maxGestureCount) {
-                        storedTemplate.ListGestures.remove(idxGestureStored);
+                        idxGestureToRemove = FindOldestGestureByInstruction(storedTemplate.ListGestures.get(idxGestureStored).Instruction);
+                        storedTemplate.ListGestures.remove(idxGestureToRemove);
+                        storedTemplate.ListGestures.add(idxGestureToRemove, tempGesture);
                     }
-                    storedTemplate.ListGestures.add(idxGestureStored, tempGesture);
+                    else {
+                        storedTemplate.ListGestures.add(tempGesture);
+                    }
                 }
             }
         }
