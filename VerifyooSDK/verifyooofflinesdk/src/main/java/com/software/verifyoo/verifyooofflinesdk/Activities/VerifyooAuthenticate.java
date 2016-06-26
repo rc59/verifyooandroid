@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbs
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureInputAbstract;
 import com.software.verifyoo.verifyooofflinesdk.R;
 import com.software.verifyoo.verifyooofflinesdk.ServerAPI.API.ApiMgr;
+import com.software.verifyoo.verifyooofflinesdk.ServerAPI.API.ApiMgrStoreDataParams;
 import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
@@ -260,6 +262,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private void onClickAuth() {
         ArrayList<GestureExtended> listGesturesToUse = new ArrayList<>();
 
+        Template tempTemplateAuth = new Template();
+        tempTemplateAuth.ListGestures = new ArrayList<>();
+
         TemplateExtended templateStoredExtended = UtilsGeneral.StoredTemplateExtended;
         ArrayList<GestureExtended> listGesturesStored = templateStoredExtended.ListGestureExtended;
 
@@ -293,9 +298,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             Template tempTemplateBase = new Template();
             tempTemplateBase.ListGestures = new ArrayList<>();
-
-            Template tempTemplateAuth = new Template();
-            tempTemplateAuth.ListGestures = new ArrayList<>();
 
             for(int idxGesture = 0; idxGesture < listGesturesToUse.size(); idxGesture++) {
                 tempGestureBase = listGesturesToUse.get(idxGesture);
@@ -346,6 +348,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             UtilsGeneral.ResultAnalysis = stringBuilder.toString();
         }
 
+        try {
+            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+            ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Register", wm, mXdpi, mYdpi, true);
+            mApiMgr.StoreData(params, tempTemplateAuth);
+        } catch (Exception exc) {
+            handleGeneralError(exc);
+        }
 
         finalScore = getFinalScore(mListScores);
 

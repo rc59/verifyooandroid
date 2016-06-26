@@ -87,7 +87,7 @@ public class ApiMgr {
             tempGesture = templateReg.ListGestures.get(idxGesture);
 
             tempExpShape = new ExpShape();
-            tempExpShape.Instruction = "";
+            tempExpShape.Instruction = tempGesture.Instruction;
             tempExpShape.Strokes = new ArrayList<>();
 
             for (int idxStroke = 0; idxStroke < tempGesture.ListStrokes.size(); idxStroke++) {
