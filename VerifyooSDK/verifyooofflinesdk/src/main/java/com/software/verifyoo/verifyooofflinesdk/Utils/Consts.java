@@ -6,9 +6,9 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
 public class Consts {
     public static final double MIN_STROKE_LENGTH = 50;
 
-    public static final int DEFAULT_NUM_REQ_GESTURES_REG = 9;
-    public static final int DEFAULT_NUM_REQ_GESTURES_AUTH = 3;
-    public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 2;
+    public static final int DEFAULT_NUM_REQ_GESTURES_REG = 4;
+    public static final int DEFAULT_NUM_REQ_GESTURES_AUTH = 4;
+    public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 4;
 
     public static final int FADE_INTERVAL = 50000;
     public static final int FADE_INTERVAL_CLEAR = 10;

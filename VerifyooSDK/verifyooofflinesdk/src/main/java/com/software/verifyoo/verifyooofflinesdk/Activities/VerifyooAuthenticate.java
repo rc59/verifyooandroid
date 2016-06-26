@@ -245,8 +245,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_REG; idx++) {
             isRandomGenerated = false;
             while(!isRandomGenerated) {
-                tempRandom1 = rand.nextInt(9);
-                tempRandom2 = rand.nextInt(9);
+                tempRandom1 = rand.nextInt(Consts.DEFAULT_NUM_REQ_GESTURES_REG);
+                tempRandom2 = rand.nextInt(Consts.DEFAULT_NUM_REQ_GESTURES_REG);
 
                 if (tempRandom1 != tempRandom2) {
                     isRandomGenerated = true;
@@ -361,7 +361,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         if (finalScore > 0.85) {
             isAuth = true;
 
-            UpdateTemplate();
+            //UpdateTemplate();
         }
 
         Intent intent = this.getIntent();
@@ -562,7 +562,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private double getFinalScore(ArrayList<Double> mListScores) {
-        if (mListScores.size() < 3) {
+        if (mListScores.size() < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
             return 0;
         }
 
@@ -571,7 +571,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         double scores = 0;
         double weights = 0;
         double tempWeight;
-//        mListScores.remove(0);
+        double finalScore = 0;
+        if (mListScores.get(0) > 0) {
+            mListScores.remove(0);
 //        for(int idx = 0; idx < mListScores.size(); idx++) {
 //            tempWeight = idx + 1;
 //            weights += tempWeight;
@@ -580,10 +582,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //            scores += mListScores.get(idx);
 //        }
 
-        scores = mListScores.get(0) * 1 + mListScores.get(1) * 1.25 + mListScores.get(2) * 1.5;
+            scores = mListScores.get(0) * 1 + mListScores.get(1) * 1.25 + mListScores.get(2) * 1.5;
 
-        //double finalScore = scores / mListScores.size();
-        double finalScore = scores / 3.75;
+            //double finalScore = scores / mListScores.size();
+            finalScore = scores / 3.75;
+        }
 
         return finalScore;
     }
