@@ -8,6 +8,7 @@ import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,7 +62,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private double mAccumulatedScore;
     private ArrayList<Double> mListScores;
 
+    private int mNumGesture;
+
     private ArrayList<Stroke> mListStrokes;
+    private ArrayList<Stroke> mListTempStrokes;
     private Button mBtnAuth;
     private Button mBtnClear;
     private TextView mTextView;
@@ -79,6 +83,14 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private int[] mInstructionIndexes;
 
     private int mStrokeCount = 0;
+
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            clearOverlay();        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,9 +132,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void init() {
-        IsShowTrail = true;
+        //IsShowTrail = true;
         initInstructionIndexes();
         mApiMgr = new ApiMgr();
+
+        mNumGesture = 0;
 
         getDPI();
         DisplayMetrics dm = new DisplayMetrics();
@@ -133,6 +147,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mListScores = new ArrayList<>();
         mTextView = (TextView) findViewById(R.id.textInstruction);
         mListStrokes = new ArrayList<>();
+        mListTempStrokes = new ArrayList<>();
 
         mGesturesProcessor = new GestureDrawProcessorAuthenticate();
         super.init(mGesturesProcessor);
@@ -595,6 +610,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         UtilsGeneral.AuthStartTime = 0;
         clearOverlay();
         mListStrokes = new ArrayList<>();
+        mListTempStrokes = new ArrayList<>();
+        mNumGesture = 0;
+        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
     }
 
     private void handleError(String errorMessage) {
@@ -657,9 +675,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     public class GestureDrawProcessorAuthenticate extends GestureDrawProcessorAbstract {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
             UtilsGeneral.AuthEndTime = new Date().getTime();
-
-            unRegisterSensors();
             super.onGesture(overlay, event);
+            unRegisterSensors();
 
             Gesture gesture  = overlay.getGesture();
             double currentLength = gesture.getLength();
@@ -677,7 +694,18 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 tempStroke.Ydpi = mYdpi;
                 tempStroke.Length = gesture.getLength();
                 mListStrokes.add(tempStroke);
+                mListTempStrokes.add(tempStroke);
                 mGesturesProcessor.clearStroke();
+
+                if (mTemplateStored.ListGestures.get(mInstructionIndexes[mNumGesture]).ListStrokes.size() == mListTempStrokes.size()) {
+                    mNumGesture++;
+                    mListTempStrokes.clear();
+                    mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
+                    handler.postDelayed(runnable, 10);
+                }
+                else {
+                    mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ public class Consts {
     public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 4;
 
     public static final int FADE_INTERVAL = 50000;
-    public static final int FADE_INTERVAL_CLEAR = 10;
+    public static final int FADE_INTERVAL_CLEAR = 20;
 
     public static final String STORAGE_FILE = "template.txt";
 
