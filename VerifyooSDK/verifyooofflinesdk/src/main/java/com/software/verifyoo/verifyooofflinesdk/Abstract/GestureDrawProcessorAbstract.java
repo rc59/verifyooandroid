@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
+import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 
@@ -54,7 +55,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mTempStroke = new Stroke();
         mApplicationContext = applicationContext;
         mVelocityTracker = VelocityTracker.obtain();
-
+        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
         mSensorManager = (SensorManager) mApplicationContext.getSystemService(mApplicationContext.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);

@@ -229,7 +229,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         ArrayList<GestureExtended> listGestures = UtilsGeneral.StoredTemplateExtended.ListGestureExtended;
         mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
 
-        String title = getTitle(listGestures);
+        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
         setTitle(title);
     }
 
@@ -237,7 +237,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         String title = "";
 
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
-            title += UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction);
+            if (idx == mNumGesture) {
+                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction));
+            }
+            else {
+                title += UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction);
+            }
             title += " ";
         }
 
@@ -613,6 +618,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mListTempStrokes = new ArrayList<>();
         mNumGesture = 0;
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+        setTitle(title);
     }
 
     private void handleError(String errorMessage) {
@@ -702,6 +709,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     mListTempStrokes.clear();
                     mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
                     handler.postDelayed(runnable, 10);
+                    String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+                    if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                        setTitle(title);
+                    }
+                    else {
+                        onClickAuth();
+                    }
                 }
                 else {
                     mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
