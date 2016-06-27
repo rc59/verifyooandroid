@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -75,6 +76,32 @@ public class VerifyooRegister extends GestureInputAbstract {
     private int mCurrentGesture;
 
     private HashMap<String, Integer> mHashNumStrokesPerGesture;
+
+    private class TemplateStorer extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            storeTemplate();
+//            TextView txt = (TextView) findViewById(R.id.output);
+//            txt.setText("Executed");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            updateStatus("Saving template...");
+            mBtnSave.setVisibility(View.INVISIBLE);
+            mBtnClear.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,9 +238,6 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void onClickSave() {
-        mBtnSave.setVisibility(View.INVISIBLE);
-        mBtnClear.setVisibility(View.INVISIBLE);
-
         clearOverlay();
 
         boolean isNumStrokesValid = true;
@@ -271,10 +295,13 @@ public class VerifyooRegister extends GestureInputAbstract {
                 mHashNumStrokesPerGesture.put(gesture.Instruction, gesture.ListStrokes.size());
             }
 
+            boolean isUpdateTitle = true;
             mCurrentGesture++;
             if (mNumberRepeats >= Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION) {
                 if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
-                    storeTemplate();
+                    setTitle("Completed - saving template...");
+                    isUpdateTitle = false;
+                    new TemplateStorer().execute("");
                 }
             }
             else {
@@ -284,7 +311,10 @@ public class VerifyooRegister extends GestureInputAbstract {
                 }
             }
 
-            updateTitle(getTitleString(UtilsInstructions.GetInstruction(mCurrentGesture)));
+            if (isUpdateTitle) {
+                updateTitle(getTitleString(UtilsInstructions.GetInstruction(mCurrentGesture)));
+            }
+
         }
         else {
             updateStatus("The gestures are not similar");
