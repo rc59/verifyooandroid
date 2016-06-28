@@ -77,6 +77,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     private HashMap<String, Integer> mHashNumStrokesPerGesture;
 
+    private int[] mInstructionIndexes;
+
     private class TemplateStorer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -149,6 +151,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void init() {
+        initInstructionIndexes();
         mHashNumStrokesPerGesture = new HashMap<>();
         mNumberRepeats = 1;
         mCurrentGesture = 0;
@@ -161,7 +164,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         mListStrokesTemp = new ArrayList<>();
         mListGestures = new ArrayList<>();
 
-        updateTitle(getTitleString(UtilsInstructions.GetInstruction(0)));
+        updateTitle(getTitleString(UtilsInstructions.GetInstruction(mInstructionIndexes[0])));
 
         mIsFirstGestureEntered = false;
 
@@ -214,6 +217,10 @@ public class VerifyooRegister extends GestureInputAbstract {
         return title;
     }
 
+    private void initInstructionIndexes() {
+        mInstructionIndexes = UtilsGeneral.generateInstructionsList(Consts.TOTAL_NUM_GESTURES);
+    }
+
     private void onClickClear() {
         mBtnSave.setVisibility(View.INVISIBLE);
         mBtnClear.setVisibility(View.INVISIBLE);
@@ -241,7 +248,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         clearOverlay();
 
         boolean isNumStrokesValid = true;
-        String currentInstruction = UtilsInstructions.GetInstruction(mCurrentGesture);
+        String currentInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
         if(mHashNumStrokesPerGesture.containsKey(currentInstruction))
         {
             int numStrokes = mHashNumStrokesPerGesture.get(currentInstruction);
@@ -287,7 +294,7 @@ public class VerifyooRegister extends GestureInputAbstract {
             Data.UserProfile.Raw.Gesture gesture = new Data.UserProfile.Raw.Gesture();
 
             gesture.ListStrokes = mListStrokes;
-            gesture.Instruction = UtilsInstructions.GetInstruction(mCurrentGesture);
+            gesture.Instruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
             mListGestures.add(gesture);
             mListStrokes = new ArrayList<>();
 
@@ -312,9 +319,8 @@ public class VerifyooRegister extends GestureInputAbstract {
             }
 
             if (isUpdateTitle) {
-                updateTitle(getTitleString(UtilsInstructions.GetInstruction(mCurrentGesture)));
+                updateTitle(getTitleString(UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture])));
             }
-
         }
         else {
             updateStatus("The gestures are not similar");
@@ -468,15 +474,15 @@ public class VerifyooRegister extends GestureInputAbstract {
             tempStroke.Ydpi = mYdpi;
             tempStroke.Length = gesture.getLength();
 
-            if (currentLength > 50) {
+            if (tempStroke.Length > 50) {
                 mListStrokes.add(tempStroke);
                 mListStrokesTemp.add(tempStroke);
 
                 mBtnSave.setVisibility(View.VISIBLE);
                 mBtnClear.setVisibility(View.VISIBLE);
-            }
 
-            mGesturesProcessor.clearStroke();
+                mGesturesProcessor.clearStroke();
+            }
         }
     }
 }

@@ -39,4 +39,41 @@ public class UtilsInstructions {
 
         return instruction;
     }
+
+
+    public static int GetInstructionIdx(String instruction) {
+
+        int instructionIdx = -1;
+        switch (instruction) {
+            case ConstsInstructions.INSTRUCTION_CODE_FIVE:
+                instructionIdx = 0;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_EIGHT:
+                instructionIdx = 1;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
+                instructionIdx = 2;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
+                instructionIdx = 3;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_TRIANGULAR:
+                instructionIdx = 4;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_HEART:
+                instructionIdx = 5;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_TWO:
+                instructionIdx = 6;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_BLETTER:
+                instructionIdx = 7;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_GLETTER:
+                instructionIdx = 8;
+                break;
+        }
+
+        return instructionIdx;
+    }
 }

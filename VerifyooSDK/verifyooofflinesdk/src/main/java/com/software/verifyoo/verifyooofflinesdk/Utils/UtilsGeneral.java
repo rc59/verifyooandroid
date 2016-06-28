@@ -3,6 +3,8 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
 import android.os.Build;
 import android.text.TextUtils;
 
+import java.util.Random;
+
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
 
@@ -28,6 +30,40 @@ public class UtilsGeneral {
         String key = String.format("%s-%s", serial, userName);
         return key;
     }
+
+    public static int[] generateInstructionsList(int size) {
+        int[] instructionIndexes = new int[size];
+
+        for(int idx = 0; idx < size; idx++) {
+            instructionIndexes[idx] = idx;
+        }
+
+        int tempRandom1 = 0;
+        int tempRandom2 = 0;
+        boolean isRandomGenerated;
+        int tempIndex;
+
+        Random rand = new Random();
+        for(int idx = 0; idx < size; idx++) {
+            isRandomGenerated = false;
+            while(!isRandomGenerated) {
+                tempRandom1 = rand.nextInt(size);
+                tempRandom2 = rand.nextInt(size);
+
+                if (tempRandom1 != tempRandom2) {
+                    isRandomGenerated = true;
+                }
+            }
+
+            tempIndex = instructionIndexes[tempRandom1];
+            instructionIndexes[tempRandom1] = instructionIndexes[tempRandom2];
+            instructionIndexes[tempRandom2] = tempIndex;
+        }
+
+        return instructionIndexes;
+    }
+
+
 
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;

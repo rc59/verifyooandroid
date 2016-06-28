@@ -29,6 +29,7 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsInstructions;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
 import java.io.FileNotFoundException;
@@ -41,7 +42,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Random;
 
 import Data.Comparison.CompareResultSummary;
 import Data.Comparison.Interfaces.ICompareResult;
@@ -82,7 +82,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private int[] mInstructionIndexes;
 
+    private int mTotalStrokes = 0;
+
+    ArrayList<GestureExtended> mListGesturesToUse = new ArrayList<>();
+
     private int mStrokeCount = 0;
+    HashMap<String, Double> mHashGesturesCount = new HashMap<>();
 
     private Handler handler = new Handler();
 
@@ -228,6 +233,17 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         ArrayList<GestureExtended> listGestures = UtilsGeneral.StoredTemplateExtended.ListGestureExtended;
         mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
+        int currentIdx;
+        GestureExtended tempGestureExtended;
+
+        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
+            currentIdx = mInstructionIndexes[idx];
+
+            tempGestureExtended = getGestureByInstructionType(UtilsInstructions.GetInstruction(currentIdx));
+
+            mTotalStrokes += tempGestureExtended.ListStrokes.size();
+            mListGesturesToUse.add(tempGestureExtended);
+        }
 
         String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
         setTitle(title);
@@ -238,10 +254,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
             if (idx == mNumGesture) {
-                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction));
+                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(UtilsInstructions.GetInstruction(mInstructionIndexes[idx])));
             }
             else {
-                title += UtilsConvert.InstructionCodeToInstruction(listGestures.get(mInstructionIndexes[idx]).Instruction);
+                title += UtilsConvert.InstructionCodeToInstruction(UtilsInstructions.GetInstruction(mInstructionIndexes[idx]));
             }
             title += " ";
         }
@@ -250,52 +266,52 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void initInstructionIndexes() {
-        mInstructionIndexes = new int[Consts.DEFAULT_NUM_REQ_GESTURES_REG];
+        double tempGestureCount;
+        GestureExtended tempGesture;
 
-        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_REG; idx++) {
-            mInstructionIndexes[idx] = idx;
-        }
+        ArrayList<Integer> listInstructions = new ArrayList<>();
 
-        int tempRandom1 = 0;
-        int tempRandom2 = 0;
-        boolean isRandomGenerated;
-        int tempIndex;
+        for(int idxGesture = 0; idxGesture < UtilsGeneral.StoredTemplateExtended.ListGestureExtended.size(); idxGesture++) {
+            tempGesture = UtilsGeneral.StoredTemplateExtended.ListGestureExtended.get(idxGesture);
+            if (!mHashGesturesCount.containsKey(tempGesture.Instruction)) {
+                mHashGesturesCount.put(tempGesture.Instruction, (double) 1);
+            }
+            else {
+                tempGestureCount = mHashGesturesCount.get(tempGesture.Instruction);
+                tempGestureCount++;
+                mHashGesturesCount.remove(tempGesture.Instruction);
+                mHashGesturesCount.put(tempGesture.Instruction, tempGestureCount);
 
-        Random rand = new Random();
-        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_REG; idx++) {
-            isRandomGenerated = false;
-            while(!isRandomGenerated) {
-                tempRandom1 = rand.nextInt(Consts.DEFAULT_NUM_REQ_GESTURES_REG);
-                tempRandom2 = rand.nextInt(Consts.DEFAULT_NUM_REQ_GESTURES_REG);
-
-                if (tempRandom1 != tempRandom2) {
-                    isRandomGenerated = true;
+                if (tempGestureCount == Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION) {
+                    listInstructions.add(UtilsInstructions.GetInstructionIdx(tempGesture.Instruction));
                 }
             }
+        }
+        int[] tempInstructionIndexes = UtilsGeneral.generateInstructionsList(listInstructions.size());
 
-            tempIndex = mInstructionIndexes[tempRandom1];
-            mInstructionIndexes[tempRandom1] = mInstructionIndexes[tempRandom2];
-            mInstructionIndexes[tempRandom2] = tempIndex;
+        mInstructionIndexes = new int[listInstructions.size()];
+        for(int idxInstruction = 0; idxInstruction < listInstructions.size(); idxInstruction++) {
+            mInstructionIndexes[idxInstruction] = listInstructions.get(tempInstructionIndexes[idxInstruction]);
         }
     }
 
-    private void onClickAuth() {
-        ArrayList<GestureExtended> listGesturesToUse = new ArrayList<>();
+    private GestureExtended getGestureByInstructionType(String instruction) {
+        GestureExtended tempGestureExtended = null;
 
+        for(int idxGesture = 0; idxGesture < UtilsGeneral.StoredTemplateExtended.ListGestureExtended.size(); idxGesture++) {
+            if (UtilsGeneral.StoredTemplateExtended.ListGestureExtended.get(idxGesture).Instruction.compareTo(instruction) == 0) {
+                tempGestureExtended = UtilsGeneral.StoredTemplateExtended.ListGestureExtended.get(idxGesture);
+            }
+        }
+
+        return tempGestureExtended;
+    }
+
+    private void onClickAuth() {
         Template tempTemplateAuth = new Template();
         tempTemplateAuth.ListGestures = new ArrayList<>();
 
         TemplateExtended templateStoredExtended = UtilsGeneral.StoredTemplateExtended;
-        ArrayList<GestureExtended> listGesturesStored = templateStoredExtended.ListGestureExtended;
-
-        int totalStrokes = 0;
-        int currentIdx;
-
-        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
-            currentIdx = mInstructionIndexes[idx];
-            totalStrokes += listGesturesStored.get(currentIdx).ListStrokes.size();
-            listGesturesToUse.add(listGesturesStored.get(currentIdx));
-        }
 
         double finalScore = 0;
         boolean isAuth = false;
@@ -309,7 +325,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             compareFilters.put("CompareGestureSurface", (double) 1);
         }
 
-        if(totalStrokes == mListStrokes.size()) {
+        if(mTotalStrokes == mListStrokes.size()) {
             Data.UserProfile.Raw.Gesture tempGestureBase;
             Data.UserProfile.Raw.Gesture tempGestureAuth;
             int numStrokes;
@@ -319,8 +335,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             Template tempTemplateBase = new Template();
             tempTemplateBase.ListGestures = new ArrayList<>();
 
-            for(int idxGesture = 0; idxGesture < listGesturesToUse.size(); idxGesture++) {
-                tempGestureBase = listGesturesToUse.get(idxGesture);
+            for(int idxGesture = 0; idxGesture < mListGesturesToUse.size(); idxGesture++) {
+                tempGestureBase = mListGesturesToUse.get(idxGesture);
                 numStrokes = tempGestureBase.ListStrokes.size();
 
                 tempGestureAuth = new Data.UserProfile.Raw.Gesture();
@@ -330,7 +346,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     tempGestureAuth.ListStrokes.add(mListStrokes.remove(0));
                 }
 
-                tempTemplateBase.ListGestures.add(listGesturesToUse.get(idxGesture));
+                tempTemplateBase.ListGestures.add(mListGesturesToUse.get(idxGesture));
                 tempTemplateAuth.ListGestures.add(tempGestureAuth);
             }
 
@@ -343,7 +359,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
                 GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
-                GestureExtended gestureExtendedBase = templateStoredExtended.ListGestureExtended.get(mInstructionIndexes[idxGesture]);
+                GestureExtended gestureExtendedBase = mListGesturesToUse.get(idxGesture);
 
                 if (compareFilters.keySet().size() > 0) {
                     gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
@@ -693,7 +709,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 gesture.getStrokes().remove(0);
             }
 
-            if (currentLength > 50) {
+            if (gesture.getLength() > 50) {
                 super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
 
                 Stroke tempStroke = mGesturesProcessor.getStroke();
@@ -704,7 +720,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 mListTempStrokes.add(tempStroke);
                 mGesturesProcessor.clearStroke();
 
-                if (mTemplateStored.ListGestures.get(mInstructionIndexes[mNumGesture]).ListStrokes.size() == mListTempStrokes.size()) {
+                if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
                     mNumGesture++;
                     mListTempStrokes.clear();
                     mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
