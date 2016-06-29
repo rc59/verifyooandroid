@@ -372,7 +372,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
                 }
 
-                gestureResultSummary = resultSummaryToString(gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
+                gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
 
                 double score = gestureComparer.GetScore();
                 String strScore = String.valueOf(score);
@@ -533,7 +533,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         }
     }
 
-    private String resultSummaryToString(CompareResultSummary compareResultSummary, double cosineScore) {
+    private String resultSummaryToString(String instruction, CompareResultSummary compareResultSummary, double cosineScore) {
         StringBuilder stringBuilder = new StringBuilder();
 
         ICompareResult compareResult;
@@ -564,6 +564,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
 
         tempParamSummary = String.format("{Cosine Distance: %s}, ", cosineScore);
+        stringBuilder.append(tempParamSummary);
+
+        tempParamSummary = String.format("{Instruction: %s}, ", instruction);
         stringBuilder.append(tempParamSummary);
 
         for(int idx = 0; idx < compareResultSummary.ListCompareResults.size(); idx++) {
@@ -611,24 +614,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         Collections.sort(mListScores);
 
         double scores = 0;
-        double weights = 0;
-        double tempWeight;
         double finalScore = 0;
-        if (mListScores.get(0) > 0) {
-            mListScores.remove(0);
-//        for(int idx = 0; idx < mListScores.size(); idx++) {
-//            tempWeight = idx + 1;
-//            weights += tempWeight;
-//
-//            scores += tempWeight * mListScores.get(idx);
-//            scores += mListScores.get(idx);
-//        }
-
-            scores = mListScores.get(0) * 1 + mListScores.get(1) * 1.25 + mListScores.get(2) * 1.5;
-
-            //double finalScore = scores / mListScores.size();
-            finalScore = scores / 3.75;
+        for (int idx = 0; idx < mListScores.size(); idx++) {
+            scores += mListScores.get(idx);
         }
+
+        finalScore = scores / mListScores.size();
 
         return finalScore;
     }

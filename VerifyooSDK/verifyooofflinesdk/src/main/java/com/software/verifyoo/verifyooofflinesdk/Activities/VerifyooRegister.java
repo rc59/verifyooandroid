@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureInputAbstract;
@@ -68,6 +69,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     boolean mIsParamsValid;
     boolean mIsFirstGestureEntered;
+
+    int mConsecutiveFalses;
 
     ApiMgr mApiMgr;
 
@@ -162,6 +165,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         mHashNumStrokesPerGesture = new HashMap<>();
         mNumberRepeats = 1;
         mCurrentGesture = 0;
+        mConsecutiveFalses = 0;
         getDPI();
         mApiMgr = new ApiMgr();
         DisplayMetrics dm = new DisplayMetrics();
@@ -302,6 +306,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
 
         if (isNumStrokesValid) {
+            mConsecutiveFalses = 0;
             mBtnSave.setEnabled(false);
 
             Data.UserProfile.Raw.Gesture gesture = new Data.UserProfile.Raw.Gesture();
@@ -338,6 +343,11 @@ public class VerifyooRegister extends GestureInputAbstract {
         else {
             updateStatus("The gestures are not similar");
             mListStrokes.clear();
+            mConsecutiveFalses++;
+
+            if (mConsecutiveFalses > 2) {
+                Toast.makeText(getApplicationContext(), "You have been rejected twice, we recommend that you restart the enrollment.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

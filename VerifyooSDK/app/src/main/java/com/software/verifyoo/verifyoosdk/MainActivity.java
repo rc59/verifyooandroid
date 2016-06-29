@@ -52,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
     ImageView mImage;
 
     EditText mTxtUser;
-    TextView mTxtViewUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +120,6 @@ public class MainActivity extends ActionBarActivity {
                 mBtnReg.setVisibility(View.VISIBLE);
                 mBtnAuth.setVisibility(View.GONE);
                 mTxtUser.setVisibility(View.VISIBLE);
-                mTxtViewUser.setVisibility(View.VISIBLE);
             }
             else {
                 mBtnReg.setVisibility(View.GONE);
@@ -135,7 +133,6 @@ public class MainActivity extends ActionBarActivity {
             mBtnAuth.setVisibility(View.GONE);
             mImage.setVisibility(View.GONE);
             mTxtUser.setVisibility(View.GONE);
-            mTxtViewUser.setVisibility(View.GONE);
             mBtnReg.setVisibility(View.GONE);
             mBtnAuth.setVisibility(View.GONE);
             mTxtStatus.setText("Loading...Please wait");
@@ -180,7 +177,6 @@ public class MainActivity extends ActionBarActivity {
         mTxtStatus.setTextColor(color);
 
         mTxtUser = (EditText) findViewById(R.id.txtUserName);
-        mTxtViewUser = (TextView) findViewById(R.id.txtViewEnterName);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
         mBtnReg = (Button) findViewById(R.id.btnReg);
@@ -269,12 +265,10 @@ public class MainActivity extends ActionBarActivity {
         if (user != null & user.length() > 0) {
             mUserName = user;
             mTxtUser.setVisibility(View.GONE);
-            mTxtViewUser.setVisibility(View.GONE);
         }
         else {
             mUserName = "";
             mTxtUser.setVisibility(View.VISIBLE);
-            mTxtViewUser.setVisibility(View.VISIBLE);
         }
 
         mTxtUser.setText(mUserName);
@@ -406,7 +400,6 @@ public class MainActivity extends ActionBarActivity {
         mTxtUser.setText("");
         mUserName = "";
         mTxtUser.setVisibility(View.VISIBLE);
-        mTxtViewUser.setVisibility(View.VISIBLE);
         mBtnReg.setVisibility(View.VISIBLE);
         mBtnAuth.setVisibility(View.GONE);
     }
