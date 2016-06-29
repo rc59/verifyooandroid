@@ -18,6 +18,8 @@ public class ExpTemplate {
     public double ScreenHeight;
     public double Xdpi;
     public double Ydpi;
+    public double Score;
+    public String AnalysisString;
 
     public ExpTemplate() {
         ExpShapeList = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.software.verifyoo.verifyooofflinesdk.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
@@ -75,6 +77,9 @@ public class VerifyooRegister extends GestureInputAbstract {
     private int mNumberRepeats;
     private int mCurrentGesture;
 
+    private ImageView mImageWait;
+    private TextView mTextViewWait;
+
     private HashMap<String, Integer> mHashNumStrokesPerGesture;
 
     private int[] mInstructionIndexes;
@@ -95,7 +100,9 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         @Override
         protected void onPreExecute() {
-            updateStatus("Saving template...");
+            mImageWait.setVisibility(View.VISIBLE);
+            mTextViewWait.setVisibility(View.VISIBLE);
+
             mBtnSave.setVisibility(View.INVISIBLE);
             mBtnClear.setVisibility(View.INVISIBLE);
         }
@@ -181,6 +188,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         mBtnClear = (Button) findViewById(R.id.btnClear);
         mBtnClear.setBackgroundColor(colorGray);
 
+
+
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,6 +212,10 @@ public class VerifyooRegister extends GestureInputAbstract {
             }
         });
 
+        mImageWait = (ImageView) findViewById(R.id.imageWait);
+        mImageWait.setImageResource(R.drawable.wait);
+
+        mTextViewWait = (TextView) findViewById(R.id.txtWait);
 
         mTextStatus = (TextView) findViewById(R.id.textStatus);
         mLayoutStatus = findViewById(R.id.layoutStatus);
@@ -306,7 +319,7 @@ public class VerifyooRegister extends GestureInputAbstract {
             mCurrentGesture++;
             if (mNumberRepeats >= Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION) {
                 if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
-                    setTitle("Completed - saving template...");
+                    setTitle("");
                     isUpdateTitle = false;
                     new TemplateStorer().execute("");
                 }
@@ -364,7 +377,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         String jsonTemplate = serializer.deepSerialize(template);
 
         try {
-            String key = UtilsGeneral.GetUserKey(mUserName);
+            String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
             jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -373,7 +386,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         OutputStreamWriter outputStreamWriter = null;
         try {
-            String fileName = Files.GetFileName(mUserName);
+            String fileName = Files.GetFileName(Consts.STORAGE_NAME);
             deleteFile(fileName);
 
             FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -386,7 +399,15 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         Intent intent = this.getIntent();
         this.setResult(RESULT_OK, intent);
+        saveUserName();
         finish();
+    }
+
+    private void saveUserName() {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("Username", mUserName);
+        editor.commit();
     }
 
     private void getDPI() {

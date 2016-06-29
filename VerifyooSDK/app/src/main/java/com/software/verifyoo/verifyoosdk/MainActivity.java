@@ -1,6 +1,8 @@
 package com.software.verifyoo.verifyoosdk;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -10,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooAuthenticate;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
@@ -43,15 +47,19 @@ public class MainActivity extends ActionBarActivity {
 
     TextView mTxtError;
 
+    Button mBtnReg;
     Button mBtnAuth;
     ImageView mImage;
+
+    EditText mTxtUser;
+    TextView mTxtViewUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mUserName = "user-roy";
+        mUserName = "";
         mCompany = "Verifyoo";
 
         init();
@@ -59,9 +67,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void loadTemplate() {
+
+        UtilsGeneral.StoredTemplate = null;
+        UtilsGeneral.StoredTemplateExtended = null;
+
         InputStream inputStream = null;
         try {
-            inputStream = openFileInput(Files.GetFileName(mUserName));
+            inputStream = openFileInput(Files.GetFileName(Consts.STORAGE_NAME));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
 //                mTxtError.setText(e.getMessage());
@@ -73,18 +85,16 @@ public class MainActivity extends ActionBarActivity {
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
             try {
                 try {
-                    String key = UtilsGeneral.GetUserKey(mUserName);
+                    String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
                     storedTemplate = AESCrypt.decrypt(key, storedTemplate);
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();
-//                        mTxtError.setText(e.getMessage());
                 }
 
                 Object listGesturesObj = deserializer.deserialize(storedTemplate);
                 TemplateExtended templateExtended = new TemplateExtended((Template) listGesturesObj);
                 UtilsGeneral.StoredTemplateExtended = templateExtended;
                 UtilsGeneral.StoredTemplate = (Template) listGesturesObj;
-                //mTemplateStored.Init();
             } catch (Exception e) {
 //                    mTxtError.setText(e.getMessage());
             }
@@ -106,12 +116,28 @@ public class MainActivity extends ActionBarActivity {
             InitScore();
             mBtnAuth.setVisibility(View.VISIBLE);
             mImage.setVisibility(View.VISIBLE);
+
+            if(UtilsGeneral.StoredTemplate == null) {
+                mBtnReg.setVisibility(View.VISIBLE);
+                mBtnAuth.setVisibility(View.GONE);
+                mTxtUser.setVisibility(View.VISIBLE);
+                mTxtViewUser.setVisibility(View.VISIBLE);
+            }
+            else {
+                mBtnReg.setVisibility(View.GONE);
+                mBtnAuth.setVisibility(View.VISIBLE);
+                loadUserName();
+            }
         }
 
         @Override
         protected void onPreExecute() {
-            mBtnAuth.setVisibility(View.INVISIBLE);
-            mImage.setVisibility(View.INVISIBLE);
+            mBtnAuth.setVisibility(View.GONE);
+            mImage.setVisibility(View.GONE);
+            mTxtUser.setVisibility(View.GONE);
+            mTxtViewUser.setVisibility(View.GONE);
+            mBtnReg.setVisibility(View.GONE);
+            mBtnAuth.setVisibility(View.GONE);
             mTxtStatus.setText("Loading...Please wait");
         }
 
@@ -153,12 +179,15 @@ public class MainActivity extends ActionBarActivity {
         mTxtScore.setTextColor(color);
         mTxtStatus.setTextColor(color);
 
+        mTxtUser = (EditText) findViewById(R.id.txtUserName);
+        mTxtViewUser = (TextView) findViewById(R.id.txtViewEnterName);
+
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
-        Button btnReg = (Button) findViewById(R.id.btnReg);
+        mBtnReg = (Button) findViewById(R.id.btnReg);
         Button btnHack = (Button) findViewById(R.id.btnHack);
 
         mBtnAuth.setBackgroundColor(color);
-        btnReg.setBackgroundColor(color);
+        mBtnReg.setBackgroundColor(color);
         btnHack.setBackgroundColor(color);
 
         mBtnAuth.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +197,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        btnReg.setOnClickListener(new View.OnClickListener() {
+        mBtnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickReg();
@@ -190,27 +219,72 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onClickReg() {
-        UtilsGeneral.AuthStartTime = 0;
-        InitScore();
-        Intent i = new Intent(getApplicationContext(), VerifyooRegister.class);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
-        i.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_USE_REPEAT_GESTURE, false);
+        if (mTxtUser.getText().toString().length() > 0) {
+            mUserName = mTxtUser.getText().toString();
+            UtilsGeneral.AuthStartTime = 0;
+            InitScore();
+            Intent i = new Intent(getApplicationContext(), VerifyooRegister.class);
+            i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
+            i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
+            i.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_USE_REPEAT_GESTURE, false);
 
-        mTxtTotalTime.setText("");
-        startActivityForResult(i, 1);
+            mTxtTotalTime.setText("");
+            startActivityForResult(i, 1);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Please enter a valid username", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void onClickAuth() {
-        UtilsGeneral.AuthStartTime = 0;
-        mTxtScore.setText("Loading...Please wait");
-        InitScore();
-        Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
-        i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
+        if (mTxtUser.getText().toString().length() > 0) {
+            mUserName = mTxtUser.getText().toString();
+            saveUserName();
+            UtilsGeneral.AuthStartTime = 0;
+            mTxtScore.setText("Loading...Please wait");
+            InitScore();
+            Intent i = new Intent(getApplicationContext(), VerifyooAuthenticate.class);
+            i.putExtra(VerifyooConsts.EXTRA_STRING_USER_NAME, mUserName);
+            i.putExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME, mCompany);
 
-        mTxtTotalTime.setText("");
-        startActivityForResult(i, 1);
+            mTxtTotalTime.setText("");
+            startActivityForResult(i, 1);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Please enter a valid username", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveUserName() {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("Username", mUserName);
+        editor.commit();
+    }
+
+    private void loadUserName() {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+        String user = prefs.getString("Username", "");
+
+        if (user != null & user.length() > 0) {
+            mUserName = user;
+            mTxtUser.setVisibility(View.GONE);
+            mTxtViewUser.setVisibility(View.GONE);
+        }
+        else {
+            mUserName = "";
+            mTxtUser.setVisibility(View.VISIBLE);
+            mTxtViewUser.setVisibility(View.VISIBLE);
+        }
+
+        mTxtUser.setText(mUserName);
+    }
+
+    private void clearUserName() {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("Username", "");
+        editor.commit();
     }
 
     private void onClickHack() {
@@ -289,6 +363,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        if(UtilsGeneral.StoredTemplate == null) {
+            mBtnAuth.setVisibility(View.GONE);
+        }
+        else {
+            mBtnReg.setVisibility(View.GONE);
+            mBtnAuth.setVisibility(View.VISIBLE);
+            loadUserName();
+        }
     }
 
     @Override
@@ -312,8 +394,21 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_analysis) {
             onClickAnalysis();
         }
+        if (id == R.id.reset_user) {
+            resetUser();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetUser() {
+        clearUserName();
+        mTxtUser.setText("");
+        mUserName = "";
+        mTxtUser.setVisibility(View.VISIBLE);
+        mTxtViewUser.setVisibility(View.VISIBLE);
+        mBtnReg.setVisibility(View.VISIBLE);
+        mBtnAuth.setVisibility(View.GONE);
     }
 
     private void onClickAnalysis() {

@@ -14,6 +14,9 @@ public class ApiMgrStoreDataParams {
     double XDpi;
     double YDpi;
 
+    public String AnalysisString;
+    public double Score;
+
     public ApiMgrStoreDataParams(String username, String company, String state, WindowManager windowManager, double xDpi, double yDpi, boolean isStoreData) {
         UserName = username;
         Company = company;
@@ -22,5 +25,7 @@ public class ApiMgrStoreDataParams {
         XDpi = xDpi;
         YDpi = yDpi;
         IsStoreData = isStoreData;
+        Score = -1;
+        AnalysisString = "";
     }
 }

@@ -137,7 +137,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void init() {
-        //IsShowTrail = true;
+
+        if (UtilsGeneral.StoredTemplateExtended == null) {
+            handleError(ConstsMessages.E00002);
+        }
+
         initInstructionIndexes();
         mApiMgr = new ApiMgr();
 
@@ -384,20 +388,22 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             UtilsGeneral.ResultAnalysis = stringBuilder.toString();
         }
 
+        finalScore = getFinalScore(mListScores);
+
         try {
             WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Register", wm, mXdpi, mYdpi, true);
+            ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Authenticate", wm, mXdpi, mYdpi, true);
+            params.Score = finalScore;
+            params.AnalysisString = UtilsGeneral.ResultAnalysis;
             mApiMgr.StoreData(params, tempTemplateAuth);
         } catch (Exception exc) {
             handleGeneralError(exc);
         }
 
-        finalScore = getFinalScore(mListScores);
-
         if (finalScore > 0.85) {
             isAuth = true;
 
-            //UpdateTemplate();
+            UpdateTemplate();
         }
 
         Intent intent = this.getIntent();
@@ -443,7 +449,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         String tempInstruction;
         double tempGestureCount;
 
-        int maxGestureCount = 5;
+        int maxGestureCount = Consts.MAX_GESTURES_IN_TEMPLATE;
 
         for(int idxGestureStored = 0; idxGestureStored < storedTemplate.ListGestures.size(); idxGestureStored++) {
             tempInstruction = storedTemplate.ListGestures.get(idxGestureStored).Instruction;
@@ -720,21 +726,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 mListTempStrokes.add(tempStroke);
                 mGesturesProcessor.clearStroke();
 
-                if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
-                    mNumGesture++;
-                    mListTempStrokes.clear();
-                    mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
-                    handler.postDelayed(runnable, 10);
-                    String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
-                    if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
-                        setTitle(title);
+                if (mNumGesture < mListGesturesToUse.size()) {
+                    if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
+                        mNumGesture++;
+                        mListTempStrokes.clear();
+                        mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
+                        handler.postDelayed(runnable, 10);
+                        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+                        if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                            setTitle(title);
+                        }
+                        else {
+                            onClickAuth();
+                        }
                     }
                     else {
-                        onClickAuth();
+                        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
                     }
-                }
-                else {
-                    mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
                 }
             }
         }

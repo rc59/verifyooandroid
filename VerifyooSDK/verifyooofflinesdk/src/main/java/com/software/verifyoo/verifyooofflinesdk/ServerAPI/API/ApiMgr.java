@@ -31,6 +31,9 @@ public class ApiMgr {
     protected double mYdpi;
     WindowManager mWindowManager;
 
+    protected String mAnalysisString;
+    protected double mScore;
+
     public void StoreData(ApiMgrStoreDataParams params, Template template) {
         try {
             if (params.IsStoreData) {
@@ -41,6 +44,9 @@ public class ApiMgr {
                 mWindowManager = params.WindowMgr;
                 mXdpi = params.XDpi;
                 mYdpi = params.YDpi;
+
+                mAnalysisString = params.AnalysisString;
+                mScore = params.Score;
 
                 ConvertData(template);
                 if (mTemplate != "") {
@@ -54,6 +60,9 @@ public class ApiMgr {
 
     private void ConvertData(Template template) {
         ExpTemplate tempExpTemplate = new ExpTemplate();
+
+        tempExpTemplate.Score = mScore;
+        tempExpTemplate.AnalysisString = mAnalysisString;
 
         tempExpTemplate.Company = mCompany;
         tempExpTemplate.Name = mUserName;

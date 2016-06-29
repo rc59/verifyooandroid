@@ -5,6 +5,40 @@
     android:background="@android:color/black" >
 
     <TextView
+        android:id="@+id/txtViewEnterName"
+        android:text="Enter Your Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+    <EditText
+        android:id="@+id/txtUserName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Username"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnReg"
+        android:id="@+id/btnReg"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin" />
+
+    <TextView
         android:id="@+id/txtScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,18 +83,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/activity_vertical_margin" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnReg"
-        android:id="@+id/btnReg"
         android:visibility="gone"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin" />
 
     <Button
