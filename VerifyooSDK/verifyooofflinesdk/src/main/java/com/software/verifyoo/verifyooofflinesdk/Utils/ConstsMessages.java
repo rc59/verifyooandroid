@@ -9,4 +9,6 @@ public class ConstsMessages {
     public static String E00003 = "E00003 The encryption process has failed.";
     public static String E00004 = "E00004 A general error has occurred. Reason: %s";
     public static String E00005 = "E00005 The parameter CompanyName cannot be an empty String or null.";
+    public static String E00006 = "E00006 Template update failed. Reason: %s";
+    public static String E00007 = "E00007 Template comparison failed. Reason: %s";
 }

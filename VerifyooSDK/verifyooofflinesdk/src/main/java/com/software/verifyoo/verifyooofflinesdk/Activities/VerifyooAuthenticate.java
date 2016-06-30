@@ -322,95 +322,104 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         String modelName = UtilsGeneral.getDeviceName();
 
-        HashMap<String, Double> compareFilters = new HashMap<>();
-        if (modelName != null && modelName.compareTo("LGE Nexus 5") != 0) {
-            compareFilters = new HashMap<>();
-            compareFilters.put("CompareGesturePressure", (double) 1);
-            compareFilters.put("CompareGestureSurface", (double) 1);
-        }
-
-        if(mTotalStrokes == mListStrokes.size()) {
-            Data.UserProfile.Raw.Gesture tempGestureBase;
-            Data.UserProfile.Raw.Gesture tempGestureAuth;
-            int numStrokes;
-
-            GestureComparer gestureComparer = new GestureComparer(true);
-
-            Template tempTemplateBase = new Template();
-            tempTemplateBase.ListGestures = new ArrayList<>();
-
-            for(int idxGesture = 0; idxGesture < mListGesturesToUse.size(); idxGesture++) {
-                tempGestureBase = mListGesturesToUse.get(idxGesture);
-                numStrokes = tempGestureBase.ListStrokes.size();
-
-                tempGestureAuth = new Data.UserProfile.Raw.Gesture();
-                tempGestureAuth.Instruction = tempGestureBase.Instruction;
-                tempGestureAuth.ListStrokes = new ArrayList<>();
-                for(int idxStroke = 0; idxStroke < numStrokes; idxStroke++) {
-                    tempGestureAuth.ListStrokes.add(mListStrokes.remove(0));
-                }
-
-                tempTemplateBase.ListGestures.add(mListGesturesToUse.get(idxGesture));
-                tempTemplateAuth.ListGestures.add(tempGestureAuth);
-            }
-
-            mTemplateAuth = tempTemplateAuth;
-
-            TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
-
-            String gestureResultSummary;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
-                GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
-                GestureExtended gestureExtendedBase = mListGesturesToUse.get(idxGesture);
-
-                if (compareFilters.keySet().size() > 0) {
-                    gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
-                }
-                else {
-                    gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
-                }
-
-                gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
-
-                double score = gestureComparer.GetScore();
-                String strScore = String.valueOf(score);
-                if (strScore.length() > 5) {
-                    strScore = strScore.substring(0, 5);
-                }
-                stringBuilder.append(String.format("[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
-
-                mAccumulatedScore += score;
-                mListScores.add(score);
-            }
-
-            UtilsGeneral.ResultAnalysis = stringBuilder.toString();
-        }
-
-        finalScore = getFinalScore(mListScores);
-
         try {
-            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Authenticate", wm, mXdpi, mYdpi, true);
-            params.Score = finalScore;
-            params.AnalysisString = UtilsGeneral.ResultAnalysis;
-            mApiMgr.StoreData(params, tempTemplateAuth);
+            HashMap<String, Double> compareFilters = new HashMap<>();
+            if (modelName != null && modelName.compareTo("LGE Nexus 5") != 0) {
+                compareFilters = new HashMap<>();
+                compareFilters.put("CompareGesturePressure", (double) 1);
+                compareFilters.put("CompareGestureSurface", (double) 1);
+            }
+
+            if(mTotalStrokes == mListStrokes.size()) {
+                Data.UserProfile.Raw.Gesture tempGestureBase;
+                Data.UserProfile.Raw.Gesture tempGestureAuth;
+                int numStrokes;
+
+                GestureComparer gestureComparer = new GestureComparer(true);
+
+                Template tempTemplateBase = new Template();
+                tempTemplateBase.ListGestures = new ArrayList<>();
+
+                for(int idxGesture = 0; idxGesture < mListGesturesToUse.size(); idxGesture++) {
+                    tempGestureBase = mListGesturesToUse.get(idxGesture);
+                    numStrokes = tempGestureBase.ListStrokes.size();
+
+                    tempGestureAuth = new Data.UserProfile.Raw.Gesture();
+                    tempGestureAuth.Instruction = tempGestureBase.Instruction;
+                    tempGestureAuth.ListStrokes = new ArrayList<>();
+                    for(int idxStroke = 0; idxStroke < numStrokes; idxStroke++) {
+                        tempGestureAuth.ListStrokes.add(mListStrokes.remove(0));
+                    }
+
+                    tempTemplateBase.ListGestures.add(mListGesturesToUse.get(idxGesture));
+                    tempTemplateAuth.ListGestures.add(tempGestureAuth);
+                }
+
+                mTemplateAuth = tempTemplateAuth;
+
+                TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
+
+                String gestureResultSummary;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for(int idxGesture = 0; idxGesture < templateExtendedAuth.ListGestureExtended.size(); idxGesture++) {
+                    GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
+                    GestureExtended gestureExtendedBase = mListGesturesToUse.get(idxGesture);
+
+                    if (compareFilters.keySet().size() > 0) {
+                        gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
+                    }
+                    else {
+                        gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+                    }
+
+                    gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
+
+                    double score = gestureComparer.GetScore();
+                    String strScore = String.valueOf(score);
+                    if (strScore.length() > 5) {
+                        strScore = strScore.substring(0, 5);
+                    }
+                    stringBuilder.append(String.format("[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
+
+                    mAccumulatedScore += score;
+                    mListScores.add(score);
+                }
+
+                UtilsGeneral.ResultAnalysis = stringBuilder.toString();
+            }
+
+            finalScore = getFinalScore(mListScores);
+
+            try {
+                WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Authenticate", wm, mXdpi, mYdpi, true);
+                params.Score = finalScore;
+                params.AnalysisString = UtilsGeneral.ResultAnalysis;
+                mApiMgr.StoreData(params, tempTemplateAuth);
+            } catch (Exception exc) {
+                handleGeneralError(exc);
+            }
+
+            if (finalScore > 0.85) {
+                isAuth = true;
+
+                try {
+                    UpdateTemplate();
+                }
+                catch (Exception exc) {
+                    handleError(String.format(ConstsMessages.E00006, exc.getMessage()));
+                }
+            }
+
+            Intent intent = this.getIntent();
+            intent.putExtra(VerifyooConsts.EXTRA_DOUBLE_SCORE, finalScore);
+            intent.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED, isAuth);
+            this.setResult(RESULT_OK, intent);
+            finish();
         } catch (Exception exc) {
-            handleGeneralError(exc);
+            handleError(String.format(ConstsMessages.E00007, exc.getMessage()));
         }
-
-        if (finalScore > 0.85) {
-            isAuth = true;
-
-            UpdateTemplate();
-        }
-
-        Intent intent = this.getIntent();
-        intent.putExtra(VerifyooConsts.EXTRA_DOUBLE_SCORE, finalScore);
-        intent.putExtra(VerifyooConsts.EXTRA_BOOLEAN_IS_AUTHORIZED, isAuth);
-        this.setResult(RESULT_OK, intent);
-        finish();
     }
 
     private int FindOldestGestureByInstruction(String instruction) {
@@ -694,47 +703,51 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     public class GestureDrawProcessorAuthenticate extends GestureDrawProcessorAbstract {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
-            UtilsGeneral.AuthEndTime = new Date().getTime();
-            super.onGesture(overlay, event);
-            unRegisterSensors();
+            try {
+                UtilsGeneral.AuthEndTime = new Date().getTime();
+                super.onGesture(overlay, event);
+                unRegisterSensors();
 
-            Gesture gesture  = overlay.getGesture();
-            double currentLength = gesture.getLength();
+                Gesture gesture  = overlay.getGesture();
+                double currentLength = gesture.getLength();
 
-            int strokesCount = gesture.getStrokes().size();
-            if (strokesCount > 1) {
-                gesture.getStrokes().remove(0);
-            }
+                int strokesCount = gesture.getStrokes().size();
+                if (strokesCount > 1) {
+                    gesture.getStrokes().remove(0);
+                }
 
-            if (gesture.getLength() > 50) {
-                super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
+                if (gesture.getLength() > 50) {
+                    super.InitPrevStroke(mGesturesProcessor.getStroke(), mListStrokes, gesture.getLength());
 
-                Stroke tempStroke = mGesturesProcessor.getStroke();
-                tempStroke.Xdpi = mXdpi;
-                tempStroke.Ydpi = mYdpi;
-                tempStroke.Length = gesture.getLength();
-                mListStrokes.add(tempStroke);
-                mListTempStrokes.add(tempStroke);
-                mGesturesProcessor.clearStroke();
+                    Stroke tempStroke = mGesturesProcessor.getStroke();
+                    tempStroke.Xdpi = mXdpi;
+                    tempStroke.Ydpi = mYdpi;
+                    tempStroke.Length = gesture.getLength();
+                    mListStrokes.add(tempStroke);
+                    mListTempStrokes.add(tempStroke);
+                    mGesturesProcessor.clearStroke();
 
-                if (mNumGesture < mListGesturesToUse.size()) {
-                    if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
-                        mNumGesture++;
-                        mListTempStrokes.clear();
-                        mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
-                        handler.postDelayed(runnable, 10);
-                        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
-                        if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
-                            setTitle(title);
+                    if (mNumGesture < mListGesturesToUse.size()) {
+                        if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
+                            mNumGesture++;
+                            mListTempStrokes.clear();
+                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
+                            handler.postDelayed(runnable, 10);
+                            String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+                            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                                setTitle(title);
+                            }
+                            else {
+                                onClickAuth();
+                            }
                         }
                         else {
-                            onClickAuth();
+                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
                         }
                     }
-                    else {
-                        mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-                    }
                 }
+            } catch (Exception exc) {
+                handleError(String.format(ConstsMessages.E00004, exc.getMessage()));
             }
         }
     }

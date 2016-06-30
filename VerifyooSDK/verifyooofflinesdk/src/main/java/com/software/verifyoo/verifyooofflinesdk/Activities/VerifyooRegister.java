@@ -345,8 +345,8 @@ public class VerifyooRegister extends GestureInputAbstract {
             mListStrokes.clear();
             mConsecutiveFalses++;
 
-            if (mConsecutiveFalses > 2) {
-                Toast.makeText(getApplicationContext(), "You have been rejected twice, we recommend that you restart the enrollment.", Toast.LENGTH_LONG).show();
+            if (mConsecutiveFalses >= 2) {
+                Toast.makeText(getApplicationContext(), "You have been rejected twice, we recommend that you restart the registration.", Toast.LENGTH_LONG).show();
             }
         }
     }
