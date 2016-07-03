@@ -326,6 +326,11 @@ public class VerifyooRegister extends GestureInputAbstract {
                 if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
                     setTitle("");
                     isUpdateTitle = false;
+
+                    SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putFloat("Score", (float) -1);
+                    editor.commit();
                     new TemplateStorer().execute("");
                 }
             }

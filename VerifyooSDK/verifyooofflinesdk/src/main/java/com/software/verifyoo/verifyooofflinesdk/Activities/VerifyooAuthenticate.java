@@ -401,11 +401,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 handleGeneralError(exc);
             }
 
-            if (finalScore > 0.85) {
+            if (finalScore > 0.6) {
                 isAuth = true;
 
                 try {
-                    UpdateTemplate();
+                    //UpdateTemplate();
                 }
                 catch (Exception exc) {
                     handleError(String.format(ConstsMessages.E00006, exc.getMessage()));
@@ -624,11 +624,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         double scores = 0;
         double finalScore = 0;
-        for (int idx = 0; idx < mListScores.size(); idx++) {
-            scores += mListScores.get(idx);
-        }
+        if (mListScores.get(0) > 0) {
+            mListScores.remove(0);
+            scores = mListScores.get(0) * 1 + mListScores.get(1) + mListScores.get(2);
 
-        finalScore = scores / mListScores.size();
+            finalScore = scores / 3;
+        }
 
         return finalScore;
     }

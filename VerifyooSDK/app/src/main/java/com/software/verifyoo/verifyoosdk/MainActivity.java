@@ -53,6 +53,8 @@ public class MainActivity extends ActionBarActivity {
 
     EditText mTxtUser;
 
+    double mThreshold = 0.85;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,6 +260,36 @@ public class MainActivity extends ActionBarActivity {
         editor.commit();
     }
 
+    private void getThresholdScore() {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+        double thresholdScore = prefs.getFloat("Score", -1);
+
+        if (thresholdScore > -1) {
+            mThreshold = thresholdScore;
+        }
+        else {
+            mThreshold = 0.85;
+        }
+    }
+
+    private void setThresholdScore(double score) {
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+        double thresholdScore = prefs.getFloat("Score", -1);
+
+        if (thresholdScore == -1) {
+            if (score < 0.9) {
+                thresholdScore = 0.8;
+            }
+            else {
+                thresholdScore = 0.85;
+            }
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putFloat("Score", (float) thresholdScore);
+            editor.commit();
+        }
+    }
+
     private void loadUserName() {
         SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
         String user = prefs.getString("Username", "");
@@ -334,7 +366,11 @@ public class MainActivity extends ActionBarActivity {
                     mTxtScore.setText(result);
 
                     mResultImage.setVisibility(View.VISIBLE);
-                    if (score >= 0.85) {
+
+                    setThresholdScore(score);
+                    getThresholdScore();
+
+                    if (score >= mThreshold) {
                         mResultImage.setImageResource(R.drawable.success);
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.GREEN);
@@ -386,7 +422,7 @@ public class MainActivity extends ActionBarActivity {
             onClickReg();
         }
         if (id == R.id.action_analysis) {
-            onClickAnalysis();
+            //onClickAnalysis();
         }
         if (id == R.id.reset_user) {
             resetUser();

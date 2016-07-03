@@ -63,12 +63,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mSensorListenerAcc = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
-                Sensor mySensor = sensorEvent.sensor;
+                try {
+                    Sensor mySensor = sensorEvent.sensor;
 
-                if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                    mAccX = sensorEvent.values[0];
-                    mAccY = sensorEvent.values[1];
-                    mAccZ = sensorEvent.values[2];
+                    if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                        mAccX = sensorEvent.values[0];
+                        mAccY = sensorEvent.values[1];
+                        mAccZ = sensorEvent.values[2];
+                    }
+                } catch (Exception exc) {
+
                 }
             }
 
@@ -81,12 +85,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mSensorListenerGyro = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
-                Sensor mySensor = sensorEvent.sensor;
+                try {
+                    Sensor mySensor = sensorEvent.sensor;
 
-                if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
-//                    mGyroX = sensorEvent.values[0];
-//                    mGyroY = sensorEvent.values[1];
-//                    mGyroZ = sensorEvent.values[2];
+                    if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                        mGyroX = sensorEvent.values[0];
+                        mGyroY = sensorEvent.values[1];
+                        mGyroZ = sensorEvent.values[2];
+                    }
+                } catch (Exception exc) {
+
                 }
             }
 
@@ -240,7 +248,11 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     }
 
     protected void unRegisterSensors() {
-        mSensorManager.unregisterListener(mSensorListenerGyro);
-        mSensorManager.unregisterListener(mSensorListenerAcc);
+        try {
+            mSensorManager.unregisterListener(mSensorListenerGyro);
+            mSensorManager.unregisterListener(mSensorListenerAcc);
+        } catch (Exception exc) {
+
+        }
     }
 }
