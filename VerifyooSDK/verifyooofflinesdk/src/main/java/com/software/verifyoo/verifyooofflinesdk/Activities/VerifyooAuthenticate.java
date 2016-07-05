@@ -2,6 +2,7 @@ package com.software.verifyoo.verifyooofflinesdk.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
@@ -83,6 +84,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private int[] mInstructionIndexes;
 
     private int mTotalStrokes = 0;
+    private double mThreshold;
 
     ArrayList<GestureExtended> mListGesturesToUse = new ArrayList<>();
 
@@ -140,6 +142,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         if (UtilsGeneral.StoredTemplateExtended == null) {
             handleError(ConstsMessages.E00002);
+        }
+
+        SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+        mThreshold = prefs.getFloat("Score", -1);
+
+        if (mThreshold == -1) {
+            mThreshold = 0.85;
         }
 
         initInstructionIndexes();
@@ -401,11 +410,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 handleGeneralError(exc);
             }
 
-            if (finalScore > 0.6) {
+            if (finalScore > mThreshold) {
                 isAuth = true;
 
                 try {
-                    //UpdateTemplate();
+                    UpdateTemplate();
                 }
                 catch (Exception exc) {
                     handleError(String.format(ConstsMessages.E00006, exc.getMessage()));
@@ -500,7 +509,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         protected String doInBackground(String... params) {
             JSONSerializer serializer = new JSONSerializer();
 
-            Template template = UtilsGeneral.StoredTemplate;
+            Template template = UtilsGeneral.StoredTemplate.Clone();
 
             String jsonTemplate = serializer.deepSerialize(template);
 
