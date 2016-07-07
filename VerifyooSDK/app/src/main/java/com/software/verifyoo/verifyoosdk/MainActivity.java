@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
     Button mBtnAuth;
     ImageView mImage;
 
+    TextView mtxtviewUserName;
     EditText mTxtUser;
 
     double mThreshold = 0.85;
@@ -179,6 +180,7 @@ public class MainActivity extends ActionBarActivity {
         mTxtStatus.setTextColor(color);
 
         mTxtUser = (EditText) findViewById(R.id.txtUserName);
+        mtxtviewUserName = (TextView) findViewById(R.id.txtviewUserName);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
         mBtnReg = (Button) findViewById(R.id.btnReg);
@@ -303,6 +305,14 @@ public class MainActivity extends ActionBarActivity {
             mTxtUser.setVisibility(View.VISIBLE);
         }
 
+        if (mUserName.length() > 0) {
+            mtxtviewUserName.setText(String.format("Hello %s", mUserName));
+            mtxtviewUserName.setVisibility(View.VISIBLE);
+        }
+        else {
+            mtxtviewUserName.setVisibility(View.GONE);
+        }
+
         mTxtUser.setText(mUserName);
     }
 
@@ -422,7 +432,7 @@ public class MainActivity extends ActionBarActivity {
             onClickReg();
         }
         if (id == R.id.action_analysis) {
-            //onClickAnalysis();
+            onClickAnalysis();
         }
         if (id == R.id.reset_user) {
             resetUser();

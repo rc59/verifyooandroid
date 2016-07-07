@@ -106,6 +106,7 @@ public class VerifyooRegister extends GestureInputAbstract {
             mImageWait.setVisibility(View.VISIBLE);
             mTextViewWait.setVisibility(View.VISIBLE);
 
+            mOverlay.setVisibility(View.INVISIBLE);
             mBtnSave.setVisibility(View.INVISIBLE);
             mBtnClear.setVisibility(View.INVISIBLE);
         }
