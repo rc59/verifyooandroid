@@ -30,6 +30,7 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
+import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsInstructionSelector;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsInstructions;
 import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 
@@ -87,6 +88,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private double mThreshold;
 
     ArrayList<GestureExtended> mListGesturesToUse = new ArrayList<>();
+    String mCurrentInstructionCode;
+
+    String mInstructionExtra;
+    ArrayList<String> mListInstructionsAuth;
 
     private int mStrokeCount = 0;
     HashMap<String, Double> mHashGesturesCount = new HashMap<>();
@@ -96,7 +101,16 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            clearOverlay();        }
+            mNumGesture++;
+            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
+            clearOverlay();
+            String title = getTitleByInstruction();
+            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                setTitle(title);
+            } else {
+                onClickAuth();
+            }
+        }
     };
 
     @Override
@@ -139,6 +153,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void init() {
+
+        UtilsInstructionSelector instructionSelector = new UtilsInstructionSelector(UtilsGeneral.StoredTemplateExtended);
+        mInstructionExtra = instructionSelector.GetInstructionExtra();
+        mListInstructionsAuth = instructionSelector.GetInstructionsAuth();
 
         if (UtilsGeneral.StoredTemplateExtended == null) {
             handleError(ConstsMessages.E00002);
@@ -249,30 +267,41 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         int currentIdx;
         GestureExtended tempGestureExtended;
 
-        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
-            currentIdx = mInstructionIndexes[idx];
-
-            tempGestureExtended = getGestureByInstructionType(UtilsInstructions.GetInstruction(currentIdx));
+        for(int idx = 0; idx < mListInstructionsAuth.size(); idx++) {
+            tempGestureExtended = getGestureByInstructionType(mListInstructionsAuth.get(idx));
 
             mTotalStrokes += tempGestureExtended.ListStrokes.size();
             mListGesturesToUse.add(tempGestureExtended);
         }
 
-        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+        String title = getTitleByInstruction();
         setTitle(title);
     }
 
-    private String getTitle(ArrayList<GestureExtended> listGestures) {
+    private String getTitleByInstruction() {
         String title = "";
 
-        for(int idx = 0; idx < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH; idx++) {
+        boolean isAddedCurrent = false;
+        for(int idx = 0; idx < mListInstructionsAuth.size(); idx++) {
             if (idx == mNumGesture) {
-                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(UtilsInstructions.GetInstruction(mInstructionIndexes[idx])));
+                isAddedCurrent = true;
+                mCurrentInstructionCode = mListInstructionsAuth.get(idx);
+                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(idx)));
             }
             else {
-                title += UtilsConvert.InstructionCodeToInstruction(UtilsInstructions.GetInstruction(mInstructionIndexes[idx]));
+                title += UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(idx));
             }
             title += " ";
+        }
+
+        if (mInstructionExtra.length() > 0) {
+            if (!isAddedCurrent) {
+                mCurrentInstructionCode = mInstructionExtra;
+                title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(mInstructionExtra));
+            }
+            else {
+                title += UtilsConvert.InstructionCodeToInstruction(mInstructionExtra);
+            }
         }
 
         return title;
@@ -339,7 +368,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 compareFilters.put("CompareGestureSurface", (double) 1);
             }
 
-            if(mTotalStrokes == mListStrokes.size()) {
+            if(mTotalStrokes == mListStrokes.size() - mListTempStrokes.size()) {
                 Data.UserProfile.Raw.Gesture tempGestureBase;
                 Data.UserProfile.Raw.Gesture tempGestureAuth;
                 int numStrokes;
@@ -498,6 +527,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         }
 
+        if (mInstructionExtra.length() > 0) {
+            Data.UserProfile.Raw.Gesture gestureExtra = new Data.UserProfile.Raw.Gesture();
+            gestureExtra.ListStrokes = mListTempStrokes;
+            gestureExtra.Instruction = mInstructionExtra;
+            storedTemplate.ListGestures.add(gestureExtra);
+        }
+
         UtilsGeneral.StoredTemplate = storedTemplate;
         UtilsGeneral.StoredTemplateExtended = new TemplateExtended(storedTemplate);
 
@@ -514,7 +550,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             String jsonTemplate = serializer.deepSerialize(template);
 
             try {
-                String key = UtilsGeneral.GetUserKey(mUserName);
+                String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
                 jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
@@ -523,7 +559,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             OutputStreamWriter outputStreamWriter = null;
             try {
-                String fileName = Files.GetFileName(mUserName);
+                String fileName = Files.GetFileName(Consts.STORAGE_NAME);
                 deleteFile(fileName);
 
                 FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -625,7 +661,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private double getFinalScore(ArrayList<Double> mListScores) {
-        if (mListScores.size() < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+        if (mListScores.size() < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH - 1) {
             return 0;
         }
 
@@ -634,10 +670,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         double scores = 0;
         double finalScore = 0;
         if (mListScores.get(0) > 0) {
-            mListScores.remove(0);
-            scores = mListScores.get(0) * 1 + mListScores.get(1) + mListScores.get(2);
+            if (mListScores.size() > 3) {
+                mListScores.remove(0);
+            }
 
-            finalScore = scores / 3;
+            scores = mListScores.get(0) * 1 + mListScores.get(1) * 1.25 + mListScores.get(2)* 1.5 ;
+
+            finalScore = scores / 3.75;
         }
 
         return finalScore;
@@ -650,7 +689,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mListTempStrokes = new ArrayList<>();
         mNumGesture = 0;
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-        String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
+        String title = getTitleByInstruction();
         setTitle(title);
     }
 
@@ -734,28 +773,36 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     tempStroke.Ydpi = mYdpi;
                     tempStroke.Length = gesture.getLength();
                     mListStrokes.add(tempStroke);
-                    mListTempStrokes.add(tempStroke);
+
                     mGesturesProcessor.clearStroke();
 
-                    if (mNumGesture < mListGesturesToUse.size()) {
-                        if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
-                            mNumGesture++;
-                            mListTempStrokes.clear();
-                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
-                            handler.postDelayed(runnable, 10);
-                            String title = getTitle(UtilsGeneral.StoredTemplateExtended.ListGestureExtended);
-                            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
-                                setTitle(title);
-                            }
-                            else {
-                                onClickAuth();
-                            }
-                        }
-                        else {
-                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-                        }
+                    handler.removeCallbacks(runnable);
+                    handler.postDelayed(runnable, 500);
+
+                    if (mInstructionExtra.compareTo(mCurrentInstructionCode) == 0) {
+                        mListTempStrokes.add(tempStroke);
                     }
-                }
+
+//                    if (mNumGesture < mListGesturesToUse.size()) {
+//                        if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
+//                            mNumGesture++;
+//                            mListTempStrokes.clear();
+//                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
+//                            handler.removeCallbacks(runnable);
+//                            handler.postDelayed(runnable, 500);
+//                            String title = getTitleByInstruction();
+//                            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+//                                setTitle(title);
+//                            }
+//                            else {
+//                                onClickAuth();
+//                            }
+//                        }
+//                        else {
+//                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+//                        }
+//                    }
+                        }
             } catch (Exception exc) {
                 handleError(String.format(ConstsMessages.E00004, exc.getMessage()));
             }
