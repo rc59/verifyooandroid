@@ -323,6 +323,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
             boolean isUpdateTitle = true;
             mCurrentGesture++;
+
             if (mNumberRepeats >= Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION) {
                 if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
                     setTitle("");

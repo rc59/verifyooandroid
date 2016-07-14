@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
@@ -41,6 +42,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     protected Bitmap mBitMap;
     protected int mWidth;
     protected int mHeight;
+
+    Runnable mRunnable;
+    private Handler handler = new Handler();
 
     public Stroke getStroke() {
         return mTempStroke;
@@ -124,6 +128,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
 
         try {
+            //handler.removeCallbacks(mRunnable);
             if (UtilsGeneral.AuthStartTime == 0) {
                 UtilsGeneral.AuthStartTime = new Date().getTime();
             }
@@ -154,7 +159,6 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
     public void onGesture(GestureOverlayView overlay, MotionEvent event) {
         try {
-
             MotionEventCompact temp;
 
             mVelocityTracker.addMovement(event);
@@ -254,5 +258,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         } catch (Exception exc) {
 
         }
+    }
+
+    public void setRunnable(Runnable runnable) {
+        mRunnable = runnable;
     }
 }

@@ -52,7 +52,7 @@ public abstract class GestureInputAbstract extends ActionBarActivity {
             mOverlay = (GestureOverlayView) findViewById(R.id.gesturesOverlay);
             mOverlay.addOnGestureListener(mGesturesProcessor);
             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-            mOverlay.setBackgroundColor(Color.rgb(33, 33, 33));
+            mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
 
             if (IsShowTrail) {
                 mOverlay.setOnTouchListener(new View.OnTouchListener() {

@@ -61,7 +61,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     public String mCompanyName;
     public String mUserName;
 
-    private double mAccumulatedScore;
     private ArrayList<Double> mListScores;
 
     private int mNumGesture;
@@ -72,7 +71,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private Button mBtnClear;
     private TextView mTextView;
 
+    private Handler handler = new Handler();
+
     boolean mIsParamsValid;
+    boolean mIsClearClicked;
 
     private Template mTemplateStored;
     private Template mTemplateAuth;
@@ -96,20 +98,19 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private int mStrokeCount = 0;
     HashMap<String, Double> mHashGesturesCount = new HashMap<>();
 
-    private Handler handler = new Handler();
-
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            mNumGesture++;
-            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
             clearOverlay();
             String title = getTitleByInstruction();
             if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
                 setTitle(title);
-            } else {
-                onClickAuth();
             }
+            else {
+                complete();
+            }
+            mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
+            mOverlay.setEnabled(true);
         }
     };
 
@@ -153,7 +154,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void init() {
-
+        mIsClearClicked = false;
         UtilsInstructionSelector instructionSelector = new UtilsInstructionSelector(UtilsGeneral.StoredTemplateExtended);
         mInstructionExtra = instructionSelector.GetInstructionExtra();
         mListInstructionsAuth = instructionSelector.GetInstructionsAuth();
@@ -179,13 +180,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         setTitle("");
-        mAccumulatedScore = 0;
         mListScores = new ArrayList<>();
         mTextView = (TextView) findViewById(R.id.textInstruction);
         mListStrokes = new ArrayList<>();
         mListTempStrokes = new ArrayList<>();
 
         mGesturesProcessor = new GestureDrawProcessorAuthenticate();
+        mGesturesProcessor.setRunnable(runnable);
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
@@ -294,7 +295,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             title += " ";
         }
 
-        if (mInstructionExtra.length() > 0) {
+        if (mInstructionExtra != null && mInstructionExtra.length() > 0) {
             if (!isAddedCurrent) {
                 mCurrentInstructionCode = mInstructionExtra;
                 title += String.format("[%s]", UtilsConvert.InstructionCodeToInstruction(mInstructionExtra));
@@ -325,7 +326,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 mHashGesturesCount.put(tempGesture.Instruction, tempGestureCount);
 
                 if (tempGestureCount == Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION) {
-                    listInstructions.add(UtilsInstructions.GetInstructionIdx(tempGesture.Instruction));
+                    listInstructions.add(UtilsInstructions.GetInstructionCodeIdx(tempGesture.Instruction));
                 }
             }
         }
@@ -350,6 +351,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void onClickAuth() {
+        mOverlay.setEnabled(false);
+        mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+        mNumGesture++;
+        mListTempStrokes.clear();
+        clearOverlay();
+        String title = getTitleByInstruction();
+        if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+            setTitle(title);
+        }
+        else {
+            complete();
+        }
+        mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
+        mOverlay.setEnabled(true);
+    }
+
+    private void complete() {
         Template tempTemplateAuth = new Template();
         tempTemplateAuth.ListGestures = new ArrayList<>();
 
@@ -420,7 +438,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     }
                     stringBuilder.append(String.format("[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
 
-                    mAccumulatedScore += score;
                     mListScores.add(score);
                 }
 
@@ -685,9 +702,21 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private void onClickClear() {
         UtilsGeneral.AuthStartTime = 0;
         clearOverlay();
-        mListStrokes = new ArrayList<>();
+
+        if (mIsClearClicked) {
+            mListStrokes.clear();
+            mNumGesture = 0;
+            mIsClearClicked = false;
+        }
+        else {
+            int numTempStrokes = mListTempStrokes.size();
+            for(int idx = 0; idx < numTempStrokes; idx++) {
+                mListStrokes.remove(mListStrokes.size() - 1);
+            }
+            mIsClearClicked = true;
+        }
+
         mListTempStrokes = new ArrayList<>();
-        mNumGesture = 0;
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
         String title = getTitleByInstruction();
         setTitle(title);
@@ -753,11 +782,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     public class GestureDrawProcessorAuthenticate extends GestureDrawProcessorAbstract {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
             try {
+                mIsClearClicked = false;
                 UtilsGeneral.AuthEndTime = new Date().getTime();
                 super.onGesture(overlay, event);
                 unRegisterSensors();
 
-                Gesture gesture  = overlay.getGesture();
+                Gesture gesture = overlay.getGesture();
                 double currentLength = gesture.getLength();
 
                 int strokesCount = gesture.getStrokes().size();
@@ -776,36 +806,59 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
                     mGesturesProcessor.clearStroke();
 
-                    handler.removeCallbacks(runnable);
-                    handler.postDelayed(runnable, 500);
-
-                    if (mInstructionExtra.compareTo(mCurrentInstructionCode) == 0) {
-                        mListTempStrokes.add(tempStroke);
-                    }
-
-//                    if (mNumGesture < mListGesturesToUse.size()) {
-//                        if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
-//                            mNumGesture++;
-//                            mListTempStrokes.clear();
-//                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
-//                            handler.removeCallbacks(runnable);
-//                            handler.postDelayed(runnable, 500);
-//                            String title = getTitleByInstruction();
-//                            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
-//                                setTitle(title);
-//                            }
-//                            else {
-//                                onClickAuth();
-//                            }
-//                        }
-//                        else {
-//                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-//                        }
+//                    if (mInstructionExtra.compareTo(mCurrentInstructionCode) == 0) {
+//                        mListTempStrokes.add(tempStroke);
 //                    }
+                    mListTempStrokes.add(tempStroke);
+
+                    if (mNumGesture < mListGesturesToUse.size()) {
+                        if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
+                            boolean isStrokeCosineDistanceValid =
+                                    checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
+
+                            if (isStrokeCosineDistanceValid) {
+                                mOverlay.setEnabled(false);
+                                mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+                                mNumGesture++;
+                                mListTempStrokes.clear();
+                                handler.removeCallbacks(runnable);
+                                handler.postDelayed(runnable, 100);
+                            }
                         }
+                        else {
+                            mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+                        }
+                    }
+                }
             } catch (Exception exc) {
                 handleError(String.format(ConstsMessages.E00004, exc.getMessage()));
             }
+        }
+
+        private boolean checkCosineDistance(ArrayList<Stroke> listStrokes1, ArrayList<Stroke> listStrokes2) {
+            Data.UserProfile.Raw.Gesture gesture1 = new Data.UserProfile.Raw.Gesture();
+            Data.UserProfile.Raw.Gesture gesture2 = new Data.UserProfile.Raw.Gesture();
+
+            gesture1.ListStrokes = listStrokes1;
+            gesture2.ListStrokes = listStrokes2;
+
+            Template template1 = new Template();
+            Template template2 = new Template();
+
+            template1.ListGestures = new ArrayList<>();
+            template2.ListGestures = new ArrayList<>();
+
+            template1.ListGestures.add(gesture1);
+            template2.ListGestures.add(gesture2);
+
+            TemplateExtended templateExtended1 = new TemplateExtended(template1);
+            TemplateExtended templateExtended2 = new TemplateExtended(template2);
+
+            GestureComparer gestureComparer = new GestureComparer(true);
+            gestureComparer.CompareGestures(templateExtended1.ListGestureExtended.get(0), templateExtended2.ListGestureExtended.get(0));
+            boolean result = gestureComparer.IsStrokeCosineDistanceValid();
+
+            return result;
         }
     }
 }
