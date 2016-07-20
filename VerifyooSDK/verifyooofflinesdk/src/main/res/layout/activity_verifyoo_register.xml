@@ -4,6 +4,24 @@
     android:orientation="vertical"
     android:background="@android:color/black" >
 
+    <RelativeLayout
+        android:id="@+id/layoutInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+    <TextView
+        android:text=""
+        android:id="@+id/textInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:textColor="@android:color/holo_blue_light"
+        android:background="@android:color/black" />
+
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/imageWait"
         android:visibility="gone"
@@ -51,6 +69,7 @@
         android:layout_height="0dip"
         android:layout_weight="8"
         android:gestureColor="@android:color/holo_blue_dark"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:gestureStrokeType="multiple" />
 
     <RelativeLayout
@@ -68,25 +87,25 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btnSave"
+                android:text="@string/btnClear"
                 android:textColor="@android:color/white"
-                android:enabled="false"
                 android:visibility="invisible"
-                android:drawableLeft="@drawable/accept"
-                android:shadowColor="@android:color/holo_green_dark"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:id="@+id/btnSave" />
+                android:drawableLeft="@drawable/restart"
+                android:id="@+id/btnClear" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btnClear"
+                android:text="@string/btnSave"
                 android:textColor="@android:color/white"
-                android:layout_toRightOf="@id/btnSave"
+                android:enabled="false"
                 android:visibility="invisible"
-                android:drawableLeft="@drawable/restart"
+                android:layout_toRightOf="@id/btnClear"
+                android:drawableLeft="@drawable/accept"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:id="@+id/btnClear" />
+                android:shadowColor="@android:color/holo_green_dark"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/btnSave" />
 
         </RelativeLayout>
 

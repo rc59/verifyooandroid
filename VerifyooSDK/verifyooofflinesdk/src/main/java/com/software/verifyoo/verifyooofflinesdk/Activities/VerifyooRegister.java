@@ -29,6 +29,7 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Consts;
 import com.software.verifyoo.verifyooofflinesdk.Utils.ConstsMessages;
 import com.software.verifyoo.verifyooofflinesdk.Utils.Files;
+import com.software.verifyoo.verifyooofflinesdk.Utils.GestureContainer;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsConvert;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsGeneral;
 import com.software.verifyoo.verifyooofflinesdk.Utils.UtilsInstructions;
@@ -51,6 +52,9 @@ import flexjson.JSONSerializer;
 
 public class VerifyooRegister extends GestureInputAbstract {
 
+    HashMap<String, Boolean> mHashCompletedInstructions;
+    HashMap<String, GestureContainer> mHashGestures;
+
     public String mCompanyName;
     public String mUserName;
 
@@ -64,6 +68,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     private TextView mTextStatus;
     private View mLayoutStatus;
+
+    private TextView mTextViewInstruction;
 
     boolean mIsRequiredToRepeatGesture;
 
@@ -156,12 +162,22 @@ public class VerifyooRegister extends GestureInputAbstract {
         int total = (Consts.DEFAULT_NUM_REQ_GESTURES_REG * Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION);
         int currentGeseture = mListGestures.size() + 1;
         String completion = String.format("(%s/%s)", String.valueOf(currentGeseture), String.valueOf(total));
+
+        double stepsCompleted = mHashCompletedInstructions.size();
+        if (mHashCompletedInstructions.size() == 0) {
+            stepsCompleted = mCurrentGesture;
+        }
+        double percentageCompleted = mHashCompletedInstructions.size() / Consts.DEFAULT_NUM_REQ_GESTURES_REG;
+        //String completion = "";//String.format("(%s completed)", percentageCompleted);
         String title = String.format("%s %s", completion, instruction);
 
-        setTitle(title);
+        mTextViewInstruction.setText(title);
+        //setTitle(title);
     }
 
     private void init() {
+        mHashCompletedInstructions = new HashMap<>();
+        mHashGestures = new HashMap<>();
         initInstructionIndexes();
         mHashNumStrokesPerGesture = new HashMap<>();
         mNumberRepeats = 1;
@@ -171,6 +187,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         mApiMgr = new ApiMgr();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        mTextViewInstruction = (TextView) findViewById(R.id.textInstruction);
 
         mListStrokes = new ArrayList<>();
         mListStrokesTemp = new ArrayList<>();
@@ -184,7 +202,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
-        int colorGreen = Color.parseColor(Consts.VERIFYOO_GREEN);
+        int colorGreen = Color.parseColor(Consts.VERIFYOO_BLUE);
         int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
 
         mBtnSave = (Button) findViewById(R.id.btnSave);
@@ -259,6 +277,61 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
         else {
             mLayoutStatus.setVisibility(View.GONE);
+        }
+    }
+
+    private void onClickSave2() {
+        String currentInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
+        GestureContainer tempGestureContainer;
+
+        if (mHashGestures.containsKey(currentInstruction)) {
+            tempGestureContainer = mHashGestures.get(currentInstruction);
+        }
+        else {
+            tempGestureContainer = new GestureContainer(currentInstruction);
+            mHashGestures.put(currentInstruction, tempGestureContainer);
+        }
+
+        Data.UserProfile.Raw.Gesture currentGesture = new Data.UserProfile.Raw.Gesture();
+        currentGesture.ListStrokes = mListStrokes;
+        currentGesture.Instruction = currentInstruction;
+
+        tempGestureContainer.AddGesture(currentGesture);
+        mListStrokes = new ArrayList<>();
+
+        mListGestures.add(currentGesture);
+
+        clearOverlay();
+        ArrayList<Data.UserProfile.Raw.Gesture> listGestures = tempGestureContainer.GetGestures();
+
+        if (listGestures.size() >= Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION && !mHashCompletedInstructions.containsKey(currentInstruction)) {
+            mHashCompletedInstructions.put(currentInstruction, true);
+        }
+
+        mCurrentGesture++;
+        if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
+            mCurrentGesture = 0;
+        }
+
+        if (mHashCompletedInstructions.keySet().size() == Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
+            setTitle("");
+            SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putFloat("Score", (float) -1);
+            editor.commit();
+            new TemplateStorer().execute("");
+        }
+        else {
+            String nextInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
+            while (mHashCompletedInstructions.containsKey(nextInstruction)) {
+                mCurrentGesture++;
+                if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
+                    mCurrentGesture = 0;
+                }
+                nextInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
+            }
+
+            updateTitle(getTitleString(UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture])));
         }
     }
 

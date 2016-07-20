@@ -432,7 +432,7 @@ public class MainActivity extends ActionBarActivity {
             onClickReg();
         }
         if (id == R.id.action_analysis) {
-            onClickAnalysis();
+            //onClickAnalysis();
         }
         if (id == R.id.reset_user) {
             resetUser();

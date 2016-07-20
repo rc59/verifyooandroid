@@ -1,9 +1,9 @@
 package com.software.verifyoo.verifyooofflinesdk.Abstract;
 
+import android.app.Activity;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.Path;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by roy on 12/28/2015.
  */
-public abstract class GestureInputAbstract extends ActionBarActivity {
+public abstract class GestureInputAbstract extends Activity {
     protected static GestureDrawProcessorAbstract mGesturesProcessor;
     protected static GestureOverlayView mOverlay;
 
@@ -52,7 +52,8 @@ public abstract class GestureInputAbstract extends ActionBarActivity {
             mOverlay = (GestureOverlayView) findViewById(R.id.gesturesOverlay);
             mOverlay.addOnGestureListener(mGesturesProcessor);
             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-            mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
+            mOverlay.setBackgroundColor(Color.rgb(88, 88, 88));
+            //mOverlay.setBackgroundResource(R.drawable.back2);
 
             if (IsShowTrail) {
                 mOverlay.setOnTouchListener(new View.OnTouchListener() {

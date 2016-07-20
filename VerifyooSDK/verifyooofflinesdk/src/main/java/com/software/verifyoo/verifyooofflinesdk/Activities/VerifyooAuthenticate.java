@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
@@ -65,11 +66,17 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private int mNumGesture;
 
+    private RelativeLayout mLayoutInstruction;
+
     private ArrayList<Stroke> mListStrokes;
     private ArrayList<Stroke> mListTempStrokes;
     private Button mBtnAuth;
     private Button mBtnClear;
-    private TextView mTextView;
+    private TextView mTextViewInstruction;
+    private TextView mTextViewInstruction2;
+    private TextView mTextViewInstruction3;
+    private TextView mTextViewInstruction4;
+
 
     private Handler handler = new Handler();
 
@@ -88,6 +95,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private int mTotalStrokes = 0;
     private double mThreshold;
+
+    private int mVerifyooColor;
 
     ArrayList<GestureExtended> mListGesturesToUse = new ArrayList<>();
     String mCurrentInstructionCode;
@@ -109,7 +118,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             else {
                 complete();
             }
-            mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
+            //mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
             mOverlay.setEnabled(true);
         }
     };
@@ -159,6 +168,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mInstructionExtra = instructionSelector.GetInstructionExtra();
         mListInstructionsAuth = instructionSelector.GetInstructionsAuth();
 
+        mVerifyooColor = Color.parseColor(Consts.VERIFYOO_BLUE);
+
+        mLayoutInstruction = (RelativeLayout) findViewById(R.id.layoutInstruction);
+        mLayoutInstruction.setBackgroundColor(mVerifyooColor);
+
         if (UtilsGeneral.StoredTemplateExtended == null) {
             handleError(ConstsMessages.E00002);
         }
@@ -181,7 +195,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         setTitle("");
         mListScores = new ArrayList<>();
-        mTextView = (TextView) findViewById(R.id.textInstruction);
+        mTextViewInstruction = (TextView) findViewById(R.id.textInstruction);
+        mTextViewInstruction2 = (TextView) findViewById(R.id.textInstruction2);
+        mTextViewInstruction3 = (TextView) findViewById(R.id.textInstruction3);
+        mTextViewInstruction4 = (TextView) findViewById(R.id.textInstruction4);
         mListStrokes = new ArrayList<>();
         mListTempStrokes = new ArrayList<>();
 
@@ -190,7 +207,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
-        int colorGreen = Color.parseColor(Consts.VERIFYOO_GREEN);
+        int colorGreen = Color.parseColor(Consts.VERIFYOO_BLUE);
         int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
@@ -264,7 +281,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         }
 
         ArrayList<GestureExtended> listGestures = UtilsGeneral.StoredTemplateExtended.ListGestureExtended;
-        mTextView.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
+        mTextViewInstruction.setText(listGestures.get(mInstructionIndexes[0]).Instruction);
+        mTextViewInstruction.setBackgroundColor(Color.GRAY);
         int currentIdx;
         GestureExtended tempGestureExtended;
 
@@ -295,6 +313,42 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             title += " ";
         }
 
+        mTextViewInstruction.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(0)));
+        mTextViewInstruction2.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(1)));
+        mTextViewInstruction3.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(2)));
+        mTextViewInstruction4.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(3)));
+
+
+        int defaultBackColor = Color.rgb(44, 44, 44);
+
+        mTextViewInstruction.setTextColor(defaultBackColor);
+        mTextViewInstruction.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction2.setTextColor(defaultBackColor);
+        mTextViewInstruction2.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction3.setTextColor(defaultBackColor);
+        mTextViewInstruction3.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction4.setTextColor(defaultBackColor);
+        mTextViewInstruction4.setBackgroundColor(mVerifyooColor);
+
+        switch (mNumGesture) {
+            case 0:
+                mTextViewInstruction.setTextColor(mVerifyooColor);
+                mTextViewInstruction.setBackgroundColor(defaultBackColor);
+                break;
+            case 1:
+                mTextViewInstruction2.setTextColor(mVerifyooColor);
+                mTextViewInstruction2.setBackgroundColor(defaultBackColor);
+                break;
+            case 2:
+                mTextViewInstruction3.setTextColor(mVerifyooColor);
+                mTextViewInstruction3.setBackgroundColor(defaultBackColor);
+                break;
+            case 3:
+                mTextViewInstruction4.setTextColor(mVerifyooColor);
+                mTextViewInstruction4.setBackgroundColor(defaultBackColor);
+                break;
+        }
+
         if (mInstructionExtra != null && mInstructionExtra.length() > 0) {
             if (!isAddedCurrent) {
                 mCurrentInstructionCode = mInstructionExtra;
@@ -305,6 +359,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         }
 
+        title = "";
         return title;
     }
 
@@ -352,7 +407,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private void onClickAuth() {
         mOverlay.setEnabled(false);
-        mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
         mNumGesture++;
         mListTempStrokes.clear();
         clearOverlay();
@@ -363,7 +418,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         else {
             complete();
         }
-        mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
+        //mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
         mOverlay.setEnabled(true);
     }
 
@@ -818,7 +873,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
                             if (isStrokeCosineDistanceValid) {
                                 mOverlay.setEnabled(false);
-                                mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+                                //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
                                 mNumGesture++;
                                 mListTempStrokes.clear();
                                 handler.removeCallbacks(runnable);

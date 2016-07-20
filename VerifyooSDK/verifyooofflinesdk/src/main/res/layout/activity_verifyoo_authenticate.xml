@@ -4,26 +4,60 @@
     android:orientation="vertical"
     android:background="@android:color/black" >
 
-    <TextView
-        android:text="Input a letter, digit or shape"
-        android:id="@+id/textInstruction"
+    <RelativeLayout
+        android:id="@+id/layoutInstruction"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_vertical_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_gravity="left"
-        android:textColor="@android:color/holo_blue_light"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:visibility="gone"
-        android:background="@android:color/black" />
+        android:gravity="center" >
+
+        <TextView
+            android:text="G"
+            android:id="@+id/textInstruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:textColor="@android:color/holo_blue_light"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:text="R"
+            android:id="@+id/textInstruction2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_toRightOf="@id/textInstruction"
+            android:textColor="@android:color/holo_blue_light"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:text="A"
+            android:id="@+id/textInstruction3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_toRightOf="@id/textInstruction2"
+            android:textColor="@android:color/holo_blue_light"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:text="B"
+            android:id="@+id/textInstruction4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_toRightOf="@id/textInstruction3"
+            android:textColor="@android:color/holo_blue_light"
+            android:background="@android:color/black" />
+
+    </RelativeLayout>
 
     <android.gesture.GestureOverlayView
         android:id="@+id/gesturesOverlay"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="8"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:gestureColor="@android:color/holo_blue_dark"
         android:gestureStrokeType="multiple" />
 
@@ -31,17 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:gravity="center" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnSave"
-            android:textColor="@android:color/white"
-            android:drawableLeft="@drawable/accept"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/btnAuth" />
 
         <Button
             android:layout_width="wrap_content"
@@ -49,9 +73,20 @@
             android:text="@string/btnClear"
             android:gravity="center"
             android:drawableLeft="@drawable/restart"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
             android:textColor="@android:color/white"
-            android:layout_toRightOf="@id/btnAuth"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/btnClear" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnSave"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/accept"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/btnClear"
+            android:id="@+id/btnAuth" />
 
     </RelativeLayout>
 

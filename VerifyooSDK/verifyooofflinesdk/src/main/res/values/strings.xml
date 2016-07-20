@@ -10,7 +10,7 @@
     <string name="title_activity_verifyoo_authenticate">VerifyooAuthenticate</string>
     <string name="btnSave">  NEXT</string>
     <string name="btnAuth">Authenticate</string>
-    <string name="btnClear">  REDRAW</string>
+    <string name="btnClear">  UNDO</string>
     <string name="gestureStrNone">[None]</string>
     <string name="gestureStrLow">Low</string>
     <string name="gestureStrMedium">Medium</string>
