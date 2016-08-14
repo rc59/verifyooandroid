@@ -22,17 +22,17 @@ public class UtilsConvert {
     public static String InstructionCodeToInstruction(String instructionCode) {
         String instruction = "";
         switch (instructionCode) {
-            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
-                instruction = ConstsInstructions.INSTRUCTION_STRING_A;
-                break;
             case ConstsInstructions.INSTRUCTION_CODE_BLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_B;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_DLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_D;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_ELETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_E;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_GLETTER:
-                instruction = ConstsInstructions.INSTRUCTION_STRING_G;
+            case ConstsInstructions.INSTRUCTION_CODE_FLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_F;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_KLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_K;
@@ -40,17 +40,17 @@ public class UtilsConvert {
             case ConstsInstructions.INSTRUCTION_CODE_MLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_M;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_NLETTER:
-                instruction = ConstsInstructions.INSTRUCTION_STRING_N;
+            case ConstsInstructions.INSTRUCTION_CODE_PLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_P;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_R;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_WLETTER:
-                instruction = ConstsInstructions.INSTRUCTION_STRING_W;
-                break;
             case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_Z;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_A;
                 break;
         }
 

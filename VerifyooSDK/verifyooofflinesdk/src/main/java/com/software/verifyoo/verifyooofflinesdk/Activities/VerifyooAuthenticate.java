@@ -171,7 +171,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mVerifyooColor = Color.parseColor(Consts.VERIFYOO_BLUE);
 
         mLayoutInstruction = (RelativeLayout) findViewById(R.id.layoutInstruction);
-        mLayoutInstruction.setBackgroundColor(mVerifyooColor);
 
         if (UtilsGeneral.StoredTemplateExtended == null) {
             handleError(ConstsMessages.E00002);
@@ -319,32 +318,33 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mTextViewInstruction4.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(3)));
 
 
-        int defaultBackColor = Color.rgb(44, 44, 44);
+        int defaultBackColor = mVerifyooColor;
+        int defaultTextColor = Color.WHITE;
 
         mTextViewInstruction.setTextColor(defaultBackColor);
-        mTextViewInstruction.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction.setBackgroundColor(defaultTextColor);
         mTextViewInstruction2.setTextColor(defaultBackColor);
-        mTextViewInstruction2.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction2.setBackgroundColor(defaultTextColor);
         mTextViewInstruction3.setTextColor(defaultBackColor);
-        mTextViewInstruction3.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction3.setBackgroundColor(defaultTextColor);
         mTextViewInstruction4.setTextColor(defaultBackColor);
-        mTextViewInstruction4.setBackgroundColor(mVerifyooColor);
+        mTextViewInstruction4.setBackgroundColor(defaultTextColor);
 
         switch (mNumGesture) {
             case 0:
-                mTextViewInstruction.setTextColor(mVerifyooColor);
+                mTextViewInstruction.setTextColor(defaultTextColor);
                 mTextViewInstruction.setBackgroundColor(defaultBackColor);
                 break;
             case 1:
-                mTextViewInstruction2.setTextColor(mVerifyooColor);
+                mTextViewInstruction2.setTextColor(defaultTextColor);
                 mTextViewInstruction2.setBackgroundColor(defaultBackColor);
                 break;
             case 2:
-                mTextViewInstruction3.setTextColor(mVerifyooColor);
+                mTextViewInstruction3.setTextColor(defaultTextColor);
                 mTextViewInstruction3.setBackgroundColor(defaultBackColor);
                 break;
             case 3:
-                mTextViewInstruction4.setTextColor(mVerifyooColor);
+                mTextViewInstruction4.setTextColor(defaultTextColor);
                 mTextViewInstruction4.setBackgroundColor(defaultBackColor);
                 break;
         }
@@ -877,7 +877,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                                 mNumGesture++;
                                 mListTempStrokes.clear();
                                 handler.removeCallbacks(runnable);
-                                handler.postDelayed(runnable, 100);
+                                handler.postDelayed(runnable, 10);
                             }
                         }
                         else {
@@ -895,7 +895,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             Data.UserProfile.Raw.Gesture gesture2 = new Data.UserProfile.Raw.Gesture();
 
             gesture1.ListStrokes = listStrokes1;
+            gesture1.Instruction = mCurrentInstructionCode;
             gesture2.ListStrokes = listStrokes2;
+            gesture2.Instruction = mCurrentInstructionCode;
 
             Template template1 = new Template();
             Template template2 = new Template();

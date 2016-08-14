@@ -5,20 +5,20 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
  */
 public class UtilsInstructions {
     public static String GetInstruction(int idx) {
-        String instruction = ConstsInstructions.INSTRUCTION_CODE_ALETTER;
+        String instruction = ConstsInstructions.INSTRUCTION_CODE_BLETTER;
 
         switch (idx) {
             case 0:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_ALETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_BLETTER;
                 break;
             case 1:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_BLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_DLETTER;
                 break;
             case 2:
                 instruction = ConstsInstructions.INSTRUCTION_CODE_ELETTER;
                 break;
             case 3:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_GLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_FLETTER;
                 break;
             case 4:
                 instruction = ConstsInstructions.INSTRUCTION_CODE_KLETTER;
@@ -27,16 +27,16 @@ public class UtilsInstructions {
                 instruction = ConstsInstructions.INSTRUCTION_CODE_MLETTER;
                 break;
             case 6:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_NLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_PLETTER;
                 break;
             case 7:
                 instruction = ConstsInstructions.INSTRUCTION_CODE_RLETTER;
                 break;
             case 8:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_WLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_ZLETTER;
                 break;
             case 9:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_ZLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_ALETTER;
                 break;
         }
 
@@ -47,16 +47,16 @@ public class UtilsInstructions {
 
         int instructionIdx = -1;
         switch (instruction) {
-            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_BLETTER:
                 instructionIdx = 0;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_BLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_DLETTER:
                 instructionIdx = 1;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_ELETTER:
                 instructionIdx = 2;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_GLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_FLETTER:
                 instructionIdx = 3;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_KLETTER:
@@ -65,16 +65,16 @@ public class UtilsInstructions {
             case ConstsInstructions.INSTRUCTION_CODE_MLETTER:
                 instructionIdx = 5;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_NLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_PLETTER:
                 instructionIdx = 6;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
                 instructionIdx = 7;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_WLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
                 instructionIdx = 8;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
                 instructionIdx = 9;
                 break;
         }
@@ -86,16 +86,16 @@ public class UtilsInstructions {
 
         int instructionIdx = -1;
         switch (instructionStr) {
-            case ConstsInstructions.INSTRUCTION_STRING_A:
+            case ConstsInstructions.INSTRUCTION_STRING_B:
                 instructionIdx = 0;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_B:
+            case ConstsInstructions.INSTRUCTION_STRING_D:
                 instructionIdx = 1;
                 break;
             case ConstsInstructions.INSTRUCTION_STRING_E:
                 instructionIdx = 2;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_G:
+            case ConstsInstructions.INSTRUCTION_STRING_F:
                 instructionIdx = 3;
                 break;
             case ConstsInstructions.INSTRUCTION_STRING_K:
@@ -104,16 +104,16 @@ public class UtilsInstructions {
             case ConstsInstructions.INSTRUCTION_STRING_M:
                 instructionIdx = 5;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_N:
+            case ConstsInstructions.INSTRUCTION_STRING_P:
                 instructionIdx = 6;
                 break;
             case ConstsInstructions.INSTRUCTION_STRING_R:
                 instructionIdx = 7;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_W:
+            case ConstsInstructions.INSTRUCTION_STRING_Z:
                 instructionIdx = 8;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_Z:
+            case ConstsInstructions.INSTRUCTION_STRING_A:
                 instructionIdx = 9;
                 break;
         }

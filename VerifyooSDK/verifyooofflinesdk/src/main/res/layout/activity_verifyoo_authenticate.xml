@@ -2,13 +2,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/black" >
+    android:background="@android:color/white" >
 
     <RelativeLayout
         android:id="@+id/layoutInstruction"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
         android:gravity="center" >
 
         <TextView
@@ -17,8 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="40dp"
-            android:textColor="@android:color/holo_blue_light"
-            android:background="@android:color/black" />
+            android:textColor="@android:color/holo_blue_light" />
 
         <TextView
             android:text="R"
@@ -27,8 +28,7 @@
             android:layout_height="wrap_content"
             android:textSize="40dp"
             android:layout_toRightOf="@id/textInstruction"
-            android:textColor="@android:color/holo_blue_light"
-            android:background="@android:color/black" />
+            android:textColor="@android:color/holo_blue_light" />
 
         <TextView
             android:text="A"
@@ -37,8 +37,7 @@
             android:layout_height="wrap_content"
             android:textSize="40dp"
             android:layout_toRightOf="@id/textInstruction2"
-            android:textColor="@android:color/holo_blue_light"
-            android:background="@android:color/black" />
+            android:textColor="@android:color/holo_blue_light" />
 
         <TextView
             android:text="B"
@@ -47,8 +46,7 @@
             android:layout_height="wrap_content"
             android:textSize="40dp"
             android:layout_toRightOf="@id/textInstruction3"
-            android:textColor="@android:color/holo_blue_light"
-            android:background="@android:color/black" />
+            android:textColor="@android:color/holo_blue_light" />
 
     </RelativeLayout>
 
@@ -57,36 +55,59 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="8"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:gestureColor="@android:color/holo_blue_dark"
         android:gestureStrokeType="multiple" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:gravity="center" >
 
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnClear"
-            android:gravity="center"
-            android:drawableLeft="@drawable/restart"
-            android:drawablePadding="@dimen/activity_horizontal_margin"
-            android:textColor="@android:color/white"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/btnClear" />
+            android:id="@+id/layout1"
+            android:orientation="horizontal"
+            android:gravity="center" >
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnSave"
-            android:textColor="@android:color/white"
-            android:drawableLeft="@drawable/accept"
-            android:drawablePadding="@dimen/activity_horizontal_margin"
-            android:layout_toRightOf="@id/btnClear"
-            android:id="@+id/btnAuth" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/btnClear"
+                android:gravity="center"
+                android:drawableLeft="@drawable/undo"
+                android:drawablePadding="16dp"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="16dp"
+                android:id="@+id/btnClear"
+                android:elegantTextHeight="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/btnSave"
+                android:textColor="@android:color/white"
+                android:drawableLeft="@drawable/check"
+                android:drawablePadding="16dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/btnClear"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/btnAuth"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:elegantTextHeight="false" />
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 

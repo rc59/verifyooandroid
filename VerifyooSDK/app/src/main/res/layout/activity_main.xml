@@ -2,13 +2,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/black" >
+    android:background="@android:color/white" >
 
     <TextView
         android:id="@+id/txtviewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
@@ -34,9 +33,12 @@
         android:text="@string/btnReg"
         android:id="@+id/btnReg"
         android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/white"
+        android:drawableLeft="@drawable/register"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:drawablePadding="16dp"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin" />
 
@@ -44,6 +46,7 @@
         android:id="@+id/txtScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
@@ -52,6 +55,7 @@
         android:id="@+id/txtStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawablePadding="16dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
@@ -84,9 +88,12 @@
         android:textColor="@android:color/white"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:drawablePadding="20dp"
+        android:drawableLeft="@drawable/login"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
-        android:layout_marginLeft="@dimen/activity_vertical_margin" />
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <Button
         android:layout_width="wrap_content"
@@ -112,6 +119,7 @@
     <TextView
         android:id="@+id/txtTotalTime"
         android:text=""
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtErrorMsg"
@@ -123,6 +131,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/resultImage"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:paddingTop="@dimen/activity_horizontal_margin" />
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +78,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     boolean mIsParamsValid;
     boolean mIsFirstGestureEntered;
 
+    int mVerifyooBlue;
     int mConsecutiveFalses;
 
     ApiMgr mApiMgr;
@@ -93,6 +96,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
     private int[] mInstructionIndexes;
 
+    private ProgressBar mProgressBar;
+
     private class TemplateStorer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -109,7 +114,8 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         @Override
         protected void onPreExecute() {
-            mImageWait.setVisibility(View.VISIBLE);
+            //mImageWait.setVisibility(View.VISIBLE);
+            mTextViewWait.setTextColor(mVerifyooBlue);
             mTextViewWait.setVisibility(View.VISIBLE);
 
             mOverlay.setVisibility(View.INVISIBLE);
@@ -169,13 +175,26 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
         double percentageCompleted = mHashCompletedInstructions.size() / Consts.DEFAULT_NUM_REQ_GESTURES_REG;
         //String completion = "";//String.format("(%s completed)", percentageCompleted);
-        String title = String.format("%s %s", completion, instruction);
+        String title = instruction;
+
+        mProgressBar.setProgress(currentGeseture - 1);
+
+        mProgressBar.getIndeterminateDrawable().setColorFilter(mVerifyooBlue, PorterDuff.Mode.SRC_IN);
+        mProgressBar.getProgressDrawable().setColorFilter(mVerifyooBlue, PorterDuff.Mode.SRC_IN);
 
         mTextViewInstruction.setText(title);
         //setTitle(title);
     }
 
     private void init() {
+        mVerifyooBlue = Color.parseColor(Consts.VERIFYOO_BLUE);
+        int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        mProgressBar.setMax(20);
+        mProgressBar.setProgress(0);
+
         mHashCompletedInstructions = new HashMap<>();
         mHashGestures = new HashMap<>();
         initInstructionIndexes();
@@ -189,6 +208,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         mTextViewInstruction = (TextView) findViewById(R.id.textInstruction);
+        mTextViewInstruction.setTextColor(mVerifyooBlue);
 
         mListStrokes = new ArrayList<>();
         mListStrokesTemp = new ArrayList<>();
@@ -202,11 +222,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         super.init(mGesturesProcessor);
 
         Resources res = getResources();
-        int colorGreen = Color.parseColor(Consts.VERIFYOO_BLUE);
-        int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
-
         mBtnSave = (Button) findViewById(R.id.btnSave);
-        mBtnSave.setBackgroundColor(colorGreen);
+        mBtnSave.setBackgroundColor(mVerifyooBlue);
 
         mBtnClear = (Button) findViewById(R.id.btnClear);
         mBtnClear.setBackgroundColor(colorGray);
@@ -248,7 +265,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     private String getTitleString(String instructionCode) {
         String title = UtilsConvert.InstructionCodeToInstruction(instructionCode);
 
-        title = String.format("DRAW %s", title);
+        title = String.format("Draw %s", title);
 
         return title;
     }
@@ -280,63 +297,11 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
     }
 
-    private void onClickSave2() {
-        String currentInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
-        GestureContainer tempGestureContainer;
-
-        if (mHashGestures.containsKey(currentInstruction)) {
-            tempGestureContainer = mHashGestures.get(currentInstruction);
-        }
-        else {
-            tempGestureContainer = new GestureContainer(currentInstruction);
-            mHashGestures.put(currentInstruction, tempGestureContainer);
-        }
-
-        Data.UserProfile.Raw.Gesture currentGesture = new Data.UserProfile.Raw.Gesture();
-        currentGesture.ListStrokes = mListStrokes;
-        currentGesture.Instruction = currentInstruction;
-
-        tempGestureContainer.AddGesture(currentGesture);
-        mListStrokes = new ArrayList<>();
-
-        mListGestures.add(currentGesture);
-
-        clearOverlay();
-        ArrayList<Data.UserProfile.Raw.Gesture> listGestures = tempGestureContainer.GetGestures();
-
-        if (listGestures.size() >= Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION && !mHashCompletedInstructions.containsKey(currentInstruction)) {
-            mHashCompletedInstructions.put(currentInstruction, true);
-        }
-
-        mCurrentGesture++;
-        if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
-            mCurrentGesture = 0;
-        }
-
-        if (mHashCompletedInstructions.keySet().size() == Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
-            setTitle("");
-            SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putFloat("Score", (float) -1);
-            editor.commit();
-            new TemplateStorer().execute("");
-        }
-        else {
-            String nextInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
-            while (mHashCompletedInstructions.containsKey(nextInstruction)) {
-                mCurrentGesture++;
-                if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
-                    mCurrentGesture = 0;
-                }
-                nextInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
-            }
-
-            updateTitle(getTitleString(UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture])));
-        }
-    }
-
     private void onClickSave() {
         clearOverlay();
+
+        mBtnSave.setVisibility(View.INVISIBLE);
+        mBtnClear.setVisibility(View.INVISIBLE);
 
         boolean isNumStrokesValid = true;
         String currentInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
@@ -401,6 +366,9 @@ public class VerifyooRegister extends GestureInputAbstract {
                 if (mCurrentGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_REG) {
                     setTitle("");
                     isUpdateTitle = false;
+
+                    updateTitle("");
+                    mProgressBar.setVisibility(View.GONE);
 
                     SharedPreferences prefs = getSharedPreferences("VerifyooPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();

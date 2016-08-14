@@ -52,7 +52,7 @@ public abstract class GestureInputAbstract extends Activity {
             mOverlay = (GestureOverlayView) findViewById(R.id.gesturesOverlay);
             mOverlay.addOnGestureListener(mGesturesProcessor);
             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
-            mOverlay.setBackgroundColor(Color.rgb(88, 88, 88));
+            mOverlay.setBackgroundColor(Color.rgb(Consts.GRAY_SHADE, Consts.GRAY_SHADE, Consts.GRAY_SHADE));
             //mOverlay.setBackgroundResource(R.drawable.back2);
 
             if (IsShowTrail) {

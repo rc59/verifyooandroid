@@ -24,5 +24,5 @@ public class Consts {
     public static final String VERIFYOO_GREEN = "#14781A";
     public static final String VERIFYOO_GRAY = "#6E6E6E";
 
-
+    public static final int GRAY_SHADE = 220;
 }

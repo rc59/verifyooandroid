@@ -2,13 +2,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/black" >
+    android:background="@android:color/white" >
 
     <RelativeLayout
         android:id="@+id/layoutInstruction"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@android:color/white"
         android:gravity="center" >
 
     <TextView
@@ -17,10 +18,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="40dp"
-        android:textColor="@android:color/holo_blue_light"
-        android:background="@android:color/black" />
+        android:textColor="@android:color/holo_blue_light" />
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal" />
 
     <ImageView
         android:id="@+id/imageWait"
@@ -32,13 +38,12 @@
 
     <TextView
         android:id="@+id/txtWait"
-        android:text="Saving Template"
+        android:text="Saving Template..."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
-        android:textColor="@android:color/white"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
 
     <RelativeLayout
@@ -69,45 +74,57 @@
         android:layout_height="0dip"
         android:layout_weight="8"
         android:gestureColor="@android:color/holo_blue_dark"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:gestureStrokeType="multiple" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:gravity="center" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout1"
+            android:orientation="horizontal"
             android:gravity="center" >
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/btnClear"
+                android:layout_weight="1"
                 android:textColor="@android:color/white"
                 android:visibility="invisible"
-                android:drawableLeft="@drawable/restart"
-                android:id="@+id/btnClear" />
+                android:drawablePadding="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="16dp"
+                android:drawableLeft="@drawable/undo"
+                android:id="@+id/btnClear"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/btnSave"
+                android:layout_weight="1"
                 android:textColor="@android:color/white"
                 android:enabled="false"
                 android:visibility="invisible"
                 android:layout_toRightOf="@id/btnClear"
-                android:drawableLeft="@drawable/accept"
+                android:drawableLeft="@drawable/check"
+                android:drawablePadding="16dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:shadowColor="@android:color/holo_green_dark"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:id="@+id/btnSave" />
+                android:id="@+id/btnSave"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

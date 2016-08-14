@@ -108,8 +108,6 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... params) {
             loadTemplate();
-//            TextView txt = (TextView) findViewById(R.id.output);
-//            txt.setText("Executed");
             return null;
         }
 
@@ -163,7 +161,7 @@ public class MainActivity extends ActionBarActivity {
         int color = Color.parseColor(Consts.VERIFYOO_BLUE);
 
         TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
-        txtTitle.setTextColor(color);
+        //txtTitle.setTextColor(color);
 
         mTxtError = (TextView) findViewById(R.id.txtErrorMsg);
 
@@ -176,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
         mTxtStatus = (TextView) findViewById(R.id.txtStatus);
         mTxtTotalTime = (TextView) findViewById(R.id.txtTotalTime);
 
-        mTxtScore.setTextColor(color);
+        //mTxtScore.setTextColor(color);
         mTxtStatus.setTextColor(color);
 
         mTxtUser = (EditText) findViewById(R.id.txtUserName);
@@ -210,12 +208,16 @@ public class MainActivity extends ActionBarActivity {
                 onClickHack();
             }
         });
+
+//        Typeface font = Typeface.createFromAsset(getAssets(), "Prototype.ttf");
+//        mBtnAuth.setTypeface(font);
     }
 
     private void InitScore() {
         mTxtScore.setText("No Score");
         mTxtStatus.setText("");
         mTxtError.setText("");
+        mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
 
     private void onClickReg() {
@@ -375,7 +377,7 @@ public class MainActivity extends ActionBarActivity {
 
                     mTxtScore.setText(result);
 
-                    mResultImage.setVisibility(View.VISIBLE);
+                    //mResultImage.setVisibility(View.VISIBLE);
 
                     setThresholdScore(score);
                     getThresholdScore();
@@ -383,11 +385,13 @@ public class MainActivity extends ActionBarActivity {
                     if (score >= mThreshold) {
                         mResultImage.setImageResource(R.drawable.success);
                         mTxtStatus.setText("Authorized");
-                        mTxtStatus.setTextColor(Color.GREEN);
+                        mTxtStatus.setTextColor(Color.parseColor(Consts.VERIFYOO_BLUE));
+                        mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.verified, 0, 0, 0);
                     } else {
                         mResultImage.setImageResource(R.drawable.failed);
                         mTxtStatus.setText("Not Authorized");
                         mTxtStatus.setTextColor(Color.RED);
+                        mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.notauth, 0, 0, 0);
                     }
                 }
                 else {

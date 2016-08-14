@@ -9,7 +9,7 @@
     <string name="title_activity_verifyoo_register">VerifyooRegister</string>
     <string name="title_activity_verifyoo_authenticate">VerifyooAuthenticate</string>
     <string name="btnSave">  NEXT</string>
-    <string name="btnAuth">Authenticate</string>
+    <string name="btnAuth">Login</string>
     <string name="btnClear">  UNDO</string>
     <string name="gestureStrNone">[None]</string>
     <string name="gestureStrLow">Low</string>
