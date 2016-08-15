@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import java.util.Random;
 
+import Data.MetaData.NormalizedGestureContainer;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
 
@@ -12,6 +13,7 @@ import Data.UserProfile.Raw.Template;
  * Created by roy on 2/25/2016.
  */
 public class UtilsGeneral {
+    public static NormalizedGestureContainer NormalizedGestureContainerObj;
     public static TemplateExtended StoredTemplateExtended;
     public static Template StoredTemplate;
 

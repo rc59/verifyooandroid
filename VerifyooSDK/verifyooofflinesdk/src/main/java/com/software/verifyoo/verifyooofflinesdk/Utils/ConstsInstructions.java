@@ -13,7 +13,7 @@ public class ConstsInstructions {
     public static final String INSTRUCTION_CODE_MLETTER = "MLETTER";
     public static final String INSTRUCTION_CODE_PLETTER = "PLETTER";
     public static final String INSTRUCTION_CODE_RLETTER = "RLETTER";
-    public static final String INSTRUCTION_CODE_ZLETTER = "ZLETTER";
+    public static final String INSTRUCTION_CODE_SLETTER = "SLETTER";
     public static final String INSTRUCTION_CODE_ALETTER = "ALETTER";
 
     public static final String INSTRUCTION_STRING_B = "B";
@@ -24,7 +24,7 @@ public class ConstsInstructions {
     public static final String INSTRUCTION_STRING_M = "M";
     public static final String INSTRUCTION_STRING_P = "P";
     public static final String INSTRUCTION_STRING_R = "R";
-    public static final String INSTRUCTION_STRING_Z = "Z";
+    public static final String INSTRUCTION_STRING_S = "S";
     public static final String INSTRUCTION_STRING_A = "A";
 
 }

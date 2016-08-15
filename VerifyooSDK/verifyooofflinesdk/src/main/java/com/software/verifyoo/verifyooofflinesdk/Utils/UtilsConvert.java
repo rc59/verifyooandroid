@@ -46,8 +46,8 @@ public class UtilsConvert {
             case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_R;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
-                instruction = ConstsInstructions.INSTRUCTION_STRING_Z;
+            case ConstsInstructions.INSTRUCTION_CODE_SLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_S;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_A;

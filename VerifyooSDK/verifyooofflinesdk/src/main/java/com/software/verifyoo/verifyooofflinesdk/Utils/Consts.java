@@ -19,6 +19,7 @@ public class Consts {
 
     public static final String STORAGE_FILE = "template.txt";
     public static final String STORAGE_NAME = "usertemplate1";
+    public static final String STORAGE_FILE_OCR_DB = "ocrDB.txt";
 
     public static final String VERIFYOO_BLUE = "#0474B2";
     public static final String VERIFYOO_GREEN = "#14781A";

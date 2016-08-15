@@ -33,7 +33,7 @@ public class UtilsInstructions {
                 instruction = ConstsInstructions.INSTRUCTION_CODE_RLETTER;
                 break;
             case 8:
-                instruction = ConstsInstructions.INSTRUCTION_CODE_ZLETTER;
+                instruction = ConstsInstructions.INSTRUCTION_CODE_SLETTER;
                 break;
             case 9:
                 instruction = ConstsInstructions.INSTRUCTION_CODE_ALETTER;
@@ -71,7 +71,7 @@ public class UtilsInstructions {
             case ConstsInstructions.INSTRUCTION_CODE_RLETTER:
                 instructionIdx = 7;
                 break;
-            case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
+            case ConstsInstructions.INSTRUCTION_CODE_SLETTER:
                 instructionIdx = 8;
                 break;
             case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
@@ -110,7 +110,7 @@ public class UtilsInstructions {
             case ConstsInstructions.INSTRUCTION_STRING_R:
                 instructionIdx = 7;
                 break;
-            case ConstsInstructions.INSTRUCTION_STRING_Z:
+            case ConstsInstructions.INSTRUCTION_STRING_S:
                 instructionIdx = 8;
                 break;
             case ConstsInstructions.INSTRUCTION_STRING_A:

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureInputAbstract;
+import com.software.verifyoo.verifyooofflinesdk.Models.ModelTemplate;
 import com.software.verifyoo.verifyooofflinesdk.R;
 import com.software.verifyoo.verifyooofflinesdk.ServerAPI.API.ApiMgr;
 import com.software.verifyoo.verifyooofflinesdk.ServerAPI.API.ApiMgrStoreDataParams;
@@ -45,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import Data.MetaData.NormalizedGesture;
+import Data.MetaData.NormalizedGestureContainer;
 import Data.UserProfile.Extended.GestureExtended;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
@@ -53,6 +57,8 @@ import Logic.Comparison.GestureComparer;
 import flexjson.JSONSerializer;
 
 public class VerifyooRegister extends GestureInputAbstract {
+
+    NormalizedGestureContainer mNormalizedGestureContainer = UtilsGeneral.NormalizedGestureContainerObj;
 
     HashMap<String, Boolean> mHashCompletedInstructions;
     HashMap<String, GestureContainer> mHashGestures;
@@ -97,6 +103,15 @@ public class VerifyooRegister extends GestureInputAbstract {
     private int[] mInstructionIndexes;
 
     private ProgressBar mProgressBar;
+
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            onClickSave();
+        }
+    };
 
     private class TemplateStorer extends AsyncTask<String, Void, String> {
         @Override
@@ -165,6 +180,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void updateTitle(String instruction) {
+
         int total = (Consts.DEFAULT_NUM_REQ_GESTURES_REG * Consts.DEFAULT_NUM_REPEATS_PER_INSTRUCTION);
         int currentGeseture = mListGestures.size() + 1;
         String completion = String.format("(%s/%s)", String.valueOf(currentGeseture), String.valueOf(total));
@@ -187,6 +203,10 @@ public class VerifyooRegister extends GestureInputAbstract {
     }
 
     private void init() {
+//        if(mNormalizedGestureContainer == null) {
+//            mNormalizedGestureContainer = new NormalizedGestureContainer();
+//        }
+
         mVerifyooBlue = Color.parseColor(Consts.VERIFYOO_BLUE);
         int colorGray = Color.parseColor(Consts.VERIFYOO_GRAY);
 
@@ -312,27 +332,29 @@ public class VerifyooRegister extends GestureInputAbstract {
                 isNumStrokesValid = false;
             }
 
+            Data.UserProfile.Raw.Gesture originalGesture = mListGestures.get(mCurrentGesture);
+            Data.UserProfile.Raw.Gesture currentGesture = new Data.UserProfile.Raw.Gesture();
+            currentGesture.ListStrokes = mListStrokes;
+            currentGesture.Instruction = originalGesture.Instruction;
+
+            Template originalTemplate = new Template();
+            Template currentTemplate = new Template();
+
+            originalTemplate.ListGestures = new ArrayList<>();
+            originalTemplate.ListGestures.add(originalGesture);
+
+            currentTemplate.ListGestures = new ArrayList<>();
+            currentTemplate.ListGestures.add(currentGesture);
+
+            TemplateExtended originalTemplateExtended = new TemplateExtended(originalTemplate);
+            TemplateExtended currentTemplateExtended = new TemplateExtended(currentTemplate);
+
+            GestureExtended originalGestureExtended = originalTemplateExtended.ListGestureExtended.get(0);
+            GestureExtended currentGestureExtended = currentTemplateExtended.ListGestureExtended.get(0);
+
+//            mNormalizedGestureContainer.AddGesture(UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]), currentGestureExtended.NormalizedGestureObj);
+
             if (isNumStrokesValid) {
-                Data.UserProfile.Raw.Gesture originalGesture = mListGestures.get(mCurrentGesture);
-                Data.UserProfile.Raw.Gesture currentGesture = new Data.UserProfile.Raw.Gesture();
-                currentGesture.ListStrokes = mListStrokes;
-                currentGesture.Instruction = originalGesture.Instruction;
-
-                Template originalTemplate = new Template();
-                Template currentTemplate = new Template();
-
-                originalTemplate.ListGestures = new ArrayList<>();
-                originalTemplate.ListGestures.add(originalGesture);
-
-                currentTemplate.ListGestures = new ArrayList<>();
-                currentTemplate.ListGestures.add(currentGesture);
-
-                TemplateExtended originalTemplateExtended = new TemplateExtended(originalTemplate);
-                TemplateExtended currentTemplateExtended = new TemplateExtended(currentTemplate);
-
-                GestureExtended originalGestureExtended = originalTemplateExtended.ListGestureExtended.get(0);
-                GestureExtended currentGestureExtended = currentTemplateExtended.ListGestureExtended.get(0);
-
                 GestureComparer comparer = new GestureComparer(true);
                 comparer.CompareGestures(originalGestureExtended, currentGestureExtended);
 
@@ -374,6 +396,7 @@ public class VerifyooRegister extends GestureInputAbstract {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putFloat("Score", (float) -1);
                     editor.commit();
+
                     new TemplateStorer().execute("");
                 }
             }
@@ -432,7 +455,10 @@ public class VerifyooRegister extends GestureInputAbstract {
         UtilsGeneral.StoredTemplate = template;
         UtilsGeneral.StoredTemplateExtended = templateExtended;
 
+        ModelTemplate modelTemplate = new ModelTemplate(template);
+
         String jsonTemplate = serializer.deepSerialize(template);
+        //String jsonTemplateOcr = serializer.deepSerialize(mNormalizedGestureContainer);
 
         try {
             String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
@@ -443,17 +469,22 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
 
         OutputStreamWriter outputStreamWriter = null;
+//        OutputStreamWriter outputStreamWriterOcr = null;
         try {
             String fileName = Files.GetFileName(Consts.STORAGE_NAME);
+            String fileNameOcr = Files.GetFileName(Consts.STORAGE_FILE_OCR_DB);
             deleteFile(fileName);
 
             FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
+//            FileOutputStream fOcr = openFileOutput(fileNameOcr, Context.MODE_PRIVATE);
             outputStreamWriter = new OutputStreamWriter(f);
+//            outputStreamWriterOcr = new OutputStreamWriter(fOcr);
         } catch (FileNotFoundException e) {
             handleError(ConstsMessages.E00003);
             e.printStackTrace();
         }
         Files.writeToFile(jsonTemplate, outputStreamWriter);
+//        Files.writeToFile(jsonTemplateOcr, outputStreamWriterOcr);
 
         Intent intent = this.getIntent();
         this.setResult(RESULT_OK, intent);
@@ -561,6 +592,32 @@ public class VerifyooRegister extends GestureInputAbstract {
                 mBtnClear.setVisibility(View.VISIBLE);
 
                 mGesturesProcessor.clearStroke();
+
+                //checkGesture();
+            }
+        }
+
+        private void checkGesture() {
+            if(UtilsGeneral.NormalizedGestureContainerObj != null) {
+                Data.UserProfile.Raw.Gesture currentGesture = new Data.UserProfile.Raw.Gesture();
+
+                currentGesture.ListStrokes = mListStrokes;
+                currentGesture.Instruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
+
+                Template currentTemplate = new Template();
+                currentTemplate.ListGestures = new ArrayList<>();
+                currentTemplate.ListGestures.add(currentGesture);
+
+                TemplateExtended currentTemplateExtended = new TemplateExtended(currentTemplate);
+                GestureExtended currentGestureExtended = currentTemplateExtended.ListGestureExtended.get(0);
+
+                NormalizedGesture tempNormGesture = currentGestureExtended.NormalizedGestureObj;
+
+                boolean isValid = UtilsGeneral.NormalizedGestureContainerObj.CheckGesture(tempNormGesture, currentGesture.Instruction);
+                if (isValid) {
+                    handler.removeCallbacks(runnable);
+                    handler.postDelayed(runnable, 10);
+                }
             }
         }
     }

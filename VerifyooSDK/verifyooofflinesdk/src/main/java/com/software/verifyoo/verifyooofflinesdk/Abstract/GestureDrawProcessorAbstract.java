@@ -139,16 +139,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
             temp = UtilsConvert.ConvertMotionEvent(event);
 
-            temp.AccelerometerX = mAccX;
-            temp.AccelerometerY = mAccY;
-            temp.AccelerometerZ = mAccZ;
+            temp.SetAccelerometerX(mAccX);
+            temp.SetAccelerometerY(mAccY);
+            temp.SetAccelerometerZ(mAccZ);
 
-            temp.GyroX = mGyroX;
-            temp.GyroY = mGyroY;
-            temp.GyroZ = mGyroZ;
+            temp.SetGyroX(mGyroX);
+            temp.SetGyroY(mGyroY);
+            temp.SetGyroZ(mGyroZ);
 
-            temp.VelocityX = mVelocityTracker.getXVelocity();
-            temp.VelocityY = mVelocityTracker.getYVelocity();
+            temp.SetVelocityX(mVelocityTracker.getXVelocity());
+            temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
             mTempStroke.ListEvents.add(temp);
         } catch (Exception exc) {
@@ -174,16 +174,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                     temp.Pressure = event.getHistoricalPressure(idx);
                     temp.TouchSurface = event.getHistoricalSize(idx);
 
-                    temp.AccelerometerX = mAccX;
-                    temp.AccelerometerY = mAccY;
-                    temp.AccelerometerZ = mAccZ;
+                    temp.SetAccelerometerX(mAccX);
+                    temp.SetAccelerometerY(mAccY);
+                    temp.SetAccelerometerZ(mAccZ);
 
-                    temp.GyroX = mGyroX;
-                    temp.GyroY = mGyroY;
-                    temp.GyroZ = mGyroZ;
+                    temp.SetGyroX(mGyroX);
+                    temp.SetGyroY(mGyroY);
+                    temp.SetGyroZ(mGyroZ);
 
-                    temp.VelocityX = mVelocityTracker.getXVelocity();
-                    temp.VelocityY = mVelocityTracker.getYVelocity();
+                    temp.SetVelocityX(mVelocityTracker.getXVelocity());
+                    temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
                     //temp.PointerCount = event.getPointerCount();
 
@@ -192,16 +192,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
 
                 temp = UtilsConvert.ConvertMotionEvent(event);
 
-                temp.AccelerometerX = mAccX;
-                temp.AccelerometerY = mAccY;
-                temp.AccelerometerZ = mAccZ;
+                temp.SetAccelerometerX(mAccX);
+                temp.SetAccelerometerY(mAccY);
+                temp.SetAccelerometerZ(mAccZ);
 
-                temp.GyroX = mGyroX;
-                temp.GyroY = mGyroY;
-                temp.GyroZ = mGyroZ;
+                temp.SetGyroX(mGyroX);
+                temp.SetGyroY(mGyroY);
+                temp.SetGyroZ(mGyroZ);
 
-                temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getYVelocity();
+                temp.SetVelocityX(mVelocityTracker.getXVelocity());
+                temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
 //            if (event.getPointerCount() > 1) {
 //                temp.Xpixel2 = event.getX(1);
@@ -217,16 +217,16 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             } else {
                 temp = UtilsConvert.ConvertMotionEvent(event);
 
-                temp.AccelerometerX = mAccX;
-                temp.AccelerometerY = mAccY;
-                temp.AccelerometerZ = mAccZ;
+                temp.SetAccelerometerX(mAccX);
+                temp.SetAccelerometerY(mAccY);
+                temp.SetAccelerometerZ(mAccZ);
 
-                temp.GyroX = mGyroX;
-                temp.GyroY = mGyroY;
-                temp.GyroZ = mGyroZ;
+                temp.SetGyroX(mGyroX);
+                temp.SetGyroY(mGyroY);
+                temp.SetGyroZ(mGyroZ);
 
-                temp.VelocityX = mVelocityTracker.getXVelocity();
-                temp.VelocityY = mVelocityTracker.getYVelocity();
+                temp.SetVelocityX(mVelocityTracker.getXVelocity());
+                temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
 //            if (event.getPointerCount() > 1) {
 //                temp.Xpixel2 = event.getX(1);

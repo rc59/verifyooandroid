@@ -28,20 +28,20 @@ public class ExpMotionEventCompact {
     public ExpMotionEventCompact(MotionEventCompact motionEventCompact) {
         X = motionEventCompact.Xpixel;
         Y = motionEventCompact.Ypixel;
-        VelocityX = motionEventCompact.VelocityX;
-        VelocityY = motionEventCompact.VelocityY;
-        Velocity = CalcPitagoras(VelocityX, Velocity);
+        VelocityX = motionEventCompact.VelocityX();
+        VelocityY = motionEventCompact.VelocityY();
+        Velocity = CalcPitagoras(VelocityX, VelocityY);
         Pressure = motionEventCompact.Pressure;
         EventTime = motionEventCompact.EventTime;
         TouchSurface = motionEventCompact.TouchSurface;
 
-        AngleX = motionEventCompact.AccelerometerX;
-        AngleY = motionEventCompact.AccelerometerY;
-        AngleZ = motionEventCompact.AccelerometerZ;
+        AngleX = motionEventCompact.AccelerometerX();
+        AngleY = motionEventCompact.AccelerometerY();
+        AngleZ = motionEventCompact.AccelerometerZ();
 
-        GyroX = motionEventCompact.GyroX;
-        GyroY = motionEventCompact.GyroY;
-        GyroZ = motionEventCompact.GyroZ;
+        GyroX = motionEventCompact.GyroX();
+        GyroY = motionEventCompact.GyroY();
+        GyroZ = motionEventCompact.GyroZ();
     }
 
     private double CalcPitagoras(double value1, double value2) {

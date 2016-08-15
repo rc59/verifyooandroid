@@ -48,6 +48,7 @@ import java.util.HashMap;
 
 import Data.Comparison.CompareResultSummary;
 import Data.Comparison.Interfaces.ICompareResult;
+import Data.MetaData.NormalizedGesture;
 import Data.UserProfile.Extended.GestureExtended;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
@@ -58,6 +59,9 @@ import flexjson.JSONSerializer;
 
 
 public class VerifyooAuthenticate extends GestureInputAbstract {
+
+    NormalizedGesture mLastNormalizedGesture;
+    boolean mLastIsNormalizedValid;
 
     public String mCompanyName;
     public String mUserName;
@@ -406,6 +410,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void onClickAuth() {
+//        if (!mLastIsNormalizedValid) {
+//            UtilsGeneral.NormalizedGestureContainerObj.AddGesture(mCurrentInstructionCode, mLastNormalizedGesture);
+//        }
+
         mOverlay.setEnabled(false);
         //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
         mNumGesture++;
@@ -423,6 +431,21 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     }
 
     private void complete() {
+//        OutputStreamWriter outputStreamWriterOcr = null;
+//        try {
+//            JSONSerializer serializer = new JSONSerializer();
+//            String jsonTemplateOcr = serializer.deepSerialize(UtilsGeneral.NormalizedGestureContainerObj);
+//            String fileNameOcr = Files.GetFileName(Consts.STORAGE_FILE_OCR_DB);
+//
+//            FileOutputStream fOcr = openFileOutput(fileNameOcr, Context.MODE_PRIVATE);
+//            outputStreamWriterOcr = new OutputStreamWriter(fOcr);
+//
+//            Files.writeToFile(jsonTemplateOcr, outputStreamWriterOcr);
+//        } catch (FileNotFoundException e) {
+//            handleError(ConstsMessages.E00003);
+//            e.printStackTrace();
+//        }
+
         Template tempTemplateAuth = new Template();
         tempTemplateAuth.ListGestures = new ArrayList<>();
 
@@ -866,19 +889,21 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //                    }
                     mListTempStrokes.add(tempStroke);
 
+                    boolean isStrokeCosineDistanceValid =
+                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
+
+                    if (isStrokeCosineDistanceValid) {
+                        mOverlay.setEnabled(false);
+                        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+                        mNumGesture++;
+                        mListTempStrokes.clear();
+                        handler.removeCallbacks(runnable);
+                        handler.postDelayed(runnable, 10);
+                    }
+
                     if (mNumGesture < mListGesturesToUse.size()) {
                         if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {
-                            boolean isStrokeCosineDistanceValid =
-                                    checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
 
-                            if (isStrokeCosineDistanceValid) {
-                                mOverlay.setEnabled(false);
-                                //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
-                                mNumGesture++;
-                                mListTempStrokes.clear();
-                                handler.removeCallbacks(runnable);
-                                handler.postDelayed(runnable, 10);
-                            }
                         }
                         else {
                             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
@@ -910,6 +935,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             TemplateExtended templateExtended1 = new TemplateExtended(template1);
             TemplateExtended templateExtended2 = new TemplateExtended(template2);
+
+            NormalizedGesture normGesture1 = templateExtended1.ListGestureExtended.get(0).NormalizedGestureObj;
+            NormalizedGesture normGesture2 = templateExtended2.ListGestureExtended.get(0).NormalizedGestureObj;
+
+//            mLastNormalizedGesture = normGesture2;
+//            mLastIsNormalizedValid = UtilsGeneral.NormalizedGestureContainerObj.CheckGesture(normGesture2, gesture1.Instruction);
 
             GestureComparer gestureComparer = new GestureComparer(true);
             gestureComparer.CompareGestures(templateExtended1.ListGestureExtended.get(0), templateExtended2.ListGestureExtended.get(0));

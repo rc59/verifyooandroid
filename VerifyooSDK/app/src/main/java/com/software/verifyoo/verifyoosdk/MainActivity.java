@@ -69,22 +69,30 @@ public class MainActivity extends ActionBarActivity {
     }
 
     protected void loadTemplate() {
+        double tsStart, tsTemp, tsDeserializeTemplates, tsDeserializeOcr;
+
+        tsStart = System.currentTimeMillis()/1000;
 
         UtilsGeneral.StoredTemplate = null;
         UtilsGeneral.StoredTemplateExtended = null;
 
         InputStream inputStream = null;
+//        InputStream inputStreamOcr = null;
         try {
             inputStream = openFileInput(Files.GetFileName(Consts.STORAGE_NAME));
+//            inputStreamOcr = openFileInput(Files.GetFileName(Consts.STORAGE_FILE_OCR_DB));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
 //                mTxtError.setText(e.getMessage());
         }
         String storedTemplate = Files.readFromFile(inputStream);
+//        String storedTemplateOcr = Files.readFromFile(inputStreamOcr);
 
         if (storedTemplate.length() > 0) {
 
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
+//            JSONDeserializer<NormalizedGestureContainer> deserializerOcr = new JSONDeserializer<NormalizedGestureContainer>();
+
             try {
                 try {
                     String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
@@ -93,15 +101,23 @@ public class MainActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                Object listGesturesObj = deserializer.deserialize(storedTemplate);
-                TemplateExtended templateExtended = new TemplateExtended((Template) listGesturesObj);
+                Object listGesturesObj = deserializer.deserialize(storedTemplate, Template.class);
+
+                Template storedTemplateObj = ((Template) listGesturesObj);
+                TemplateExtended templateExtended = new TemplateExtended(storedTemplateObj);
                 UtilsGeneral.StoredTemplateExtended = templateExtended;
-                UtilsGeneral.StoredTemplate = (Template) listGesturesObj;
+                UtilsGeneral.StoredTemplate = storedTemplateObj;
+
+//                UtilsGeneral.NormalizedGestureContainerObj = deserializerOcr.deserialize(storedTemplateOcr);
+//                tsDeserializeOcr  = System.currentTimeMillis()/1000;
+
             } catch (Exception e) {
 //                    mTxtError.setText(e.getMessage());
             }
 
         }
+
+
     }
 
     private class TemplateLoader extends AsyncTask<String, Void, String> {
