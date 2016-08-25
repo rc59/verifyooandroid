@@ -115,6 +115,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         @Override
         public void run() {
             clearOverlay();
+            mNumGesture++;
+            mListTempStrokes.clear();
             String title = getTitleByInstruction();
             if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
                 setTitle(title);
@@ -122,7 +124,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             else {
                 complete();
             }
-            //mOverlay.setBackgroundColor(Color.rgb(44, 44, 44));
             mOverlay.setEnabled(true);
         }
     };
@@ -321,9 +322,14 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mTextViewInstruction3.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(2)));
         mTextViewInstruction4.setText(UtilsConvert.InstructionCodeToInstruction(mListInstructionsAuth.get(3)));
 
-
         int defaultBackColor = mVerifyooColor;
         int defaultTextColor = Color.WHITE;
+
+        if(mNumGesture < mListInstructionsAuth.size()) {
+            String currInstruction = mListInstructionsAuth.get(mNumGesture);
+            double currGestureTime = 1.2 * UtilsGeneral.StoredTemplateExtended.GetGestureMaxTimeInterval(currInstruction);
+            mGesturesProcessor.setGestureTime((long)currGestureTime);
+        }
 
         mTextViewInstruction.setTextColor(defaultBackColor);
         mTextViewInstruction.setBackgroundColor(defaultTextColor);
@@ -764,7 +770,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         double scores = 0;
         double finalScore = 0;
-        if (mListScores.get(0) > 0) {
+        if (mListScores.get(0) > 0.5) {
             if (mListScores.size() > 3) {
                 mListScores.remove(0);
             }
@@ -774,6 +780,22 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             finalScore = scores / 3.75;
         }
 
+        return finalScore;
+    }
+
+    private double getFinalScore1(ArrayList<Double> mListScores) {
+        if (mListScores.size() < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH - 1) {
+            return 0;
+        }
+
+        double p1 = mListScores.get(0);
+        double p2 = mListScores.get(1);
+        double p3 = mListScores.get(2);
+        double p4 = mListScores.get(3);
+
+        double finalScore = (p1*p2*p3*p4)/(p1*p2*p3*p4+(1-p1)*(1-p2)*(1-p3)*(1-p4));
+
+        finalScore =p1*p2*p3*p4*(1-(1-p1)*(1-p2)*(1-p3)*(1-p4));
         return finalScore;
     }
 
@@ -889,17 +911,17 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //                    }
                     mListTempStrokes.add(tempStroke);
 
-                    boolean isStrokeCosineDistanceValid =
-                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
-
-                    if (isStrokeCosineDistanceValid) {
-                        mOverlay.setEnabled(false);
-                        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
-                        mNumGesture++;
-                        mListTempStrokes.clear();
-                        handler.removeCallbacks(runnable);
-                        handler.postDelayed(runnable, 10);
-                    }
+//                    boolean isStrokeCosineDistanceValid =
+//                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
+//
+//                    if (isStrokeCosineDistanceValid) {
+//                        mOverlay.setEnabled(false);
+//                        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+//                        mNumGesture++;
+//                        mListTempStrokes.clear();
+////                        handler.removeCallbacks(runnable);
+////                        handler.postDelayed(runnable, 10);
+//                    }
 
                     if (mNumGesture < mListGesturesToUse.size()) {
                         if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {

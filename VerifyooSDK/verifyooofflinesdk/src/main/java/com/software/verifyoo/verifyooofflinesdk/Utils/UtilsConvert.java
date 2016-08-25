@@ -15,7 +15,6 @@ public class UtilsConvert {
         tempEvent.EventTime = event.getEventTime();
         tempEvent.Pressure = event.getPressure();
         tempEvent.TouchSurface = event.getSize();
-
         return tempEvent;
     }
 

@@ -43,6 +43,7 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     protected int mWidth;
     protected int mHeight;
 
+    protected long mTotalGestureTime;
     Runnable mRunnable;
     private Handler handler = new Handler();
 
@@ -63,6 +64,8 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         mSensorManager = (SensorManager) mApplicationContext.getSystemService(mApplicationContext.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        mOverlay.setGestureStrokeWidth(8);
 
         mSensorListenerAcc = new SensorEventListener() {
             @Override
@@ -128,7 +131,9 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
 
         try {
-            //handler.removeCallbacks(mRunnable);
+            handler.removeCallbacks(mRunnable);
+            handler.postDelayed(mRunnable, mTotalGestureTime);
+
             if (UtilsGeneral.AuthStartTime == 0) {
                 UtilsGeneral.AuthStartTime = new Date().getTime();
             }
@@ -203,16 +208,6 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                 temp.SetVelocityX(mVelocityTracker.getXVelocity());
                 temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
-//            if (event.getPointerCount() > 1) {
-//                temp.Xpixel2 = event.getX(1);
-//                temp.Ypixel2 = event.getY(1);
-//
-//                if (event.getPointerCount() > 2) {
-//                    temp.Xpixel3 = event.getX(2);
-//                    temp.Ypixel3 = event.getY(2);
-//                }
-//            }
-
                 mTempStroke.ListEvents.add(temp);
             } else {
                 temp = UtilsConvert.ConvertMotionEvent(event);
@@ -228,16 +223,6 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
                 temp.SetVelocityX(mVelocityTracker.getXVelocity());
                 temp.SetVelocityY(mVelocityTracker.getYVelocity());
 
-//            if (event.getPointerCount() > 1) {
-//                temp.Xpixel2 = event.getX(1);
-//                temp.Ypixel2 = event.getY(1);
-//
-//                if (event.getPointerCount() > 2) {
-//                    temp.Xpixel3 = event.getX(2);
-//                    temp.Ypixel3 = event.getY(2);
-//                }
-//            }
-
                 mTempStroke.ListEvents.add(temp);
             }
             return;
@@ -246,6 +231,30 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
             String msg = exc.getMessage();
         }
     }
+
+    protected float getGestureWidth(float pressure) {
+        float width = 0;
+
+        float minPressure = (float) 0.2;
+        float maxPressure = (float) 0.7;
+
+        if(pressure >= maxPressure) {
+            width = 15;
+        }
+        if(pressure <= minPressure) {
+            width = 3;
+        }
+        if(pressure > minPressure && pressure < maxPressure) {
+            float diffPressure = pressure - minPressure;
+            float interval = maxPressure - minPressure;
+            float percentage = diffPressure / interval;
+
+            width = (12 * percentage + 3);
+        }
+
+        return width;
+    }
+
 
     public void onGestureCancelled(GestureOverlayView overlay, MotionEvent event) {
 
@@ -258,6 +267,10 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         } catch (Exception exc) {
 
         }
+    }
+
+    public void setGestureTime(long gestureTime) {
+        mTotalGestureTime = gestureTime;
     }
 
     public void setRunnable(Runnable runnable) {

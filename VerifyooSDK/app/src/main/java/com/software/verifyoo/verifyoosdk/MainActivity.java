@@ -31,6 +31,7 @@ import java.security.GeneralSecurityException;
 
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
+import Logic.Comparison.Stats.Norms.NormMgr;
 import flexjson.JSONDeserializer;
 
 
@@ -39,8 +40,6 @@ public class MainActivity extends ActionBarActivity {
     TextView mTxtScore;
     TextView mTxtStatus;
     TextView mTxtTotalTime;
-
-    ImageView mResultImage;
 
     String mUserName;
     String mCompany;
@@ -68,6 +67,10 @@ public class MainActivity extends ActionBarActivity {
         postInit();
     }
 
+    protected void loadNorms() {
+        NormMgr.GetInstance();
+    }
+
     protected void loadTemplate() {
         double tsStart, tsTemp, tsDeserializeTemplates, tsDeserializeOcr;
 
@@ -92,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
 
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
 //            JSONDeserializer<NormalizedGestureContainer> deserializerOcr = new JSONDeserializer<NormalizedGestureContainer>();
-
+            new NormsLoader().execute("");
             try {
                 try {
                     String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
@@ -118,6 +121,14 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+    }
+
+    private class NormsLoader extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            loadNorms();
+            return null;
+        }
     }
 
     private class TemplateLoader extends AsyncTask<String, Void, String> {
@@ -176,15 +187,10 @@ public class MainActivity extends ActionBarActivity {
         Resources res = getResources();
         int color = Color.parseColor(Consts.VERIFYOO_BLUE);
 
-        TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
-        //txtTitle.setTextColor(color);
-
         mTxtError = (TextView) findViewById(R.id.txtErrorMsg);
 
         mImage = (ImageView) findViewById(R.id.welcomeImage);
         mImage.setImageResource(R.drawable.logo);
-
-        mResultImage = (ImageView) findViewById(R.id.resultImage);
 
         mTxtScore = (TextView) findViewById(R.id.txtScore);
         mTxtStatus = (TextView) findViewById(R.id.txtStatus);
@@ -354,7 +360,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mResultImage.setVisibility(View.GONE);
         if (resultCode == RESULT_OK) {
             if (UtilsGeneral.AuthStartTime != 0) {
                 double totalTime = UtilsGeneral.AuthEndTime - UtilsGeneral.AuthStartTime;
@@ -399,12 +404,10 @@ public class MainActivity extends ActionBarActivity {
                     getThresholdScore();
 
                     if (score >= mThreshold) {
-                        mResultImage.setImageResource(R.drawable.success);
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.parseColor(Consts.VERIFYOO_BLUE));
                         mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.verified, 0, 0, 0);
                     } else {
-                        mResultImage.setImageResource(R.drawable.failed);
                         mTxtStatus.setText("Not Authorized");
                         mTxtStatus.setTextColor(Color.RED);
                         mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.notauth, 0, 0, 0);

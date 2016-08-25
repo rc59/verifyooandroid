@@ -53,6 +53,7 @@ public abstract class GestureInputAbstract extends Activity {
             mOverlay.addOnGestureListener(mGesturesProcessor);
             mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
             mOverlay.setBackgroundColor(Color.rgb(Consts.GRAY_SHADE, Consts.GRAY_SHADE, Consts.GRAY_SHADE));
+
             //mOverlay.setBackgroundResource(R.drawable.back2);
 
             if (IsShowTrail) {
