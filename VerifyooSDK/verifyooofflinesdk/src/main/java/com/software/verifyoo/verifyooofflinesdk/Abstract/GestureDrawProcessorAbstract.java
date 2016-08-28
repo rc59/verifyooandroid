@@ -131,6 +131,8 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
     public void onGestureStarted(GestureOverlayView overlay, MotionEvent event) {
 
         try {
+            UtilsGeneral.IsGesturing = true;
+
             handler.removeCallbacks(mRunnable);
             handler.postDelayed(mRunnable, mTotalGestureTime);
 

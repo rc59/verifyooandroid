@@ -17,6 +17,8 @@ public class UtilsGeneral {
     public static TemplateExtended StoredTemplateExtended;
     public static Template StoredTemplate;
 
+    public static boolean IsGesturing;
+
     public static String ResultAnalysis;
     public static double AuthStartTime;
     public static double AuthEndTime;

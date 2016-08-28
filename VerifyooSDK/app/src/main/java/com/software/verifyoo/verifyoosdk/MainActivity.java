@@ -95,7 +95,6 @@ public class MainActivity extends ActionBarActivity {
 
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
 //            JSONDeserializer<NormalizedGestureContainer> deserializerOcr = new JSONDeserializer<NormalizedGestureContainer>();
-            new NormsLoader().execute("");
             try {
                 try {
                     String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
@@ -182,7 +181,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void init() {
-
+        new NormsLoader().execute("");
         setTitle("Verifyoo Demo");
         Resources res = getResources();
         int color = Color.parseColor(Consts.VERIFYOO_BLUE);
@@ -236,7 +235,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void InitScore() {
-        mTxtScore.setText("No Score");
+        mTxtScore.setText("");
         mTxtStatus.setText("");
         mTxtError.setText("");
         mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

@@ -38,7 +38,7 @@
         android:drawableLeft="@drawable/register"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:drawablePadding="16dp"
+        android:drawablePadding="-20dp"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin" />
 
@@ -113,13 +113,13 @@
             android:layout_height="wrap_content"
             android:text="@string/btnAuth"
             android:id="@+id/btnAuth"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:drawablePadding="20dp"
+            android:drawablePadding="-20dp"
             android:drawableLeft="@drawable/login"
             android:layout_gravity="center_horizontal"
-
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
         </LinearLayout>

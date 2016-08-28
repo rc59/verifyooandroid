@@ -111,20 +111,28 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private int mStrokeCount = 0;
     HashMap<String, Double> mHashGesturesCount = new HashMap<>();
 
+    boolean mClearGestureOnceFinished;
+
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            clearOverlay();
-            mNumGesture++;
-            mListTempStrokes.clear();
-            String title = getTitleByInstruction();
-            if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
-                setTitle(title);
+            if(!UtilsGeneral.IsGesturing) {
+                mClearGestureOnceFinished = false;
+                clearOverlay();
+                mNumGesture++;
+                mListTempStrokes.clear();
+                String title = getTitleByInstruction();
+                if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                    setTitle(title);
+                }
+                else {
+                    complete();
+                }
+                mOverlay.setEnabled(true);
             }
             else {
-                complete();
+                mClearGestureOnceFinished = true;
             }
-            mOverlay.setEnabled(true);
         }
     };
 
@@ -327,7 +335,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         if(mNumGesture < mListInstructionsAuth.size()) {
             String currInstruction = mListInstructionsAuth.get(mNumGesture);
-            double currGestureTime = 1.2 * UtilsGeneral.StoredTemplateExtended.GetGestureMaxTimeInterval(currInstruction);
+            double currGestureTime = UtilsGeneral.StoredTemplateExtended.GetGestureMaxTimeInterval(currInstruction);
             mGesturesProcessor.setGestureTime((long)currGestureTime);
         }
 
@@ -452,6 +460,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //            e.printStackTrace();
 //        }
 
+        mOverlay.setEnabled(false);
+
         Template tempTemplateAuth = new Template();
         tempTemplateAuth.ListGestures = new ArrayList<>();
 
@@ -464,11 +474,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         try {
             HashMap<String, Double> compareFilters = new HashMap<>();
-            if (modelName != null && modelName.compareTo("LGE Nexus 5") != 0) {
-                compareFilters = new HashMap<>();
-                compareFilters.put("CompareGesturePressure", (double) 1);
-                compareFilters.put("CompareGestureSurface", (double) 1);
-            }
+//            if (modelName != null && modelName.compareTo("LGE Nexus 5") != 0) {
+//                compareFilters = new HashMap<>();
+//                compareFilters.put("CompareGesturePressure", (double) 1);
+//                compareFilters.put("CompareGestureSurface", (double) 1);
+//            }
 
             if(mTotalStrokes == mListStrokes.size() - mListTempStrokes.size()) {
                 Data.UserProfile.Raw.Gesture tempGestureBase;
@@ -510,7 +520,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                         gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
                     }
                     else {
-                        gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+                        try {
+                            gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth);
+                        } catch (Exception exc) {
+                            String msg = exc.getMessage();
+                        }
                     }
 
                     gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
@@ -882,6 +896,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     public class GestureDrawProcessorAuthenticate extends GestureDrawProcessorAbstract {
         public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
             try {
+                UtilsGeneral.IsGesturing = false;
+
                 mIsClearClicked = false;
                 UtilsGeneral.AuthEndTime = new Date().getTime();
                 super.onGesture(overlay, event);
@@ -910,6 +926,13 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //                        mListTempStrokes.add(tempStroke);
 //                    }
                     mListTempStrokes.add(tempStroke);
+
+
+                    if(mClearGestureOnceFinished) {
+                        handler.removeCallbacks(runnable);
+                        handler.postDelayed(runnable, 10);
+                        mClearGestureOnceFinished = false;
+                    }
 
 //                    boolean isStrokeCosineDistanceValid =
 //                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);

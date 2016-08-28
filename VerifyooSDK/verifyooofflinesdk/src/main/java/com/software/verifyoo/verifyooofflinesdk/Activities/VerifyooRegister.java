@@ -134,8 +134,8 @@ public class VerifyooRegister extends GestureInputAbstract {
             mTextViewWait.setVisibility(View.VISIBLE);
 
             mOverlay.setVisibility(View.INVISIBLE);
-            mBtnSave.setVisibility(View.INVISIBLE);
-            mBtnClear.setVisibility(View.INVISIBLE);
+
+            setButtonsStatus(false);
         }
 
         @Override
@@ -248,7 +248,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         mBtnClear = (Button) findViewById(R.id.btnClear);
         mBtnClear.setBackgroundColor(colorGray);
 
-
+        mBtnClear.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
+        mBtnSave.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,9 +295,22 @@ public class VerifyooRegister extends GestureInputAbstract {
         mInstructionIndexes = UtilsGeneral.generateInstructionsList(Consts.TOTAL_NUM_GESTURES);
     }
 
+    private void setButtonsStatus(boolean isEnabled) {
+        mBtnSave.setEnabled(isEnabled);
+        mBtnClear.setEnabled(isEnabled);
+
+        if(isEnabled) {
+            mBtnClear.getBackground().setAlpha(Consts.NORMAL_BUTTON_ALPHA);
+            mBtnSave.getBackground().setAlpha(Consts.NORMAL_BUTTON_ALPHA);
+        }
+        else {
+            mBtnClear.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
+            mBtnSave.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
+        }
+    }
+
     private void onClickClear() {
-        mBtnSave.setVisibility(View.INVISIBLE);
-        mBtnClear.setVisibility(View.INVISIBLE);
+        setButtonsStatus(false);
 
         mIsFirstGestureEntered = false;
         clearOverlay();
@@ -320,8 +334,7 @@ public class VerifyooRegister extends GestureInputAbstract {
     private void onClickSave() {
         clearOverlay();
 
-        mBtnSave.setVisibility(View.INVISIBLE);
-        mBtnClear.setVisibility(View.INVISIBLE);
+        setButtonsStatus(false);
 
         boolean isNumStrokesValid = true;
         String currentInstruction = UtilsInstructions.GetInstruction(mInstructionIndexes[mCurrentGesture]);
@@ -356,7 +369,13 @@ public class VerifyooRegister extends GestureInputAbstract {
 
             if (isNumStrokesValid) {
                 GestureComparer comparer = new GestureComparer(true);
-                comparer.CompareGestures(originalGestureExtended, currentGestureExtended);
+                try {
+                    comparer.CompareGestures(originalGestureExtended, currentGestureExtended);
+                }
+                catch (Exception exc) {
+                    String msg = exc.getMessage();
+                }
+
 
                 double cosineDistance = comparer.GetMinCosineDistance();
 
@@ -588,12 +607,9 @@ public class VerifyooRegister extends GestureInputAbstract {
                 mListStrokes.add(tempStroke);
                 mListStrokesTemp.add(tempStroke);
 
-                mBtnSave.setVisibility(View.VISIBLE);
-                mBtnClear.setVisibility(View.VISIBLE);
+                setButtonsStatus(true);
 
                 mGesturesProcessor.clearStroke();
-
-                //checkGesture();
             }
         }
 
