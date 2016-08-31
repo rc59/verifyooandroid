@@ -117,10 +117,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         @Override
         public void run() {
             if(!UtilsGeneral.IsGesturing) {
-                mClearGestureOnceFinished = false;
+                //mClearGestureOnceFinished = false;
                 clearOverlay();
-                mNumGesture++;
-                mListTempStrokes.clear();
                 String title = getTitleByInstruction();
                 if (mNumGesture < Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
                     setTitle(title);
@@ -793,6 +791,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             finalScore = scores / 3.75;
         }
+        else {
+            scores = mListScores.get(0) + mListScores.get(1) + mListScores.get(2) * 1.25 + mListScores.get(3)* 1.5 ;
+            finalScore = scores / 4.75;
+        }
 
         return finalScore;
     }
@@ -927,24 +929,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //                    }
                     mListTempStrokes.add(tempStroke);
 
+//                    if(mClearGestureOnceFinished) {
+//                        handler.removeCallbacks(runnable);
+//                        handler.postDelayed(runnable, 10);
+//                        mClearGestureOnceFinished = false;
+//                    }
 
-                    if(mClearGestureOnceFinished) {
+                    boolean isStrokeCosineDistanceValid =
+                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
+
+                    if (isStrokeCosineDistanceValid) {
+                        mOverlay.setEnabled(false);
+                        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
+                        mNumGesture++;
+                        mListTempStrokes.clear();
                         handler.removeCallbacks(runnable);
                         handler.postDelayed(runnable, 10);
-                        mClearGestureOnceFinished = false;
                     }
-
-//                    boolean isStrokeCosineDistanceValid =
-//                            checkCosineDistance(mListGesturesToUse.get(mNumGesture).ListStrokes, mListTempStrokes);
-//
-//                    if (isStrokeCosineDistanceValid) {
-//                        mOverlay.setEnabled(false);
-//                        //mOverlay.setBackgroundColor(Color.rgb(77, 77, 77));
-//                        mNumGesture++;
-//                        mListTempStrokes.clear();
-////                        handler.removeCallbacks(runnable);
-////                        handler.postDelayed(runnable, 10);
-//                    }
 
                     if (mNumGesture < mListGesturesToUse.size()) {
                         if (mListGesturesToUse.get(mNumGesture).ListStrokes.size() == mListTempStrokes.size()) {

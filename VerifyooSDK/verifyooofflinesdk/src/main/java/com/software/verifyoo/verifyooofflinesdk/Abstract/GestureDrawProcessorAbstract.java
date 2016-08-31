@@ -133,8 +133,8 @@ public abstract class GestureDrawProcessorAbstract implements GestureOverlayView
         try {
             UtilsGeneral.IsGesturing = true;
 
-            handler.removeCallbacks(mRunnable);
-            handler.postDelayed(mRunnable, mTotalGestureTime);
+//            handler.removeCallbacks(mRunnable);
+//            handler.postDelayed(mRunnable, mTotalGestureTime);
 
             if (UtilsGeneral.AuthStartTime == 0) {
                 UtilsGeneral.AuthStartTime = new Date().getTime();

@@ -86,7 +86,6 @@
                 android:drawablePadding="-16dp"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:id="@+id/btnClear"
                 android:elegantTextHeight="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -96,7 +95,6 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/btnSave"
-                android:visibility="gone"
                 android:textColor="@android:color/white"
                 android:drawableLeft="@drawable/check"
                 android:drawablePadding="-16dp"
