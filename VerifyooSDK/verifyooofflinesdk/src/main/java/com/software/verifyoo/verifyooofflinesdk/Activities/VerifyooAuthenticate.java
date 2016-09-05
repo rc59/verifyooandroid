@@ -528,6 +528,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                     GestureExtended gestureExtendedAuth = templateExtendedAuth.ListGestureExtended.get(idxGesture);
                     GestureExtended gestureExtendedBase = mListGesturesToUse.get(idxGesture);
 
+                    gestureComparer = new GestureComparer(true);
+
                     if (compareFilters.keySet().size() > 0) {
                         gestureComparer.CompareGestures(gestureExtendedBase, gestureExtendedAuth, compareFilters);
                     }
