@@ -14,6 +14,15 @@
         android:gravity="center" >
 
         <TextView
+
+            android:id="@+id/txtVerifying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_blue_light" />
+
+        <TextView
             android:text="G"
             android:id="@+id/textInstruction"
             android:layout_width="wrap_content"

@@ -442,6 +442,21 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mOverlay.setEnabled(true);
     }
 
+    private void disableOverlayAndButtons() {
+        TextView txtVerifying = (TextView) findViewById(R.id.txtVerifying);
+        txtVerifying.setVisibility(View.VISIBLE);
+        mTextViewInstruction.setVisibility(View.GONE);
+        mTextViewInstruction2.setVisibility(View.GONE);
+        mTextViewInstruction3.setVisibility(View.GONE);
+        mTextViewInstruction4.setVisibility(View.GONE);
+        mOverlay.setEnabled(false);
+        mOverlay.setBackgroundColor(Color.rgb(Consts.GRAY_SHADE_DARK, Consts.GRAY_SHADE_DARK, Consts.GRAY_SHADE_DARK));
+        mBtnAuth.setEnabled(false);
+        mBtnAuth.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
+        mBtnClear.setEnabled(false);
+        mBtnClear.getBackground().setAlpha(Consts.TRANSPARENT_BUTTON_ALPHA);
+    }
+
     private void complete() {
 //        OutputStreamWriter outputStreamWriterOcr = null;
 //        try {
@@ -457,8 +472,6 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //            handleError(ConstsMessages.E00003);
 //            e.printStackTrace();
 //        }
-
-        mOverlay.setEnabled(false);
 
         Template tempTemplateAuth = new Template();
         tempTemplateAuth.ListGestures = new ArrayList<>();
@@ -479,6 +492,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //            }
 
             if(mTotalStrokes == mListStrokes.size() - mListTempStrokes.size()) {
+
                 Data.UserProfile.Raw.Gesture tempGestureBase;
                 Data.UserProfile.Raw.Gesture tempGestureAuth;
                 int numStrokes;
@@ -945,6 +959,12 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                         mListTempStrokes.clear();
                         handler.removeCallbacks(runnable);
                         handler.postDelayed(runnable, 10);
+
+                        if (mNumGesture >= Consts.DEFAULT_NUM_REQ_GESTURES_AUTH) {
+                            if(mTotalStrokes == mListStrokes.size() - mListTempStrokes.size()) {
+                                disableOverlayAndButtons();
+                            }
+                        }
                     }
 
                     if (mNumGesture < mListGesturesToUse.size()) {
@@ -989,7 +1009,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 //            mLastIsNormalizedValid = UtilsGeneral.NormalizedGestureContainerObj.CheckGesture(normGesture2, gesture1.Instruction);
 
             GestureComparer gestureComparer = new GestureComparer(true);
-            gestureComparer.CompareGestures(templateExtended1.ListGestureExtended.get(0), templateExtended2.ListGestureExtended.get(0));
+            gestureComparer.CompareGestureShapes(templateExtended1.ListGestureExtended.get(0), templateExtended2.ListGestureExtended.get(0));
             boolean result = gestureComparer.IsStrokeCosineDistanceValid();
 
             return result;

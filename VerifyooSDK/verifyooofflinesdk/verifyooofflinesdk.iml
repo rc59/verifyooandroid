@@ -96,6 +96,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="verifyooBL" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-basement-8.1.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appindexing-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="JTransforms-3.1" level="project" />
     <orderEntry type="library" exported="" name="flexjson-2.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />

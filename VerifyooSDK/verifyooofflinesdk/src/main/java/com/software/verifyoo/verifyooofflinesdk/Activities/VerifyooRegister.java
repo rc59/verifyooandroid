@@ -370,18 +370,14 @@ public class VerifyooRegister extends GestureInputAbstract {
             if (isNumStrokesValid) {
                 GestureComparer comparer = new GestureComparer(true);
                 try {
-                    comparer.CompareGestures(originalGestureExtended, currentGestureExtended);
+                    comparer.CompareGestureShapes(originalGestureExtended, currentGestureExtended);
                 }
                 catch (Exception exc) {
                     String msg = exc.getMessage();
                 }
 
 
-                double cosineDistance = comparer.GetMinCosineDistance();
-
-                if (cosineDistance < 1) {
-                    isNumStrokesValid = false;
-                }
+                isNumStrokesValid = comparer.IsStrokeCosineDistanceValid();
             }
         }
 

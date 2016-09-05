@@ -26,7 +26,7 @@ public class Consts {
     public static final String VERIFYOO_GRAY = "#6E6E6E";
 
     public static final int GRAY_SHADE = 220;
-    public static final int GRAY_SHADE_DARK = 150;
+    public static final int GRAY_SHADE_DARK = 200;
     public static final int TRANSPARENT_BUTTON_ALPHA = 80;
     public static final int NORMAL_BUTTON_ALPHA = 255;
 }
