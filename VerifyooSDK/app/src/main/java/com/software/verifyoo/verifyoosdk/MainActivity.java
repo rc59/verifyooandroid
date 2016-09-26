@@ -63,8 +63,10 @@ public class MainActivity extends ActionBarActivity {
         mUserName = "";
         mCompany = "Verifyoo";
 
-        init();
-        postInit();
+        Intent i = new Intent(getApplicationContext(), Main2Activity.class);
+        startActivity(i);
+//        init();
+//        postInit();
     }
 
     protected void loadNorms() {
@@ -82,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
         InputStream inputStream = null;
 //        InputStream inputStreamOcr = null;
         try {
-            inputStream = openFileInput(Files.GetFileName(Consts.STORAGE_NAME));
+            inputStream = openFileInput(Files.GetFileName(Files.GetFileName(UtilsGeneral.GetStorageName(mUserName))));
 //            inputStreamOcr = openFileInput(Files.GetFileName(Consts.STORAGE_FILE_OCR_DB));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -97,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
 //            JSONDeserializer<NormalizedGestureContainer> deserializerOcr = new JSONDeserializer<NormalizedGestureContainer>();
             try {
                 try {
-                    String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
+                    String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
                     storedTemplate = AESCrypt.decrypt(key, storedTemplate);
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();
@@ -425,14 +427,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if(UtilsGeneral.StoredTemplate == null) {
-            mBtnAuth.setVisibility(View.GONE);
-        }
-        else {
-            mBtnReg.setVisibility(View.GONE);
-            mBtnAuth.setVisibility(View.VISIBLE);
-            loadUserName();
-        }
+//        if(UtilsGeneral.StoredTemplate == null) {
+//            mBtnAuth.setVisibility(View.GONE);
+//        }
+//        else {
+//            mBtnReg.setVisibility(View.GONE);
+//            mBtnAuth.setVisibility(View.VISIBLE);
+//            loadUserName();
+//        }
     }
 
     @Override

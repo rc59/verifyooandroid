@@ -17,11 +17,11 @@ public class Consts {
 
     public static final int DEFAULT_DELAY = 700;
 
-    public static final String STORAGE_FILE = "template.txt";
-    public static final String STORAGE_NAME = "usertemplate1";
-    public static final String STORAGE_FILE_OCR_DB = "ocrDB.txt";
+    public static final String STORAGE_NAME = "template";
+    public static final String STORAGE_FILE_OCR_DB1 = "ocrDB.txt";
 
     public static final String VERIFYOO_BLUE = "#0474B2";
+    public static final String VERIFYOO_RED = "#CA0000";
     public static final String VERIFYOO_GREEN = "#14781A";
     public static final String VERIFYOO_GRAY = "#6E6E6E";
 

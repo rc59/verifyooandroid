@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
  */
 public class Files {
     public static String GetFileName(String userName) {
-        String fileName = String.format("%s-%s", userName, Consts.STORAGE_FILE);
+        String fileName = String.format("%s-%s", userName, Consts.STORAGE_NAME);
         return fileName;
     }
 

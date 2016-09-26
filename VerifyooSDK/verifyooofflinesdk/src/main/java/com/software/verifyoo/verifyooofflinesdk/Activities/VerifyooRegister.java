@@ -476,7 +476,7 @@ public class VerifyooRegister extends GestureInputAbstract {
         //String jsonTemplateOcr = serializer.deepSerialize(mNormalizedGestureContainer);
 
         try {
-            String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
+            String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
             jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -486,8 +486,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         OutputStreamWriter outputStreamWriter = null;
 //        OutputStreamWriter outputStreamWriterOcr = null;
         try {
-            String fileName = Files.GetFileName(Consts.STORAGE_NAME);
-            String fileNameOcr = Files.GetFileName(Consts.STORAGE_FILE_OCR_DB);
+            String fileName = Files.GetFileName(UtilsGeneral.GetStorageName(mUserName));
+            //String fileNameOcr = Files.GetFileName(Consts.STORAGE_FILE_OCR_DB);
             deleteFile(fileName);
 
             FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);

@@ -13,12 +13,15 @@ import Data.UserProfile.Raw.Template;
  * Created by roy on 2/25/2016.
  */
 public class UtilsGeneral {
+    public static double TempThreshold;
+
     public static NormalizedGestureContainer NormalizedGestureContainerObj;
     public static TemplateExtended StoredTemplateExtended;
     public static Template StoredTemplate;
 
     public static boolean IsGesturing;
 
+    public static String CurrentUser;
     public static String ResultAnalysis;
     public static double AuthStartTime;
     public static double AuthEndTime;
@@ -27,6 +30,11 @@ public class UtilsGeneral {
         int x = 1;
         int y = 0;
         x = x / y;
+    }
+
+    public static String GetStorageName(String userName) {
+        String key = String.format("%s-%s", Consts.STORAGE_NAME, userName);
+        return key;
     }
 
     public static String GetUserKey(String userName) {

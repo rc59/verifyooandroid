@@ -24,28 +24,15 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:visibility="invisible"
         android:layout_gravity="center_horizontal"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btnReg"
-        android:id="@+id/btnReg"
-        android:visibility="gone"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/white"
-        android:drawableLeft="@drawable/register"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:drawablePadding="-20dp"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_vertical_margin" />
+
 
     <TextView
         android:id="@+id/txtScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
@@ -99,17 +86,34 @@
         android:textColor="@android:color/holo_blue_dark"
         android:gravity="center_horizontal" />
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnReg"
+        android:id="@+id/btnReg"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:drawablePadding="-20dp"
+        android:drawableLeft="@drawable/register"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="10"
         android:gravity="bottom" >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout1"
             android:orientation="horizontal"
             android:gravity="center" >
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

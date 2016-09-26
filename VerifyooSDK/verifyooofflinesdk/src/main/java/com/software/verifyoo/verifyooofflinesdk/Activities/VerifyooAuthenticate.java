@@ -66,6 +66,8 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     public String mCompanyName;
     public String mUserName;
 
+    boolean mIsHack;
+
     private ArrayList<Double> mListScores;
 
     private int mNumGesture;
@@ -161,6 +163,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             mCompanyName = getIntent().getStringExtra(VerifyooConsts.EXTRA_STRING_COMPANY_NAME);
             mUserName = getIntent().getStringExtra(VerifyooConsts.EXTRA_STRING_USER_NAME);
+            mIsHack = getIntent().getBooleanExtra("IsHack", false);
         }
 
         if (mUserName == null || mUserName.length() == 0) {
@@ -267,7 +270,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
                 try {
                     try {
-                        String key = UtilsGeneral.GetUserKey(mUserName);
+                        String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
                         storedTemplate = AESCrypt.decrypt(key, storedTemplate);
                     } catch (GeneralSecurityException e) {
                         e.printStackTrace();
@@ -557,10 +560,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
 
             finalScore = getFinalScore(mListScores);
+            String strFinalScore = Double.toString(finalScore);
+            if(strFinalScore.length() > 7) {
+                strFinalScore = strFinalScore.substring(0, 7);
+            }
+            UtilsGeneral.ResultAnalysis = String.format("SCORE: %s DETAILS: %s", strFinalScore, UtilsGeneral.ResultAnalysis);
 
             try {
                 WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-                ApiMgrStoreDataParams params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Authenticate", wm, mXdpi, mYdpi, true);
+
+                ApiMgrStoreDataParams params;
+                if(mIsHack) {
+                    params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Hack", wm, mXdpi, mYdpi, true);
+                }
+                else {
+                    params = new ApiMgrStoreDataParams(mUserName, mCompanyName, "Authenticate", wm, mXdpi, mYdpi, true);
+                }
+
                 params.Score = finalScore;
                 params.AnalysisString = UtilsGeneral.ResultAnalysis;
                 mApiMgr.StoreData(params, tempTemplateAuth);
@@ -665,6 +681,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
         UtilsGeneral.StoredTemplate = storedTemplate;
         UtilsGeneral.StoredTemplateExtended = new TemplateExtended(storedTemplate);
+        UtilsGeneral.StoredTemplateExtended.Name = mUserName;
 
         new TemplateStorer().execute("");
     }
@@ -679,7 +696,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             String jsonTemplate = serializer.deepSerialize(template);
 
             try {
-                String key = UtilsGeneral.GetUserKey(Consts.STORAGE_NAME);
+                String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
                 jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
@@ -688,7 +705,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
             OutputStreamWriter outputStreamWriter = null;
             try {
-                String fileName = Files.GetFileName(Consts.STORAGE_NAME);
+                String fileName = Files.GetFileName(UtilsGeneral.GetStorageName(mUserName));
                 deleteFile(fileName);
 
                 FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
