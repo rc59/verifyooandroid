@@ -27,7 +27,7 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
 
         try {
             mSuccess = false;
-            String urlString = "http://52.26.178.48/shapes/createtemplateDemo";
+            String urlString = "http://52.29.210.15/shapes/createtemplateDemo";
             //String urlString = "http://localhost:3001/shapes/createTemplateDemo";
             URL url = new URL(urlString);
 

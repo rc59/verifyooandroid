@@ -54,6 +54,7 @@ import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
 import Data.UserProfile.Raw.Template;
 import Logic.Comparison.GestureComparer;
+import Logic.Comparison.StrokeComparer;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
@@ -194,7 +195,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         mThreshold = prefs.getFloat("Score", -1);
 
         if (mThreshold == -1) {
-            mThreshold = 0.85;
+            mThreshold = 0.95;
         }
 
         initInstructionIndexes();
@@ -544,14 +545,14 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                         }
                     }
 
-                    gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer.GetResultsSummary(), gestureComparer.GetMinCosineDistance());
+                    gestureResultSummary = resultSummaryToString(gestureExtendedBase.Instruction, gestureComparer, gestureComparer.GetMinCosineDistance());
 
                     double score = gestureComparer.GetScore();
                     String strScore = String.valueOf(score);
                     if (strScore.length() > 5) {
                         strScore = strScore.substring(0, 5);
                     }
-                    stringBuilder.append(String.format("[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
+                    stringBuilder.append(String.format("\n\n[%s: Score:%s %s], ", String.valueOf(idxGesture),  strScore, gestureResultSummary));
 
                     mListScores.add(score);
                 }
@@ -588,7 +589,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 isAuth = true;
 
                 try {
-                    UpdateTemplate();
+                    //UpdateTemplate();
                 }
                 catch (Exception exc) {
                     handleError(String.format(ConstsMessages.E00006, exc.getMessage()));
@@ -733,8 +734,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         }
     }
 
-    private String resultSummaryToString(String instruction, CompareResultSummary compareResultSummary, double cosineScore) {
+    private String resultSummaryToString(String instruction, GestureComparer gestureComparer, double cosineScore) {
         StringBuilder stringBuilder = new StringBuilder();
+
+        CompareResultSummary compareResultSummary = gestureComparer.GetResultsSummary();
+        ArrayList<StrokeComparer> listStrokeComparer = gestureComparer.GetStrokeComparers();
 
         ICompareResult compareResult;
         String paramName;
@@ -762,11 +766,23 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
             }
         });
 
+        int cosineInt = (int)(cosineScore * 100);
+        cosineScore = cosineInt;
+        cosineScore = cosineScore / 100;
 
-        tempParamSummary = String.format("{Cosine Distance: %s}, ", cosineScore);
+        tempParamSummary = String.format("\n{Instruction: %s}, ", instruction);
         stringBuilder.append(tempParamSummary);
 
-        tempParamSummary = String.format("{Instruction: %s}, ", instruction);
+//        tempParamSummary = String.format("\n{Cosine Distance: %s}, ", RoundValue(cosineScore));
+//        stringBuilder.append(tempParamSummary);
+
+        tempParamSummary = String.format("\n{DTWScore: %s}, ", RoundValue(gestureComparer.DtwScore));
+        stringBuilder.append(tempParamSummary);
+
+        tempParamSummary = String.format("\n{PCAScore: %s}, ", RoundValue(gestureComparer.PcaScore));
+        stringBuilder.append(tempParamSummary);
+
+        tempParamSummary = String.format("\n{%s: %s}, ", "AvgSurfaceScore", RoundValue(gestureComparer.AvgSurfaceScore));
         stringBuilder.append(tempParamSummary);
 
         for(int idx = 0; idx < compareResultSummary.ListCompareResults.size(); idx++) {
@@ -786,13 +802,60 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 paramWeightStr = paramWeightStr.substring(0, maxLength);
             }
 
-            tempParamSummary = String.format("{%s: %s (%s)}, ", paramName, paramScoreStr, paramWeightStr);
+            tempParamSummary = String.format("\n{%s: %s (%s)}, ", paramName, paramScoreStr, compareResult.GetOriginalValue());
 
             stringBuilder.append(tempParamSummary);
         }
 
+        StrokeComparer tempStrokeComparer;
+        ArrayList<ICompareResult> listParams;
+        for(int idxComparer = 0; idxComparer < listStrokeComparer.size(); idxComparer++) {
+            tempStrokeComparer = listStrokeComparer.get(idxComparer);
+            stringBuilder.append(String.format("\n{Stroke: %s: {", idxComparer));
+
+            listParams = tempStrokeComparer.GetResultsSummary().ListCompareResults;
+
+            Collections.sort(listParams, new Comparator<ICompareResult>() {
+                @Override
+                public int compare(ICompareResult score1, ICompareResult score2) {
+                    if (Math.abs(score1.GetValue()) > Math.abs(score2.GetValue())) {
+                        return 1;
+                    }
+                    if (Math.abs(score1.GetValue()) < Math.abs(score2.GetValue())) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            });
+
+            tempParamSummary = String.format("\n{%s: %s}, ", "CosineDistance", RoundValue(tempStrokeComparer.GetMinCosineDistance()));
+            stringBuilder.append(tempParamSummary);
+
+            tempParamSummary = String.format("\n{%s: %s}, ", "DtwVelocities", RoundValue(tempStrokeComparer.DtwSpatialTotalScore));
+            stringBuilder.append(tempParamSummary);
+
+            tempParamSummary = String.format("\n{%s: %s}, ", "PcaScore", RoundValue(tempStrokeComparer.PcaScoreFinal));
+            stringBuilder.append(tempParamSummary);
+
+            String s = "";
+            for(int idxParam = 0; idxParam < listParams.size(); idxParam++) {
+                tempParamSummary = String.format("\n{%s: %s (%s)}, ", listParams.get(idxParam).GetName(), RoundValue(listParams.get(idxParam).GetValue()), listParams.get(idxParam).GetOriginalValue());
+                stringBuilder.append(tempParamSummary);
+            }
+            stringBuilder.append("\n}");
+        }
+
         return stringBuilder.toString();
     }
+
+    private double RoundValue(double value) {
+        int valueInt = (int)(value * 100);
+        value = valueInt;
+        value = value / 100;
+
+        return value;
+    }
+
 
     private Data.UserProfile.Raw.Gesture getGestureByInstruction(ArrayList<Data.UserProfile.Raw.Gesture> listGestures, String instructionCode) {
         Data.UserProfile.Raw.Gesture selectedGesture = null;

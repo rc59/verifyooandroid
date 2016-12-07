@@ -51,6 +51,38 @@ public class UtilsConvert {
             case ConstsInstructions.INSTRUCTION_CODE_ALETTER:
                 instruction = ConstsInstructions.INSTRUCTION_STRING_A;
                 break;
+
+
+            case ConstsInstructions.INSTRUCTION_CODE_GETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_G;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_HLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_H;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_ILETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_I;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_JLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_J;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_QLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_Q;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_TLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_T;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_WLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_W;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_YLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_Y;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_ZLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_Z;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_NLETTER:
+                instruction = ConstsInstructions.INSTRUCTION_STRING_N;
+                break;
         }
 
         return instruction;

@@ -21,6 +21,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/flexjson-2.1.jar')
+    compile files('libs/gson-2.8.0.jar')
     compile files('libs/verifyooBL.jar')
     compile 'com.android.support:appcompat-v7:23.0.1'
 }

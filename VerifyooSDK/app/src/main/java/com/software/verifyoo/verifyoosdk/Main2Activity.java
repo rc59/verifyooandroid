@@ -180,6 +180,8 @@ public class Main2Activity extends ActionBarActivity {
         NormMgr.GetInstance();
         if (storedTemplate.length() > 0) {
 
+
+
             JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
             try {
                 try {
@@ -219,7 +221,7 @@ public class Main2Activity extends ActionBarActivity {
                     score = Math.round(score);
                     score = score / 10000;
 
-                    if (score >= UtilsGeneral.TempThreshold) {
+                    if (score >= 0.9) {
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.parseColor(Consts.VERIFYOO_BLUE));
                         mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.verified, 0, 0, 0);

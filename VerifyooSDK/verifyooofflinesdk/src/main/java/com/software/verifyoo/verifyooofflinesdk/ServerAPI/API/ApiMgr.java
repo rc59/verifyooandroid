@@ -69,7 +69,7 @@ public class ApiMgr {
         tempExpTemplate.State = mState;
         tempExpTemplate.OS = Build.VERSION.RELEASE;
         tempExpTemplate.ModelName = getDeviceName();
-        tempExpTemplate.DeviceId = Build.SERIAL;
+        tempExpTemplate.DeviceId = "fake";//Build.SERIAL;
 
         Display display = mWindowManager.getDefaultDisplay();
         Point size = new Point();
