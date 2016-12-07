@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureDrawProcessorAbstract;
 import com.software.verifyoo.verifyooofflinesdk.Abstract.GestureInputAbstract;
 import com.software.verifyoo.verifyooofflinesdk.Models.ModelTemplate;
@@ -54,6 +56,7 @@ import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
 import Data.UserProfile.Raw.Template;
 import Logic.Comparison.GestureComparer;
+import Logic.Comparison.Stats.Norms.NormMgr;
 import flexjson.JSONSerializer;
 
 public class VerifyooRegister extends GestureInputAbstract {
@@ -113,6 +116,28 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
     };
 
+    private class NormsLoader extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            NormMgr.GetInstance();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
     private class TemplateStorer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -152,6 +177,7 @@ public class VerifyooRegister extends GestureInputAbstract {
             mIsParamsValid = true;
             checkParameters();
             if (mIsParamsValid) {
+                new NormsLoader().execute("");
                 init();
             }
         } catch (Exception exc) {
@@ -212,7 +238,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        mProgressBar.setMax(40);
+        mProgressBar.setMax(20);
         mProgressBar.setProgress(0);
 
         mHashCompletedInstructions = new HashMap<>();
@@ -450,6 +476,8 @@ public class VerifyooRegister extends GestureInputAbstract {
         }
 
         JSONSerializer serializer = new JSONSerializer();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
 
 //        TemplateExtended templateExtended = new TemplateExtended(template);
 //        GestureExtended gestureExtended;
@@ -472,7 +500,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         ModelTemplate modelTemplate = new ModelTemplate(template);
 
-        String jsonTemplate = serializer.deepSerialize(template);
+        String jsonTemplate = gson.toJson(template); //serializer.deepSerialize(template);
         //String jsonTemplateOcr = serializer.deepSerialize(mNormalizedGestureContainer);
 
         try {
@@ -489,6 +517,9 @@ public class VerifyooRegister extends GestureInputAbstract {
             String fileName = Files.GetFileName(UtilsGeneral.GetStorageName(mUserName));
             //String fileNameOcr = Files.GetFileName(Consts.STORAGE_FILE_OCR_DB);
             deleteFile(fileName);
+
+            String fileNameMetaData = Files.GetFileNameUpdatedNorms(UtilsGeneral.GetStorageName(mUserName));
+            deleteFile(fileNameMetaData);
 
             FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
 //            FileOutputStream fOcr = openFileOutput(fileNameOcr, Context.MODE_PRIVATE);

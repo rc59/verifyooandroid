@@ -54,9 +54,10 @@ import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Stroke;
 import Data.UserProfile.Raw.Template;
 import Logic.Comparison.GestureComparer;
+import Logic.Comparison.Stats.Interfaces.IFeatureMeanData;
+import Logic.Comparison.Stats.Norms.NormMgr;
 import Logic.Comparison.StrokeComparer;
 import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 
 
 public class VerifyooAuthenticate extends GestureInputAbstract {
@@ -92,6 +93,10 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
 
     private Template mTemplateStored;
     private Template mTemplateAuth;
+
+    private HashMap<String, IFeatureMeanData> mHashMapNormsAuth;
+
+    private TemplateExtended mTemplateExtendedAuth;
 
     ApiMgr mApiMgr;
 
@@ -524,6 +529,7 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 mTemplateAuth = tempTemplateAuth;
 
                 TemplateExtended templateExtendedAuth = new TemplateExtended(tempTemplateAuth);
+                mTemplateExtendedAuth = templateExtendedAuth;
 
                 String gestureResultSummary;
                 StringBuilder stringBuilder = new StringBuilder();
@@ -585,15 +591,20 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
                 handleGeneralError(exc);
             }
 
-            if (finalScore > mThreshold) {
+            if (finalScore > 0.87) {
                 isAuth = true;
 
                 try {
                     //UpdateTemplate();
+                    NormMgr.GetInstance().GetStoredMetaDataMgr().MergeBoundaryLists();
+                    UpdateTemplateNew();
                 }
                 catch (Exception exc) {
                     handleError(String.format(ConstsMessages.E00006, exc.getMessage()));
                 }
+            }
+            else {
+                UtilsGeneral.StoredMetaDataManager.DiscardBoundaryChanges();
             }
 
             Intent intent = this.getIntent();
@@ -631,6 +642,11 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         }
 
         return idxOldestGesture;
+    }
+
+    private void UpdateTemplateNew() {
+        mHashMapNormsAuth = mTemplateExtendedAuth.GetHashMapNorms();
+        new TemplateStorer().execute("");
     }
 
     private void UpdateTemplate() {
@@ -690,32 +706,39 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
     private class TemplateStorer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            JSONSerializer serializer = new JSONSerializer();
-
-            Template template = UtilsGeneral.StoredTemplate.Clone();
-
-            String jsonTemplate = serializer.deepSerialize(template);
-
-            try {
-                String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
-                jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
-                handleError(ConstsMessages.E00002);
-            }
+//            Template template = UtilsGeneral.StoredTemplate.Clone();
 
             OutputStreamWriter outputStreamWriter = null;
             try {
-                String fileName = Files.GetFileName(UtilsGeneral.GetStorageName(mUserName));
+                String fileName = Files.GetFileNameUpdatedNorms(UtilsGeneral.GetStorageName(mUserName));
                 deleteFile(fileName);
+
+                UtilsGeneral.StoredMetaDataManager.AppendBoundaryHash(NormMgr.GetInstance().GetStoredMetaDataMgr().HashParamBoundaries);
+                UtilsGeneral.StoredMetaDataManager.AppendHash(mHashMapNormsAuth);
+                String jsonTemplate = UtilsGeneral.Gson.toJson(UtilsGeneral.StoredMetaDataManager);
+
+                try {
+                    String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
+                    jsonTemplate = AESCrypt.encrypt(key, jsonTemplate);
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                    handleError(ConstsMessages.E00002);
+                }
+
+//                HashMap<String, IFeatureMeanData> tempHash = UtilsGeneral.StoredHashNormsCtr.ToHash();
+//                UtilsGeneral.StoredTemplate.InitHashMap(tempHash);
+//                TemplateExtended templateExtended = new TemplateExtended(UtilsGeneral.StoredTemplate);
+//                UtilsGeneral.StoredTemplateExtended = templateExtended;
 
                 FileOutputStream f = openFileOutput(fileName, Context.MODE_PRIVATE);
                 outputStreamWriter = new OutputStreamWriter(f);
+
+                Files.writeToFile(jsonTemplate, outputStreamWriter);
             } catch (FileNotFoundException e) {
                 handleError(ConstsMessages.E00003);
                 e.printStackTrace();
             }
-            Files.writeToFile(jsonTemplate, outputStreamWriter);
+
             return null;
         }
 
@@ -780,6 +803,9 @@ public class VerifyooAuthenticate extends GestureInputAbstract {
         stringBuilder.append(tempParamSummary);
 
         tempParamSummary = String.format("\n{PCAScore: %s}, ", RoundValue(gestureComparer.PcaScore));
+        stringBuilder.append(tempParamSummary);
+
+        tempParamSummary = String.format("\n{Interest Point: %s}, ", RoundValue(gestureComparer.InterestPointScore));
         stringBuilder.append(tempParamSummary);
 
         tempParamSummary = String.format("\n{%s: %s}, ", "AvgSurfaceScore", RoundValue(gestureComparer.AvgSurfaceScore));

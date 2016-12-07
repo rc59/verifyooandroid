@@ -3,9 +3,13 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Random;
 
 import Data.MetaData.NormalizedGestureContainer;
+import Data.MetaData.StoredMetaDataMgr;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
 
@@ -14,6 +18,10 @@ import Data.UserProfile.Raw.Template;
  */
 public class UtilsGeneral {
     public static double TempThreshold;
+
+    public static StoredMetaDataMgr StoredMetaDataManager;
+    public static GsonBuilder GsonBuilder;
+    public static Gson Gson;
 
     public static NormalizedGestureContainer NormalizedGestureContainerObj;
     public static TemplateExtended StoredTemplateExtended;

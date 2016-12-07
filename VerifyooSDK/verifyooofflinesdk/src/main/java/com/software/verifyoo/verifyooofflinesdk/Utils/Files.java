@@ -18,6 +18,11 @@ public class Files {
         return fileName;
     }
 
+    public static String GetFileNameUpdatedNorms(String userName) {
+        String fileName = String.format("%s-%s", userName, Consts.STORAGE_NAME_UPDATED_NORMS);
+        return fileName;
+    }
+
     public static void writeToFile(String data, OutputStreamWriter outputStreamWriter) {
         try {
             //File file = new File(Environment.getExternalStorageDirectory(), "/shapeRecognition/user.txt");

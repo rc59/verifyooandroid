@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.GsonBuilder;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooAuthenticate;
 import com.software.verifyoo.verifyooofflinesdk.Activities.VerifyooRegister;
 import com.software.verifyoo.verifyooofflinesdk.Utils.AESCrypt;
@@ -23,11 +24,13 @@ import com.software.verifyoo.verifyooofflinesdk.Utils.VerifyooConsts;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 
+import Data.MetaData.StoredMetaDataMgr;
 import Data.UserProfile.Extended.TemplateExtended;
 import Data.UserProfile.Raw.Template;
+import Logic.Comparison.Stats.Interfaces.IFeatureMeanData;
 import Logic.Comparison.Stats.Norms.NormMgr;
-import flexjson.JSONDeserializer;
 
 public class Main2Activity extends ActionBarActivity {
 
@@ -169,20 +172,42 @@ public class Main2Activity extends ActionBarActivity {
         UtilsGeneral.StoredTemplate = null;
         UtilsGeneral.StoredTemplateExtended = null;
 
+        String errMsg;
+
         InputStream inputStream = null;
+        InputStream inputStreamNorms = null;
         try {
             inputStream = openFileInput(Files.GetFileName(UtilsGeneral.GetStorageName(mUserName)));
+            inputStreamNorms = openFileInput(Files.GetFileNameUpdatedNorms(UtilsGeneral.GetStorageName(mUserName)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         String storedTemplate = Files.readFromFile(inputStream);
+        String storedNorms = Files.readFromFile(inputStreamNorms);
+
+        UtilsGeneral.GsonBuilder = new GsonBuilder();
+        UtilsGeneral.Gson = UtilsGeneral.GsonBuilder.enableComplexMapKeySerialization().create();
+
+        StoredMetaDataMgr storedMetaDataManager = null;
+        if(storedNorms.length() > 0) {
+            try {
+                try {
+                    String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
+                    storedNorms = AESCrypt.decrypt(key, storedNorms);
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                }
+
+                Object hashMapNormsCtrObj = UtilsGeneral.Gson.fromJson(storedNorms, StoredMetaDataMgr.class);
+                storedMetaDataManager = (StoredMetaDataMgr) hashMapNormsCtrObj;
+
+            } catch (Exception e) {
+                errMsg = e.getMessage();
+            }
+        }
 
         NormMgr.GetInstance();
         if (storedTemplate.length() > 0) {
-
-
-
-            JSONDeserializer<Template> deserializer = new JSONDeserializer<Template>();
             try {
                 try {
                     String key = UtilsGeneral.GetUserKey(UtilsGeneral.GetStorageName(mUserName));
@@ -191,9 +216,19 @@ public class Main2Activity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                Object listGesturesObj = deserializer.deserialize(storedTemplate, Template.class);
+                Object listGesturesObj = UtilsGeneral.Gson.fromJson(storedTemplate, Template.class); //deserializer.deserialize(storedTemplate, Template.class);
 
                 Template storedTemplateObj = ((Template) listGesturesObj);
+                if (storedMetaDataManager != null) {
+                    UtilsGeneral.StoredMetaDataManager = storedMetaDataManager;
+                    NormMgr.GetInstance().GetStoredMetaDataMgr().HashParamBoundaries = UtilsGeneral.StoredMetaDataManager.HashParamBoundaries;
+                    HashMap<String, IFeatureMeanData> tempHash = storedMetaDataManager.ToHash();
+                    storedTemplateObj.InitHashMap(tempHash);
+                }
+                else {
+                    UtilsGeneral.StoredMetaDataManager = new StoredMetaDataMgr();
+                }
+
                 TemplateExtended templateExtended = new TemplateExtended(storedTemplateObj);
                 UtilsGeneral.StoredTemplateExtended = templateExtended;
                 UtilsGeneral.StoredTemplateExtended.Name = mUserName;
@@ -221,7 +256,7 @@ public class Main2Activity extends ActionBarActivity {
                     score = Math.round(score);
                     score = score / 10000;
 
-                    if (score >= 0.9) {
+                    if (score >= 0.87) {
                         mTxtStatus.setText("Authorized");
                         mTxtStatus.setTextColor(Color.parseColor(Consts.VERIFYOO_BLUE));
                         mTxtStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.verified, 0, 0, 0);

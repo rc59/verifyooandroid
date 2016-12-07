@@ -427,6 +427,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+
+        Intent i = new Intent(getApplicationContext(), Main2Activity.class);
+        startActivity(i);
 //        if(UtilsGeneral.StoredTemplate == null) {
 //            mBtnAuth.setVisibility(View.GONE);
 //        }
