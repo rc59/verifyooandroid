@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SignatureCapture</string>
+    <string name="btnClear">Clear</string>
+    <string name="btnSave">Save</string>
+</resources>
