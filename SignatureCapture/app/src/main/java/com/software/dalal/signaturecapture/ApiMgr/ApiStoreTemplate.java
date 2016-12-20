@@ -1,6 +1,12 @@
 package com.software.dalal.signaturecapture.ApiMgr;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.TextView;
+
+import com.software.dalal.signaturecapture.Consts;
+import com.software.dalal.signaturecapture.Fail;
 
 import org.json.JSONObject;
 
@@ -14,8 +20,36 @@ import java.net.URL;
  * Created by roy on 12/12/2016.
  */
 public class ApiStoreTemplate extends AsyncTask<String, String, String> {
+    Context mApplicationContext;
+    TextView mTextView;
+    boolean mIsSuccess;
+    String mErrMsg;
+
+    public ApiStoreTemplate(Context applicationContext, TextView textView) {
+        mApplicationContext = applicationContext;
+        mTextView = textView;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+
+        if (mIsSuccess) {
+            mTextView.setText("Success");
+        }
+        else {
+            Intent i = new Intent(mApplicationContext, Fail.class);
+            i.putExtra(Consts.ERROR_MSG, mErrMsg);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mApplicationContext.startActivity(i);
+        }
+    }
+
     @Override
     protected String doInBackground(String... params) {
+        mIsSuccess = false;
+        mErrMsg = "";
+
         String shape = params[0];
         InputStream is = null;
         OutputStream os = null;
@@ -23,7 +57,8 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
         String strFileContents = "";
 
         try {
-            String urlString = "http://192.168.43.113:3001/shapes/createtemplateDemo";
+            Consts.IP = "10.0.0.7:3001";
+            String urlString = "http://" + Consts.IP + "/shapes/createtemplateDemo"; //192.168.43.113:3001
             URL url = new URL(urlString);
 
             String message = "";
@@ -32,8 +67,8 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
             }
 
             conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(20000);
-            conn.setConnectTimeout(20000);
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -52,16 +87,12 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
 
             int bytesRead = 0;
 
-            while( (bytesRead = is.read(contents)) != -1){
-                strFileContents = new String(contents, 0, bytesRead);
-            }
-
-            if (strFileContents.contains("true")) {
-
-            }
+            mIsSuccess = true;
         }
         catch (Exception exc) {
             String msg = exc.getMessage();
+            mIsSuccess = false;
+            mErrMsg = exc.getMessage();
         }
         finally {
             try {
@@ -78,7 +109,7 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
 
     public void run(String jsonShape) {
         if (jsonShape!= null && !jsonShape.isEmpty()) {
-            new ApiStoreTemplate().execute(jsonShape);
+            new ApiStoreTemplate(mApplicationContext, mTextView).execute(jsonShape);
         }
     }
 }

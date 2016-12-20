@@ -238,7 +238,7 @@ public class VerifyooRegister extends GestureInputAbstract {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        mProgressBar.setMax(20);
+        mProgressBar.setMax(52);
         mProgressBar.setProgress(0);
 
         mHashCompletedInstructions = new HashMap<>();

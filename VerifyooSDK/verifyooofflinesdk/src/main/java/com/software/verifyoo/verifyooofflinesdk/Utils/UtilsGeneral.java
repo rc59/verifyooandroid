@@ -19,6 +19,7 @@ import Data.UserProfile.Raw.Template;
 public class UtilsGeneral {
     public static double TempThreshold;
 
+    public static int IdxCurrentWord;
     public static StoredMetaDataMgr StoredMetaDataManager;
     public static GsonBuilder GsonBuilder;
     public static Gson Gson;

@@ -27,6 +27,13 @@ public class ConstsInstructions {
     public static final String INSTRUCTION_CODE_ZLETTER = "ZLETTER";
     public static final String INSTRUCTION_CODE_NLETTER = "NLETTER";
 
+    public static final String INSTRUCTION_CODE_CLETTER = "CLETTER";
+    public static final String INSTRUCTION_CODE_LLETTER = "LLETTER";
+    public static final String INSTRUCTION_CODE_OLETTER = "OLETTER";
+    public static final String INSTRUCTION_CODE_ULETTER = "ULETTER";
+    public static final String INSTRUCTION_CODE_VLETTER = "VLETTER";
+    public static final String INSTRUCTION_CODE_XLETTER = "XLETTER";
+
     public static final String INSTRUCTION_STRING_B = "B";
     public static final String INSTRUCTION_STRING_D = "D";
     public static final String INSTRUCTION_STRING_E = "E";
@@ -49,4 +56,10 @@ public class ConstsInstructions {
     public static final String INSTRUCTION_STRING_Z = "Z";
     public static final String INSTRUCTION_STRING_N = "N";
 
+    public static final String INSTRUCTION_STRING_C = "C";
+    public static final String INSTRUCTION_STRING_L = "L";
+    public static final String INSTRUCTION_STRING_O = "O";
+    public static final String INSTRUCTION_STRING_U = "U";
+    public static final String INSTRUCTION_STRING_V = "V";
+    public static final String INSTRUCTION_STRING_X = "X";
 }

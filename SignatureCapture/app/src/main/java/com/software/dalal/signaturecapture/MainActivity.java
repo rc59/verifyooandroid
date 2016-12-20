@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.software.dalal.signaturecapture.ApiMgr.ApiMgr;
 import com.software.dalal.signaturecapture.Models.ExpMotionEventCompact;
@@ -15,6 +16,7 @@ import com.software.dalal.signaturecapture.Models.ExpStroke;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView mTxtStatus;
     private Button mBtnAuth;
     private Button mBtnClear;
 
@@ -32,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        clearOverlay();
+        mTxtStatus.setVisibility(View.INVISIBLE);
+    }
+
     private void init() {
         mTempGesture = new ExpShape();
 
@@ -44,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         mOverlay.addOnGestureListener(mGesturesProcessor);
         mOverlay.setGestureStrokeWidth(8);
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+
+        mTxtStatus = (TextView) findViewById(R.id.txtSaving);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
         mBtnAuth.setBackgroundColor(colorBlue);
@@ -87,14 +99,23 @@ public class MainActivity extends AppCompatActivity {
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL_CLEAR);
         mOverlay.clear(true);
         mOverlay.setFadeOffset(Consts.FADE_INTERVAL);
+        mTxtStatus.setVisibility(View.INVISIBLE);
     }
 
     private void storeGesture() {
-        ApiMgr apiMgr = new ApiMgr();
+        mTxtStatus.setText("Saving...");
+        ApiMgr apiMgr = new ApiMgr(getApplicationContext(), mTxtStatus);
         apiMgr.storeData(mTempGesture);
+        clearOverlay();
+        showLoading();
+    }
+
+    private void showLoading() {
+        mTxtStatus.setVisibility(View.VISIBLE);
     }
 
     private void onClickAuth() {
+        mTxtStatus.setVisibility(View.VISIBLE);
         storeGesture();
     }
 

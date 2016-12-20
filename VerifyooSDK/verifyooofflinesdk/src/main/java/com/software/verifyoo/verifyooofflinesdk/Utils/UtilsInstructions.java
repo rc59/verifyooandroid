@@ -70,6 +70,25 @@ public class UtilsInstructions {
             case 19:
                 instruction = ConstsInstructions.INSTRUCTION_CODE_NLETTER;
                 break;
+
+            case 20:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_CLETTER;
+                break;
+            case 21:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_LLETTER;
+                break;
+            case 22:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_OLETTER;
+                break;
+            case 23:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_ULETTER;
+                break;
+            case 24:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_VLETTER;
+                break;
+            case 25:
+                instruction = ConstsInstructions.INSTRUCTION_CODE_XLETTER;
+                break;
         }
 
         return instruction;
@@ -140,6 +159,26 @@ public class UtilsInstructions {
             case ConstsInstructions.INSTRUCTION_CODE_NLETTER:
                 instructionIdx = 19;
                 break;
+
+            case ConstsInstructions.INSTRUCTION_CODE_CLETTER:
+                instructionIdx = 20;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_LLETTER:
+                instructionIdx = 21;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_OLETTER:
+                instructionIdx = 22;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_ULETTER:
+                instructionIdx = 23;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_VLETTER:
+                instructionIdx = 24;
+                break;
+            case ConstsInstructions.INSTRUCTION_CODE_XLETTER:
+                instructionIdx = 25;
+                break;
+
         }
 
         return instructionIdx;
@@ -209,6 +248,24 @@ public class UtilsInstructions {
                 break;
             case ConstsInstructions.INSTRUCTION_STRING_N:
                 instructionIdx = 19;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_C:
+                instructionIdx = 20;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_L:
+                instructionIdx = 21;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_O:
+                instructionIdx = 22;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_U:
+                instructionIdx = 23;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_V:
+                instructionIdx = 24;
+                break;
+            case ConstsInstructions.INSTRUCTION_STRING_X:
+                instructionIdx = 25;
                 break;
         }
 

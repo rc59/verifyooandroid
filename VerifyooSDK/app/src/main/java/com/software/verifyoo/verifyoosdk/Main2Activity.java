@@ -58,6 +58,7 @@ public class Main2Activity extends ActionBarActivity {
     }
 
     private void init() {
+        UtilsGeneral.IdxCurrentWord = 0;
         UtilsGeneral.TempThreshold = 0.85;
         mIsHack = false;
         mCompany = "Verifyoo Experiment";

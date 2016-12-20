@@ -6,7 +6,7 @@ package com.software.verifyoo.verifyooofflinesdk.Utils;
 public class Consts {
     public static final double MIN_STROKE_LENGTH = 50;
 
-    public static final int TOTAL_NUM_GESTURES = 10;
+    public static final int TOTAL_NUM_GESTURES = 26;
     public static final int DEFAULT_NUM_REQ_GESTURES_REG = 10;
     public static final int DEFAULT_NUM_REQ_GESTURES_AUTH = 4;
     public static final int DEFAULT_NUM_REPEATS_PER_INSTRUCTION = 2;
