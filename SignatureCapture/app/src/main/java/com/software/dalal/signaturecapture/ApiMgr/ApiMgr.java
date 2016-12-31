@@ -20,13 +20,17 @@ public class ApiMgr {
         mTextView = textView;
     }
 
-    public void storeData(ExpShape gesture) {
+    public void storeData(ExpShape gesture, boolean isAuth) {
         ExpTemplate tempTemplate = new ExpTemplate();
         tempTemplate.ExpShapeList.add(gesture);
 
         JSONSerializer serializer = new JSONSerializer();
         String strTemplate = serializer.deepSerialize(tempTemplate);
 
-        new ApiStoreTemplate(mApplicationContext, mTextView).run(strTemplate);
+        new ApiStoreTemplate(mApplicationContext, mTextView, isAuth).run(strTemplate, isAuth);
+    }
+
+    public void checkConnection() {
+        new ApiStoreTemplate(mApplicationContext, mTextView, true).checkConnection();
     }
 }

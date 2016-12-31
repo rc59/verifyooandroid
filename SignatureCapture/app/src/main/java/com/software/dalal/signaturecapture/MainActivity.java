@@ -1,11 +1,14 @@
 package com.software.dalal.signaturecapture;
 
+import android.content.pm.ActivityInfo;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTxtStatus;
     private Button mBtnAuth;
+    private Button mBtnReg;
     private Button mBtnClear;
 
     protected ExpStroke mTempStroke;
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         init();
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mTempGesture = new ExpShape();
 
         int colorBlue = Color.parseColor(Consts.VERIFYOO_BLUE);
@@ -58,16 +65,25 @@ public class MainActivity extends AppCompatActivity {
         mTxtStatus = (TextView) findViewById(R.id.txtSaving);
 
         mBtnAuth = (Button) findViewById(R.id.btnAuth);
-        mBtnAuth.setBackgroundColor(colorBlue);
-
+        mBtnReg = (Button) findViewById(R.id.btnReg);
         mBtnClear = (Button) findViewById(R.id.btnClear);
-        mBtnClear.setBackgroundColor(colorGray);
 
         mBtnAuth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     onClickAuth();
+                } catch (Exception exc) {
+                    handleGeneralError(exc);
+                }
+            }
+        });
+
+        mBtnReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    onClickReg();
                 } catch (Exception exc) {
                     handleGeneralError(exc);
                 }
@@ -87,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void onClickReg() {
+        mTxtStatus.setVisibility(View.VISIBLE);
+        storeGesture(false);
+    }
+
     private void handleGeneralError(Exception exc) {
     }
 
@@ -102,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
         mTxtStatus.setVisibility(View.INVISIBLE);
     }
 
-    private void storeGesture() {
+    private void storeGesture(boolean isAuth) {
         mTxtStatus.setText("Saving...");
         ApiMgr apiMgr = new ApiMgr(getApplicationContext(), mTxtStatus);
-        apiMgr.storeData(mTempGesture);
+        apiMgr.storeData(mTempGesture, isAuth);
         clearOverlay();
         showLoading();
     }
@@ -116,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClickAuth() {
         mTxtStatus.setVisibility(View.VISIBLE);
-        storeGesture();
+        storeGesture(true);
     }
 
     public class GestureDrawProcessor implements GestureOverlayView.OnGestureListener {

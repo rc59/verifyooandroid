@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gestureOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="8"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gestureColor="@android:color/holo_blue_dark"
+        android:gestureStrokeType="multiple" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="0dp"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layout1"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="64dp"
+                android:text="@string/btnSave"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/btnAuth"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:elegantTextHeight="false" />
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="64dp"
+                android:text="@string/btnClear"
+                android:gravity="center"
+                android:layout_marginRight="16dp"
+                android:id="@+id/btnClear"
+                android:layout_toRightOf="@id/btnAuth"
+                android:elegantTextHeight="false"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

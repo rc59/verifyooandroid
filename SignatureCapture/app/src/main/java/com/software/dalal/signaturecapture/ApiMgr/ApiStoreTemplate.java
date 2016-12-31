@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.software.dalal.signaturecapture.Consts;
 import com.software.dalal.signaturecapture.Fail;
+import com.software.dalal.signaturecapture.MainActivity;
 
 import org.json.JSONObject;
 
@@ -23,11 +24,14 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
     Context mApplicationContext;
     TextView mTextView;
     boolean mIsSuccess;
+    boolean mIsAuth;
     String mErrMsg;
+    String mDataReceived;
 
-    public ApiStoreTemplate(Context applicationContext, TextView textView) {
+    public ApiStoreTemplate(Context applicationContext, TextView textView, boolean isAuth) {
         mApplicationContext = applicationContext;
         mTextView = textView;
+        mIsAuth = isAuth;
     }
 
     @Override
@@ -35,13 +39,31 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
         super.onPostExecute(s);
 
         if (mIsSuccess) {
-            mTextView.setText("Success");
+            if (mTextView != null) {
+                if (mIsAuth) {
+                    String score = mDataReceived.split("@")[1];
+                    String text = String.format("Score: %s", score);
+
+                    mTextView.setText(text);
+                }
+                else {
+                    mTextView.setText("Success");
+                }
+            } else {
+                Intent i = new Intent(mApplicationContext, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mApplicationContext.startActivity(i);
+            }
         }
         else {
-            Intent i = new Intent(mApplicationContext, Fail.class);
-            i.putExtra(Consts.ERROR_MSG, mErrMsg);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mApplicationContext.startActivity(i);
+            if (mTextView != null) {
+                mTextView.setText("Please sign again");
+            } else {
+                Intent i = new Intent(mApplicationContext, Fail.class);
+                i.putExtra(Consts.ERROR_MSG, mErrMsg);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mApplicationContext.startActivity(i);
+            }
         }
     }
 
@@ -57,8 +79,14 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
         String strFileContents = "";
 
         try {
-            Consts.IP = "10.0.0.7:3001";
-            String urlString = "http://" + Consts.IP + "/shapes/createtemplateDemo"; //192.168.43.113:3001
+//            Consts.IP = "192.168.1.17:3001";
+
+            String action = "createtemplatedemo";
+            if (mIsAuth) {
+                action = "createtemplatedemoAuth";
+            }
+
+            String urlString = "http://" + Consts.IP + ":3001/shapes/" + action; //192.168.43.113:3001
             URL url = new URL(urlString);
 
             String message = "";
@@ -83,9 +111,13 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
             os.flush();
 
             is = conn.getInputStream();
-            byte[] contents = new byte[1024];
+            byte[] contents = new byte[2048];
 
-            int bytesRead = 0;
+            if (mIsAuth) {
+                int bytesRead = 0;
+                bytesRead = is.read(contents);
+                mDataReceived = new String(contents, 0, bytesRead);
+            }
 
             mIsSuccess = true;
         }
@@ -107,9 +139,14 @@ public class ApiStoreTemplate extends AsyncTask<String, String, String> {
         return strFileContents;
     }
 
-    public void run(String jsonShape) {
+    public void run(String jsonShape, boolean isAuth) {
         if (jsonShape!= null && !jsonShape.isEmpty()) {
-            new ApiStoreTemplate(mApplicationContext, mTextView).execute(jsonShape);
+            new ApiStoreTemplate(mApplicationContext, mTextView, isAuth).execute(jsonShape);
         }
+    }
+
+
+    public void checkConnection() {
+        new ApiStoreTemplate(mApplicationContext, mTextView, true).execute("");
     }
 }

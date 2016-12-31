@@ -13,4 +13,6 @@ public class Consts {
 
     public static final int FADE_INTERVAL = 50000;
     public static final int FADE_INTERVAL_CLEAR = 20;
+
+    public static final String DEFAULT_IP = "192.168.43.113";
 }

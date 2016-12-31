@@ -3,4 +3,6 @@
     <string name="btnClear">Clear</string>
     <string name="btnSave">Save</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="btnUser">USER</string>
+    <string name="btnTest">TEST</string>
 </resources>

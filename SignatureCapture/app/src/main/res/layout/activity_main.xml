@@ -4,74 +4,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white">
-
-    <TextView
-        android:id="@+id/txtSaving"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Signature Saved"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
-
-    <android.gesture.GestureOverlayView
-        android:id="@+id/gesturesOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="8"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:gestureColor="@android:color/holo_blue_dark"
-        android:gestureStrokeType="multiple" />
+    android:background="@drawable/back">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:gravity="center" >
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout1"
-            android:orientation="horizontal"
-            android:gravity="center" >
+            android:gravity="left"
+            android:orientation="horizontal" >
 
             <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/btnClear"
-                android:gravity="center"
-                android:drawableLeft="@drawable/undo"
-                android:drawablePadding="-16dp"
-                android:textColor="@android:color/white"
-                android:layout_marginRight="16dp"
-                android:id="@+id/btnClear"
-                android:elegantTextHeight="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/btnSave"
-                android:textColor="@android:color/white"
-                android:drawableLeft="@drawable/check"
-                android:drawablePadding="-16dp"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@id/btnClear"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:id="@+id/btnAuth"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:elegantTextHeight="false" />
+                android:background="@drawable/user"
+                android:textColor="@android:color/white"
+                android:id="@+id/btnReg" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/test"
+                android:textColor="@android:color/white"
+                android:id="@+id/btnAuth" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout2"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/clear"
+                android:textColor="@android:color/white"
+                android:id="@+id/btnClear" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" >
+
+        <TextView
+            android:id="@+id/txtSaving"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            />
+
+        <android.gesture.GestureOverlayView
+            android:id="@+id/gesturesOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gestureColor="@android:color/holo_blue_dark"
+            android:gestureStrokeType="multiple" />
 
     </RelativeLayout>
 
